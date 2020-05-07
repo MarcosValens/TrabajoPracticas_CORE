@@ -1,10 +1,11 @@
 package com.esliceu.core.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "alumne")
-public class Alumne {
+public class Alumne implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
