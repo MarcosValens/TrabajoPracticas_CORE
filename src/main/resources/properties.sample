@@ -3,7 +3,7 @@
 spring.datasource.driver-class-name = com.mysql.cj.jdbc.Driver
 
 # URL de la Base de Datos, por defecto nosotros usamos "localhost". Las propiedades del final se pueden cambiar.
-spring.datasource.url = jdbc:mysql://localhost:3306/tresee?useSSL=false&createDatabaseIfNotExist=true&useUnicode=true
+spring.datasource.url = jdbc:mysql://localhost:3306/core?useSSL=false&createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
 
 # Nombre de Usuario para acceder a la Base de Datos.
 spring.datasource.username = root
