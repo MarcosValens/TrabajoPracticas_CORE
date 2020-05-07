@@ -1,4 +1,8 @@
 package com.esliceu.core.repository;
 
-public interface AulaRepository {
+import com.esliceu.core.entity.Aula;
+import org.springframework.data.repository.CrudRepository;
+
+public interface AulaRepository extends CrudRepository<Aula, Long>{
+
 }

@@ -1,4 +1,7 @@
 package com.esliceu.core.repository;
 
-public interface DepartamentRepository {
+import com.esliceu.core.entity.Departament;
+import org.springframework.data.repository.CrudRepository;
+
+public interface DepartamentRepository extends CrudRepository<Departament, Long> {
 }

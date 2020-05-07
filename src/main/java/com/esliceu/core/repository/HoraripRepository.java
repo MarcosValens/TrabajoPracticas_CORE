@@ -1,4 +1,7 @@
 package com.esliceu.core.repository;
 
-public interface HoraripRepository {
+import com.esliceu.core.entity.Horarip;
+import org.springframework.data.repository.CrudRepository;
+
+public interface HoraripRepository extends CrudRepository<Horarip, Long> {
 }

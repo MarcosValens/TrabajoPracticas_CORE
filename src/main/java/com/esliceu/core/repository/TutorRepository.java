@@ -1,4 +1,7 @@
 package com.esliceu.core.repository;
 
-public interface TutorRepository {
+import com.esliceu.core.entity.Tutor;
+import org.springframework.data.repository.CrudRepository;
+
+public interface TutorRepository extends CrudRepository<Tutor, Long> {
 }

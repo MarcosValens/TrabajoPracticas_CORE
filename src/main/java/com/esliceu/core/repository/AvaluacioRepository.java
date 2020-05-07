@@ -1,4 +1,7 @@
 package com.esliceu.core.repository;
 
-public interface AvaluacioRepository {
+import com.esliceu.core.entity.Avaluacio;
+import org.springframework.data.repository.CrudRepository;
+
+public interface AvaluacioRepository extends CrudRepository<Avaluacio, Long> {
 }
