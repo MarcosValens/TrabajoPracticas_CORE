@@ -26,8 +26,6 @@ public class Tutor implements Serializable {
     @Column(name = "relacio", length = 50)
     private String relacio;
 
-    private String alumnoId;
-
     public Tutor() {
     }
 
@@ -61,14 +59,6 @@ public class Tutor implements Serializable {
 
     public void setLlinatge2(String llinatge2) {
         this.llinatge2 = llinatge2;
-    }
-
-    public String getAlumnoId() {
-        return alumnoId;
-    }
-
-    public void setAlumnoId(String alumnoId) {
-        this.alumnoId = alumnoId;
     }
 
     public String getRelacio() {

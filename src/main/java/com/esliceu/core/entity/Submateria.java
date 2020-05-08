@@ -21,8 +21,6 @@ public class Submateria implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Curs curs;
 
-    private String cursId;
-
     public Submateria() {
     }
 
@@ -58,11 +56,4 @@ public class Submateria implements Serializable {
         this.curs = curs;
     }
 
-    public String getCursId() {
-        return cursId;
-    }
-
-    public void setCursId(String cursId) {
-        this.cursId = cursId;
-    }
 }
