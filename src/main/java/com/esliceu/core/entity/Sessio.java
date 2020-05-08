@@ -1,19 +1,63 @@
 package com.esliceu.core.entity;
 
-public class Sessio {
-    private String horari;
-    private String professor;
-    private String alumne;
-    private String curs;
-    private String grup;
-    private int dia;
-    private int hora;
-    private int durada;
-    private long aula;
-    private long submateria;
-    private long activitat;
-    private long placa;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.sql.Time;
 
+@Entity
+public class Sessio implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "horari")
+    private String horari;
+
+    @Column(name = "professor", length = 300)
+    private String professor;
+
+    @Column(name = "alumne", length = 100)
+    private String alumne;
+
+    @Column(name = "curs", length = 300)
+    private String curs;
+
+    @Column(name = "grup", length = 100)
+    private String grup;
+
+    @Column(name = "dia")
+    private int dia;
+
+    @Column(name = "hora")
+    private Time hora;
+
+    @Column(name = "durada")
+    private int durada;
+
+    @Column(name = "aula")
+    private Long aula;
+
+    @Column(name = "submateria")
+    private Long submateria;
+
+    @Column(name = "activitat")
+    private Long activitat;
+
+    @Column(name = "placa")
+    private Long placa;
+
+    public Sessio() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getHorari() {
         return horari;
@@ -63,11 +107,11 @@ public class Sessio {
         this.dia = dia;
     }
 
-    public int getHora() {
+    public Time getHora() {
         return hora;
     }
 
-    public void setHora(int hora) {
+    public void setHora(Time hora) {
         this.hora = hora;
     }
 
@@ -79,35 +123,35 @@ public class Sessio {
         this.durada = durada;
     }
 
-    public long getAula() {
+    public Long getAula() {
         return aula;
     }
 
-    public void setAula(long aula) {
+    public void setAula(Long aula) {
         this.aula = aula;
     }
 
-    public long getSubmateria() {
+    public Long getSubmateria() {
         return submateria;
     }
 
-    public void setSubmateria(long submateria) {
+    public void setSubmateria(Long submateria) {
         this.submateria = submateria;
     }
 
-    public long getActivitat() {
+    public Long getActivitat() {
         return activitat;
     }
 
-    public void setActivitat(long activitat) {
+    public void setActivitat(Long activitat) {
         this.activitat = activitat;
     }
 
-    public long getPlaca() {
+    public Long getPlaca() {
         return placa;
     }
 
-    public void setPlaca(long placa) {
+    public void setPlaca(Long placa) {
         this.placa = placa;
     }
 }
