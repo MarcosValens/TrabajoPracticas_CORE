@@ -12,7 +12,7 @@ public class Professor implements Serializable {
 
     @Id
     @Column(name = "codi")
-    private Long codi;
+    private String codi;
 
     @Column(name = "nom", length = 300)
     private String nom;
@@ -32,11 +32,11 @@ public class Professor implements Serializable {
     public Professor() {
     }
 
-    public Long getCodi() {
+    public String getCodi() {
         return codi;
     }
 
-    public void setCodi(Long codi) {
+    public void setCodi(String codi) {
         this.codi = codi;
     }
 
