@@ -8,7 +8,6 @@ import java.io.Serializable;
 public class Alumne implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codi", unique = true)
     private String codi;
 
@@ -23,6 +22,9 @@ public class Alumne implements Serializable {
 
     @Column(name = "expedient")
     private Long expedient;
+
+    @Column(name = "grup")
+    private Long grup;
 
     public Alumne() {
     }

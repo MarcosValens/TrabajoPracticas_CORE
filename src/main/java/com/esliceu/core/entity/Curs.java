@@ -10,11 +10,14 @@ import javax.persistence.Table;
 public class Curs {
 
     @Id
-    @Column(name = "codi")
+    @Column(name = "codi", unique = true)
     private Long codi;
 
     @Column(name = "descripcio", length = 300)
     private String descripcio;
+
+    @Column(name = "grup", unique = true)
+    private Long grup;
 
     public Curs() {
     }
@@ -33,5 +36,13 @@ public class Curs {
 
     public void setDescripcio(String descripcio) {
         this.descripcio = descripcio;
+    }
+
+    public Long getGrup() {
+        return grup;
+    }
+
+    public void setGrup(Long grup) {
+        this.grup = grup;
     }
 }

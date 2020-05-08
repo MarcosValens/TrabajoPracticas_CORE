@@ -17,6 +17,9 @@ public class Grup implements Serializable {
     @Column(name = "nom", length = 100)
     private String nom;
 
+    @Column(name = "tutor")
+    private Long tutor;
+
 
     public Grup() {
     }
@@ -35,5 +38,13 @@ public class Grup implements Serializable {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public Long getTutor() {
+        return tutor;
+    }
+
+    public void setTutor(Long tutor) {
+        this.tutor = tutor;
     }
 }

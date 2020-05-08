@@ -95,7 +95,7 @@ public class XmlParser {
                             Attribute tutorGrup = startElement.getAttributeByName(new QName("tutor"));
                             grup.setCodi(Long.parseLong(codiGrup.getValue()));
                             grup.setNom(nomGrup.getValue());
-                            grup.setTutor(tutorGrup.getValue());
+                            grup.setTutor(Long.parseLong(tutorGrup.getValue()));
                             grupList.add(grup);
                             grup.setAvaluacions(avaluacioLists);
                             break;
@@ -212,20 +212,20 @@ public class XmlParser {
                             if (grupSessio != null) {
                                 sessio.setGrup(grupSessio.getValue());
                             }
-                            sessio.setDia(diaSessio.getValue());
-                            sessio.setHora(horaSessio.getValue());
-                            sessio.setDurada(duradaSessio.getValue());
+                            sessio.setDia(Integer.parseInt(diaSessio.getValue()));
+                            sessio.setHora(Integer.parseInt(horaSessio.getValue()));
+                            sessio.setDurada(Integer.parseInt(duradaSessio.getValue()));
                             if (aulaSessio != null) {
-                                sessio.setAula(aulaSessio.getValue());
+                                sessio.setAula(Long.parseLong(aulaSessio.getValue()));
                             }
                             if (submateriaSessio != null) {
-                                sessio.setSubmateria(submateriaSessio.getValue());
+                                sessio.setSubmateria(Long.parseLong(submateriaSessio.getValue()));
                             }
                             if (activitatSessio != null) {
-                                sessio.setActivitat(activitatSessio.getValue());
+                                sessio.setActivitat(Long.parseLong(activitatSessio.getValue()));
                             }
                             if (placaSessio != null) {
-                                sessio.setPlaca(placaSessio.getValue());
+                                sessio.setPlaca(Long.parseLong(placaSessio.getValue()));
                             }
                             sessions.add(sessio);
                             break;
