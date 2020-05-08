@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.sql.Time;
 
 @Entity
+@Table(name = "sessio")
 public class Sessio implements Serializable {
 
     @Id
@@ -15,17 +16,21 @@ public class Sessio implements Serializable {
     @Column(name = "horari")
     private String horari;
 
-    @Column(name = "professor", length = 300)
-    private String professor;
+    @Column(name = "professor")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Professor professor;
 
-    @Column(name = "alumne", length = 100)
-    private String alumne;
+    @Column(name = "alumne")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Alumne alumne;
 
-    @Column(name = "curs", length = 300)
-    private String curs;
+    @Column(name = "curs")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Curs curs;
 
-    @Column(name = "grup", length = 100)
-    private String grup;
+    @Column(name = "grup")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Grup grup;
 
     @Column(name = "dia")
     private int dia;
@@ -37,13 +42,16 @@ public class Sessio implements Serializable {
     private int durada;
 
     @Column(name = "aula")
-    private Long aula;
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Aula aula;
 
     @Column(name = "submateria")
-    private Long submateria;
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Submateria submateria;
 
     @Column(name = "activitat")
-    private Long activitat;
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Activitat activitat;
 
     @Column(name = "placa")
     private Long placa;
@@ -67,35 +75,35 @@ public class Sessio implements Serializable {
         this.horari = horari;
     }
 
-    public String getProfessor() {
+    public Professor getProfessor() {
         return professor;
     }
 
-    public void setProfessor(String professor) {
+    public void setProfessor(Professor professor) {
         this.professor = professor;
     }
 
-    public String getAlumne() {
+    public Alumne getAlumne() {
         return alumne;
     }
 
-    public void setAlumne(String alumne) {
+    public void setAlumne(Alumne alumne) {
         this.alumne = alumne;
     }
 
-    public String getCurs() {
+    public Curs getCurs() {
         return curs;
     }
 
-    public void setCurs(String curs) {
+    public void setCurs(Curs curs) {
         this.curs = curs;
     }
 
-    public String getGrup() {
+    public Grup getGrup() {
         return grup;
     }
 
-    public void setGrup(String grup) {
+    public void setGrup(Grup grup) {
         this.grup = grup;
     }
 
@@ -123,27 +131,27 @@ public class Sessio implements Serializable {
         this.durada = durada;
     }
 
-    public Long getAula() {
+    public Aula getAula() {
         return aula;
     }
 
-    public void setAula(Long aula) {
+    public void setAula(Aula aula) {
         this.aula = aula;
     }
 
-    public Long getSubmateria() {
+    public Submateria getSubmateria() {
         return submateria;
     }
 
-    public void setSubmateria(Long submateria) {
+    public void setSubmateria(Submateria submateria) {
         this.submateria = submateria;
     }
 
-    public Long getActivitat() {
+    public Activitat getActivitat() {
         return activitat;
     }
 
-    public void setActivitat(Long activitat) {
+    public void setActivitat(Activitat activitat) {
         this.activitat = activitat;
     }
 
