@@ -1,6 +1,7 @@
 package com.esliceu.core.manager;
 
 import com.esliceu.core.entity.*;
+import com.esliceu.core.utils.DateParser;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,7 +21,7 @@ public class XmlParser {
         parseXML(fileName);
     }
 
-    private static List<List> parseXML(String fileName) {
+    private static List<List> parseXML(String fileName) throws Exception {
 
         /*PRIMER BLOQUE "CURS"*/
         List<Curs> cursList = new ArrayList<>();
@@ -113,8 +114,8 @@ public class XmlParser {
                             Attribute data_fi = startElement.getAttributeByName(new QName("data_fi"));
                             avaluacio.setCodi(Long.parseLong(codiAvaluacio.getValue()));
                             avaluacio.setDescripcio(descripcioAvaluacio.getValue());
-                            avaluacio.setDataInici(data_inici.getValue());
-                            avaluacio.setDataFi(data_fi.getValue());
+                            avaluacio.setDataInici(DateParser.dataParser(data_inici.getValue()));
+                            avaluacio.setDataFi(DateParser.dataParser(data_fi.getValue()));
                             avaluacioList.add(avaluacio);
                             break;
                         case "NOTES":
@@ -249,8 +250,8 @@ public class XmlParser {
                             Attribute llinatge2Tutor = startElement.getAttributeByName(new QName("llinatge2"));
                             Attribute nomTutor = startElement.getAttributeByName(new QName("nom"));
                             Attribute relacioTutor = startElement.getAttributeByName(new QName("relacio"));
-                            tutor.setAlumne(Long.parseLong(codiAlumneTutor.getValue()));
-                            tutor.setCodi(Long.parseLong(codiTutor.getValue()));
+                            tutor.setAlumne(codiAlumneTutor.getValue());
+                            tutor.setCodi(codiTutor.getValue());
                             tutor.setLlinatge1(llinatge1Tutor.getValue());
                             tutor.setLlinatge2(llinatge2Tutor.getValue());
                             tutor.setNom(nomTutor.getValue());
