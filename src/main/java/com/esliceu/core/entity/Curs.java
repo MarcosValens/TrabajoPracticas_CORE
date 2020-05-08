@@ -13,9 +13,6 @@ public class Curs {
     @Column(name = "descripcio", length = 300)
     private String descripcio;
 
-    private String cursoId;
-
-
     public Curs() {
     }
 
@@ -35,11 +32,4 @@ public class Curs {
         this.descripcio = descripcio;
     }
 
-    public String getCursoId() {
-        return cursoId;
-    }
-
-    public void setCursoId(String cursoId) {
-        this.cursoId = cursoId;
-    }
 }

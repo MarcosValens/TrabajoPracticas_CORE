@@ -56,14 +56,6 @@ public class Sessio implements Serializable {
     @Column(name = "placa")
     private Long placa;
 
-    private String aulaId;
-    private String submateriaId;
-    private String activitatId;
-    private String profesorId;
-    private String alumneId;
-    private String cursId;
-    private String gurpId;
-
     public Sessio() {
     }
 
@@ -171,59 +163,4 @@ public class Sessio implements Serializable {
         this.placa = placa;
     }
 
-    public String getAulaId() {
-        return aulaId;
-    }
-
-    public void setAulaId(String aulaId) {
-        this.aulaId = aulaId;
-    }
-
-    public String getSubmateriaId() {
-        return submateriaId;
-    }
-
-    public void setSubmateriaId(String submateriaId) {
-        this.submateriaId = submateriaId;
-    }
-
-    public String getActivitatId() {
-        return activitatId;
-    }
-
-    public void setActivitatId(String activitatId) {
-        this.activitatId = activitatId;
-    }
-
-    public String getProfesorId() {
-        return profesorId;
-    }
-
-    public void setProfesorId(String profesorId) {
-        this.profesorId = profesorId;
-    }
-
-    public String getAlumneId() {
-        return alumneId;
-    }
-
-    public void setAlumneId(String alumneId) {
-        this.alumneId = alumneId;
-    }
-
-    public String getCursId() {
-        return cursId;
-    }
-
-    public void setCursId(String cursId) {
-        this.cursId = cursId;
-    }
-
-    public String getGurpId() {
-        return gurpId;
-    }
-
-    public void setGurpId(String gurpId) {
-        this.gurpId = gurpId;
-    }
 }

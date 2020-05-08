@@ -23,8 +23,6 @@ public class Grup implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Avaluacio avaluacio;
 
-    private String avaluacioId;
-
     @ManyToMany()
     private List<Professor> professors;
 
@@ -61,14 +59,6 @@ public class Grup implements Serializable {
 
     public void setCurs(Curs curs) {
         this.curs = curs;
-    }
-
-    public String getAvaluacioId() {
-        return avaluacioId;
-    }
-
-    public void setAvaluacioId(String avaluacioId) {
-        this.avaluacioId = avaluacioId;
     }
 
     public List<Professor> getProfessors() {

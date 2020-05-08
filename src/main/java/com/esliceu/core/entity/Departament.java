@@ -14,7 +14,6 @@ public class Departament implements Serializable {
     @Column(name = "descripcio", length = 300)
     private String descripcio;
 
-
     public Departament() {
     }
 

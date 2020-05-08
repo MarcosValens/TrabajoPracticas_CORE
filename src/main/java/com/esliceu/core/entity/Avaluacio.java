@@ -25,7 +25,6 @@ public class Avaluacio implements Serializable {
     @Column(name = "data_fi", columnDefinition = "DATE")
     private LocalDate dataFi;
 
-
     public Avaluacio() {
     }
 

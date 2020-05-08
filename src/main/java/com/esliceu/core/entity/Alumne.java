@@ -28,8 +28,6 @@ public class Alumne implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Grup grup;
 
-    private String grupId;
-
     public Alumne() {
     }
 
@@ -81,11 +79,4 @@ public class Alumne implements Serializable {
         this.grup = grup;
     }
 
-    public String getGrupId() {
-        return grupId;
-    }
-
-    public void setGrupId(String grupId) {
-        this.grupId = grupId;
-    }
 }
