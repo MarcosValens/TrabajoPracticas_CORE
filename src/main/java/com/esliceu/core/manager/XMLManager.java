@@ -22,14 +22,13 @@ public class XMLManager {
 
     public boolean readXML(MultipartFile fileMultiPart) {
 
-        String fileName = "";
         File file;
         List<List> listaObjetosXML = new ArrayList<>();
 
         try {
 
             file = convertMultiPartToFile(fileMultiPart);
-            listaObjetosXML = xmlParser.parseXML("nombredel archivo");
+            listaObjetosXML = xmlParser.parseXML(file);
 
             // Leer cada objeto y con el manager correspondiente a cada objeto meter en la base de datos
 

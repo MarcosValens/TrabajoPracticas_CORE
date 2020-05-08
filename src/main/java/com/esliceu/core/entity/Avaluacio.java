@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -18,11 +19,11 @@ public class Avaluacio implements Serializable {
     @Column(name = "descripcio", length = 300)
     private String descripcio;
 
-    @Column(name = "data_inici", nullable = false, columnDefinition = "DATE")
-    private Date dataInici;
+    @Column(name = "data_inici", columnDefinition = "DATE")
+    private LocalDate dataInici;
 
-    @Column(name = "data_fi", nullable = false, columnDefinition = "DATE")
-    private Date dataFi;
+    @Column(name = "data_fi", columnDefinition = "DATE")
+    private LocalDate dataFi;
 
     public Avaluacio() {
     }
@@ -43,19 +44,19 @@ public class Avaluacio implements Serializable {
         this.descripcio = descripcio;
     }
 
-    public Date getDataInici() {
+    public LocalDate getDataInici() {
         return dataInici;
     }
 
-    public void setDataInici(Date dataInici) {
+    public void setDataInici(LocalDate dataInici) {
         this.dataInici = dataInici;
     }
 
-    public Date getDataFi() {
+    public LocalDate getDataFi() {
         return dataFi;
     }
 
-    public void setDataFi(Date dataFi) {
+    public void setDataFi(LocalDate dataFi) {
         this.dataFi = dataFi;
     }
 }

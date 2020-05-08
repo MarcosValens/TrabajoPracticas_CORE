@@ -2,7 +2,7 @@ package com.esliceu.core.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Time;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "sessio")
@@ -36,7 +36,7 @@ public class Sessio implements Serializable {
     private int dia;
 
     @Column(name = "hora")
-    private Time hora;
+    private LocalDateTime hora;
 
     @Column(name = "durada")
     private int durada;
@@ -115,11 +115,11 @@ public class Sessio implements Serializable {
         this.dia = dia;
     }
 
-    public Time getHora() {
+    public LocalDateTime getHora() {
         return hora;
     }
 
-    public void setHora(Time hora) {
+    public void setHora(LocalDateTime hora) {
         this.hora = hora;
     }
 

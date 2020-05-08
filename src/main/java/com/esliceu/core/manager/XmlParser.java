@@ -2,7 +2,9 @@ package com.esliceu.core.manager;
 
 import com.esliceu.core.entity.*;
 import com.esliceu.core.utils.DateParser;
+import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -14,14 +16,13 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.*;
 
+
+@Service
 public class XmlParser {
 
-    public static void main(String[] args) {
-        String fileName = "./exportacioDadesCentre.xml";
-        parseXML(fileName);
-    }
+    public List<List> parseXML(File file) throws Exception {
 
-    private static List<List> parseXML(String fileName) throws Exception {
+        String fileName = file.getPath();
 
         /*PRIMER BLOQUE "CURS"*/
         List<Curs> cursList = new ArrayList<>();
@@ -202,7 +203,9 @@ public class XmlParser {
                             Attribute activitatSessio = startElement.getAttributeByName(new QName("activitat"));
                             Attribute placaSessio = startElement.getAttributeByName(new QName("placa"));
                             if (professorSessio != null) {
-                                sessio.setProfessor(professorSessio.getValue());
+                                Professor professor1 = new Professor();
+                                professor1.setCodi(professorSessio.getValue());
+                                sessio.setProfessor(professor1);
                             }
                             if (alumneSessio != null) {
                                 sessio.setAlumne(alumneSessio.getValue());
@@ -220,7 +223,9 @@ public class XmlParser {
                                 sessio.setAula(Long.parseLong(aulaSessio.getValue()));
                             }
                             if (submateriaSessio != null) {
-                                sessio.setSubmateria(Long.parseLong(submateriaSessio.getValue()));
+
+                                Submateria submateria1 = SubmateriaManager.findby(Long.parseLong(submateriaSessio.getValue()));
+                                sessio.setSubmateria(submateria1);
                             }
                             if (activitatSessio != null) {
                                 sessio.setActivitat(Long.parseLong(activitatSessio.getValue()));
@@ -245,6 +250,7 @@ public class XmlParser {
                             Attribute llinatge2Tutor = startElement.getAttributeByName(new QName("llinatge2"));
                             Attribute nomTutor = startElement.getAttributeByName(new QName("nom"));
                             Attribute relacioTutor = startElement.getAttributeByName(new QName("relacio"));
+
                             tutor.setCodiAlumne(codiAlumneTutor.getValue());
                             tutor.setCodiTutor(codiTutor.getValue());
                             tutor.setLlinatge1(llinatge1Tutor.getValue());
