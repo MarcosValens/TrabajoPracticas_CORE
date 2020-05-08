@@ -23,9 +23,6 @@ public class Tutor implements Serializable {
     @Column(name = "llinatge2", length = 300)
     private String llinatge2;
 
-    @Column(name = "relacio", length = 300)
-    private String relacio;
-
     public Tutor() {
     }
 
@@ -59,13 +56,5 @@ public class Tutor implements Serializable {
 
     public void setLlinatge2(String llinatge2) {
         this.llinatge2 = llinatge2;
-    }
-
-    public String getRelacio() {
-        return relacio;
-    }
-
-    public void setRelacio(String relacio) {
-        this.relacio = relacio;
     }
 }
