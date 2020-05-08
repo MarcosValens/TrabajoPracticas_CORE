@@ -24,8 +24,9 @@ public class Professor implements Serializable {
     @Column(name = "username", length = 300)
     private String username;
 
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @Column(name = "departament", length = 300)
-    private Long departament;
+    private Departament departament;
 
     @ManyToMany()
     private List<Grup> grups;
@@ -73,11 +74,11 @@ public class Professor implements Serializable {
         this.username = username;
     }
 
-    public Long getDepartament() {
+    public Departament getDepartament() {
         return departament;
     }
 
-    public void setDepartament(Long departament) {
+    public void setDepartament(Departament departament) {
         this.departament = departament;
     }
 }

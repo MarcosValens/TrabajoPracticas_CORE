@@ -15,13 +15,14 @@ public class Grup implements Serializable {
     @Column(name = "nom", length = 100)
     private String nom;
 
+    @Column(name = "curs")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Curs curs;
+
     @Column(name = "avalucacio")
-    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Avaluacio avaluacio;
 
-    @Column(name = "alumne")
-    @OneToOne(cascade = CascadeType.ALL, optional = false)
-    private Alumne alumne;
 
     @ManyToMany()
     private List<Professor> professors;
@@ -53,11 +54,11 @@ public class Grup implements Serializable {
         this.avaluacio = avaluacio;
     }
 
-    public Alumne getAlumne() {
-        return alumne;
+    public Curs getCurs() {
+        return curs;
     }
 
-    public void setAlumne(Alumne alumne) {
-        this.alumne = alumne;
+    public void setCurs(Curs curs) {
+        this.curs = curs;
     }
 }

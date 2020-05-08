@@ -14,9 +14,6 @@ public class Departament implements Serializable {
     @Column(name = "descripcio", length = 300)
     private String descripcio;
 
-    @Column(name = "professor")
-    @OneToOne(cascade = CascadeType.ALL, optional = false)
-    private Professor professor;
 
     public Departament() {
     }
@@ -37,11 +34,4 @@ public class Departament implements Serializable {
         this.descripcio = descripcio;
     }
 
-    public Professor getProfessor() {
-        return professor;
-    }
-
-    public void setProfessor(Professor professor) {
-        this.professor = professor;
-    }
 }

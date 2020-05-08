@@ -24,6 +24,10 @@ public class Alumne implements Serializable {
     @Column(name = "expedient")
     private Long expedient;
 
+    @Column(name = "grup")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Grup grup;
+
     public Alumne() {
     }
 
@@ -65,5 +69,13 @@ public class Alumne implements Serializable {
 
     public void setExpedient(Long expedient) {
         this.expedient = expedient;
+    }
+
+    public Grup getGrup() {
+        return grup;
+    }
+
+    public void setGrup(Grup grup) {
+        this.grup = grup;
     }
 }
