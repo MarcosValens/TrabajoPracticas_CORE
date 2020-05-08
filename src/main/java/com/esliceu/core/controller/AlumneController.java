@@ -28,6 +28,11 @@ public class AlumneController {
         return new ResponseEntity<>("Foto subida", HttpStatus.OK);
     }
 
+    @PostMapping("/subirFoto")
+    public ResponseEntity<String> subirFotoNueva() {
+        return new ResponseEntity<>("Foto subida", HttpStatus.OK);
+    }
+
     @DeleteMapping("/eliminarFoto")
     public ResponseEntity<String> eliminarFoto() {
         return new ResponseEntity<>("Foto eliminada", HttpStatus.OK);
