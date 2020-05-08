@@ -227,11 +227,6 @@ public class XmlParser {
                             if (placaSessio != null) {
                                 sessio.setPlaca(Long.parseLong(placaSessio.getValue()));
                             }
-                            if (professorSessio != null && alumneSessio == null) {
-                                sessio.setHorari("HorariP");
-                            } else if (professorSessio == null && alumneSessio != null) {
-                                sessio.setHorari("HorariA");
-                            } else sessio.setHorari("HorariG");
                             sessions.add(sessio);
                             break;
                         case "AULE":
@@ -249,8 +244,8 @@ public class XmlParser {
                             Attribute llinatge2Tutor = startElement.getAttributeByName(new QName("llinatge2"));
                             Attribute nomTutor = startElement.getAttributeByName(new QName("nom"));
                             Attribute relacioTutor = startElement.getAttributeByName(new QName("relacio"));
-                            tutor.setAlumne(Long.parseLong(codiAlumneTutor.getValue()));
-                            tutor.setCodi(Long.parseLong(codiTutor.getValue()));
+                            tutor.setCodiAlumne(codiAlumneTutor.getValue());
+                            tutor.setCodiTutor(codiTutor.getValue());
                             tutor.setLlinatge1(llinatge1Tutor.getValue());
                             tutor.setLlinatge2(llinatge2Tutor.getValue());
                             tutor.setNom(nomTutor.getValue());

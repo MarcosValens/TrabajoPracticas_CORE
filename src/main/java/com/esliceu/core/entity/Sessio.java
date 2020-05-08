@@ -1,7 +1,6 @@
 package com.esliceu.core.entity;
 
 public class Sessio {
-    private String horari;
     private String professor;
     private String alumne;
     private String curs;
@@ -13,15 +12,6 @@ public class Sessio {
     private long submateria;
     private long activitat;
     private long placa;
-
-
-    public String getHorari() {
-        return horari;
-    }
-
-    public void setHorari(String horari) {
-        this.horari = horari;
-    }
 
     public String getProfessor() {
         return professor;
