@@ -10,7 +10,7 @@ public class Alumne implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codi")
-    private Long codi;
+    private String codi;
 
     @Column(name = "nom", length = 100)
     private String nom;
@@ -27,11 +27,11 @@ public class Alumne implements Serializable {
     public Alumne() {
     }
 
-    public Long getCodi() {
+    public String getCodi() {
         return codi;
     }
 
-    public void setCodi(Long codi) {
+    public void setCodi(String codi) {
         this.codi = codi;
     }
 
