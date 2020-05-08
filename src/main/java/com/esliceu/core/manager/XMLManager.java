@@ -27,8 +27,12 @@ public class XMLManager {
 
         try {
 
+            boolean insertBD;
+
             file = convertMultiPartToFile(fileMultiPart);
             listaObjetosXML = xmlParser.parseXML(file);
+            /*            insertBD=insertarBD(listaObjetosXML);*/
+
 
             // Leer cada objeto y con el manager correspondiente a cada objeto meter en la base de datos
 
@@ -48,4 +52,15 @@ public class XMLManager {
         fos.close();
         return convFile;
     }
+
+/*    public boolean
+
+    // Inserta en la base de datos todos los objetos de la lista obtenida del XML
+    public boolean insertarBD(List<>listaXML){
+
+
+
+        return true;
+
+    }*/
 }
