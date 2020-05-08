@@ -66,12 +66,4 @@ public class Alumne implements Serializable {
     public void setExpedient(Long expedient) {
         this.expedient = expedient;
     }
-
-    public Long getGrup() {
-        return grup;
-    }
-
-    public void setGrup(Long grup) {
-        this.grup = grup;
-    }
 }
