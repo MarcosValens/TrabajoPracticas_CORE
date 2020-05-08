@@ -1,3 +1,4 @@
+/*
 package com.esliceu.core.manager;
 
 import com.esliceu.core.entity.Departament;
@@ -15,3 +16,4 @@ public class DepartamentManager {
         departamentRepository.save(departament);
     }
 }
+*/

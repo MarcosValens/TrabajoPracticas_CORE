@@ -1,3 +1,4 @@
+/*
 package com.esliceu.core.manager;
 
 import java.io.FileInputStream;
@@ -20,7 +21,9 @@ public class XmlParser {
 
     private static List<List> parseXML(String fileName) {
 
-        /*PRIMER BLOQUE "CURS"*/
+        */
+/*PRIMER BLOQUE "CURS"*//*
+
         List<Curs> cursList = new ArrayList<>();
         List<Grup> grupList = new ArrayList<>();
         List<Avaluacio> avaluacioList = new ArrayList<>();
@@ -32,36 +35,52 @@ public class XmlParser {
         Avaluacio avaluacio;
         Note note;
 
-        /*SEGUNDO BLOQUE "SUBMATERIES"*/
+        */
+/*SEGUNDO BLOQUE "SUBMATERIES"*//*
+
         List<Submateria> submateries = new ArrayList<>();
         Submateria submateria;
 
-        /*TERCER BLOQUE "ACTIVITATS"*/
+        */
+/*TERCER BLOQUE "ACTIVITATS"*//*
+
         List<Activitat> activitats = new ArrayList<>();
         Activitat activitat;
 
-        /*CUARTO BLOQUE "ALUMNE"*/
+        */
+/*CUARTO BLOQUE "ALUMNE"*//*
+
         List<Alumne> alumnes = new ArrayList<>();
         Alumne alumne;
 
-        /*CUARTO BLOQUE "PROFESSOR"*/
+        */
+/*CUARTO BLOQUE "PROFESSOR"*//*
+
         List<Professor> professors = new ArrayList<>();
         Professor professor;
 
-        /*QUINTO BLOQUE "SESSIO"*/
+        */
+/*QUINTO BLOQUE "SESSIO"*//*
+
 
         List<Sessio> sessions = new ArrayList<>();
         Sessio sessio;
 
-        /*SEXTO BLOQUE "TUTOR"*/
+        */
+/*SEXTO BLOQUE "TUTOR"*//*
+
         List<Tutor> tutors = new ArrayList<>();
         Tutor tutor;
 
-        /*NOVENO BLOQUE "DEPARTAMENT"*/
+        */
+/*NOVENO BLOQUE "DEPARTAMENT"*//*
+
         List<Departament> departaments = new ArrayList<>();
         Departament departament;
 
-        /*EL RESULTADO DE LA FUNCION*/
+        */
+/*EL RESULTADO DE LA FUNCION*//*
+
         List<List> parsedXML = new ArrayList<>();
 
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
@@ -266,3 +285,4 @@ public class XmlParser {
         return parsedXML;
     }
 }
+*/
