@@ -26,6 +26,9 @@ public class Tutor implements Serializable {
     @Column(name = "relacio", length = 300)
     private String relacio;
 
+    @Column(name = "alumne")
+    private Long alumne;
+
     public Tutor() {
     }
 
@@ -67,5 +70,13 @@ public class Tutor implements Serializable {
 
     public void setRelacio(String relacio) {
         this.relacio = relacio;
+    }
+
+    public Long getAlumne() {
+        return alumne;
+    }
+
+    public void setAlumne(Long alumne) {
+        this.alumne = alumne;
     }
 }
