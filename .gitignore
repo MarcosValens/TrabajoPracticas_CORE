@@ -32,3 +32,14 @@ build/
 
 ### VS Code ###
 .vscode/
+/src/main/java/com/esliceu/core/manager/Activitat.java
+/src/main/java/com/esliceu/core/manager/Tutor.java
+/src/main/java/com/esliceu/core/manager/Curs.java
+/src/main/java/com/esliceu/core/manager/Professor.java
+/src/main/java/com/esliceu/core/manager/Grup.java
+/src/main/java/com/esliceu/core/manager/Alumne.java
+/src/main/java/com/esliceu/core/manager/Note.java
+/src/main/java/com/esliceu/core/manager/Sessio.java
+/src/main/java/com/esliceu/core/manager/Avaluacio.java
+/src/main/java/com/esliceu/core/manager/Submateria.java
+/src/main/java/com/esliceu/core/manager/Departament.java
