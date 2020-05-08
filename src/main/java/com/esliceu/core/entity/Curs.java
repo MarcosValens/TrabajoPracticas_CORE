@@ -1,9 +1,6 @@
 package com.esliceu.core.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "curs")
@@ -15,6 +12,10 @@ public class Curs {
 
     @Column(name = "descripcio", length = 300)
     private String descripcio;
+
+    @Column(name = "grup")
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    private Grup grup;
 
     public Curs() {
     }
@@ -33,5 +34,13 @@ public class Curs {
 
     public void setDescripcio(String descripcio) {
         this.descripcio = descripcio;
+    }
+
+    public Grup getGrup() {
+        return grup;
+    }
+
+    public void setGrup(Grup grup) {
+        this.grup = grup;
     }
 }
