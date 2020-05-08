@@ -11,6 +11,12 @@ spring.datasource.username = root
 # Contrasña para acceder a la Base de Datos.
 spring.datasource.password =
 
+# El tamaño total que el archivo no puede superar
+spring.servlet.multipart.max-file-size=10MB
+
+# El tamaño total que la solicitud no puede superar
+spring.servlet.multipart.max-request-size=12MB
+
 
 ## Hibernate Properties ##
 # Dialecto de SQL que usará Hibernate, por defecto, nosotros usamos "org.hibernate.dialect.MySQL5InnoDBDialect".

@@ -1,22 +1,21 @@
 package com.esliceu.core.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "curs")
 public class Curs {
 
     @Id
-    @Column(name = "codi", unique = true)
+    @Column(name = "codi")
     private Long codi;
 
     @Column(name = "descripcio", length = 300)
     private String descripcio;
 
-    private Long grup;
+    @Column(name = "grup")
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    private Grup grup;
 
     public Curs() {
     }
@@ -37,11 +36,11 @@ public class Curs {
         this.descripcio = descripcio;
     }
 
-    public Long getGrup() {
+    public Grup getGrup() {
         return grup;
     }
 
-    public void setGrup(Long grup) {
+    public void setGrup(Grup grup) {
         this.grup = grup;
     }
 }

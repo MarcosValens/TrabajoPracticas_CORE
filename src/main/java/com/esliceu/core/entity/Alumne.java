@@ -8,8 +8,9 @@ import java.io.Serializable;
 public class Alumne implements Serializable {
 
     @Id
-    @Column(name = "codi", unique = true)
-    private String codi;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "codi")
+    private Long codi;
 
     @Column(name = "nom", length = 100)
     private String nom;
@@ -23,17 +24,14 @@ public class Alumne implements Serializable {
     @Column(name = "expedient")
     private Long expedient;
 
-    @Column(name = "grup")
-    private Long grup;
-
     public Alumne() {
     }
 
-    public String getCodi() {
+    public Long getCodi() {
         return codi;
     }
 
-    public void setCodi(String codi) {
+    public void setCodi(Long codi) {
         this.codi = codi;
     }
 

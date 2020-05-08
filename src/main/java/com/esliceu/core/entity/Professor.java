@@ -1,10 +1,8 @@
 package com.esliceu.core.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "professor")
@@ -12,7 +10,7 @@ public class Professor implements Serializable {
 
     @Id
     @Column(name = "codi")
-    private String codi;
+    private Long codi;
 
     @Column(name = "nom", length = 300)
     private String nom;
@@ -29,14 +27,17 @@ public class Professor implements Serializable {
     @Column(name = "departament", length = 300)
     private Long departament;
 
+    @ManyToMany()
+    private List<Grup> grups;
+
     public Professor() {
     }
 
-    public String getCodi() {
+    public Long getCodi() {
         return codi;
     }
 
-    public void setCodi(String codi) {
+    public void setCodi(Long codi) {
         this.codi = codi;
     }
 

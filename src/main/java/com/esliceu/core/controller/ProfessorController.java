@@ -15,8 +15,13 @@ public class ProfessorController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/grupos")
+    public ResponseEntity<String> getGrupos() {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @GetMapping("/professor")
-    public ResponseEntity<String> getProfessor() {
+    public ResponseEntity<String> getProfessor(String professor) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
