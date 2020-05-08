@@ -19,11 +19,11 @@ public class Nota implements Serializable {
     private String descripcio;
 
     @Column(name = "curs")
-    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Curs curs;
 
     @Column(name = "submateria")
-    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Submateria submateria;
 
     public Nota() {
