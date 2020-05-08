@@ -18,6 +18,14 @@ public class Nota implements Serializable {
     @Column(name = "descripcio", length = 300)
     private String descripcio;
 
+    @Column(name = "curs")
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    private Curs curs;
+
+    @Column(name = "submateria")
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    private Submateria submateria;
+
     public Nota() {
     }
 
@@ -44,4 +52,16 @@ public class Nota implements Serializable {
     public void setDescripcio(String descripcio) {
         this.descripcio = descripcio;
     }
+
+    public Curs getCurs() {
+        return curs;
+    }
+
+    public void setCurs(Curs curs) { this.curs = curs; }
+
+    public Submateria getSubmateria() {
+        return submateria;
+    }
+
+    public void setSubmateria(Submateria submateria) { this.submateria = submateria; }
 }
