@@ -1,5 +1,6 @@
-/*
 package com.esliceu.core.manager;
+
+import com.esliceu.core.entity.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,66 +22,52 @@ public class XmlParser {
 
     private static List<List> parseXML(String fileName) {
 
-        */
-/*PRIMER BLOQUE "CURS"*//*
-
+        /*PRIMER BLOQUE "CURS"*/
         List<Curs> cursList = new ArrayList<>();
         List<Grup> grupList = new ArrayList<>();
         List<Avaluacio> avaluacioList = new ArrayList<>();
         List<List> avaluacioLists = new ArrayList<>();
-        List<Note> noteList = new ArrayList<>();
+        List<Nota> noteList = new ArrayList<>();
         List<List> noteLists = new ArrayList<>();
         Curs curs;
         Grup grup;
         Avaluacio avaluacio;
-        Note note;
+        Nota nota;
 
-        */
-/*SEGUNDO BLOQUE "SUBMATERIES"*//*
-
+        /*SEGUNDO BLOQUE "SUBMATERIES"*/
         List<Submateria> submateries = new ArrayList<>();
         Submateria submateria;
 
-        */
-/*TERCER BLOQUE "ACTIVITATS"*//*
-
+        /*TERCER BLOQUE "ACTIVITATS"*/
         List<Activitat> activitats = new ArrayList<>();
         Activitat activitat;
 
-        */
-/*CUARTO BLOQUE "ALUMNE"*//*
-
+        /*CUARTO BLOQUE "ALUMNE"*/
         List<Alumne> alumnes = new ArrayList<>();
         Alumne alumne;
 
-        */
-/*CUARTO BLOQUE "PROFESSOR"*//*
-
+        /*CUARTO BLOQUE "PROFESSOR"*/
         List<Professor> professors = new ArrayList<>();
         Professor professor;
 
-        */
-/*QUINTO BLOQUE "SESSIO"*//*
-
+        /*QUINTO BLOQUE "SESSIO"*/
 
         List<Sessio> sessions = new ArrayList<>();
         Sessio sessio;
 
-        */
-/*SEXTO BLOQUE "TUTOR"*//*
+        /*SEXTO BLOQUE "AULA"*/
+        List<Aula> aules = new ArrayList<>();
+        Aula aula;
 
+        /*SEPTIMO BLOQUE "TUTOR"*/
         List<Tutor> tutors = new ArrayList<>();
         Tutor tutor;
 
-        */
-/*NOVENO BLOQUE "DEPARTAMENT"*//*
-
+        /*OCTAVO BLOQUE "DEPARTAMENT"*/
         List<Departament> departaments = new ArrayList<>();
         Departament departament;
 
-        */
-/*EL RESULTADO DE LA FUNCION*//*
-
+        /*EL RESULTADO DE LA FUNCION*/
         List<List> parsedXML = new ArrayList<>();
 
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
@@ -96,7 +83,7 @@ public class XmlParser {
                             //Get the 'id' attribute from curs element
                             Attribute codiCurs = startElement.getAttributeByName(new QName("codi"));
                             Attribute descripcioCurs = startElement.getAttributeByName(new QName("descripcio"));
-                            curs.setCodi(Integer.parseInt(codiCurs.getValue()));
+                            curs.setCodi(Long.parseLong(codiCurs.getValue()));
                             curs.setDescripcio(descripcioCurs.getValue());
                             cursList.add(curs);
                             curs.setGrup(grupList);
@@ -106,9 +93,9 @@ public class XmlParser {
                             Attribute codiGrup = startElement.getAttributeByName(new QName("codi"));
                             Attribute nomGrup = startElement.getAttributeByName(new QName("nom"));
                             Attribute tutorGrup = startElement.getAttributeByName(new QName("tutor"));
-                            grup.setCodi(Integer.parseInt(codiGrup.getValue()));
+                            grup.setCodi(Long.parseLong(codiGrup.getValue()));
                             grup.setNom(nomGrup.getValue());
-                            grup.setTutor(tutorGrup.getValue());
+                            grup.setTutor(Long.parseLong(tutorGrup.getValue()));
                             grupList.add(grup);
                             grup.setAvaluacions(avaluacioLists);
                             break;
@@ -124,10 +111,10 @@ public class XmlParser {
                             Attribute descripcioAvaluacio = startElement.getAttributeByName(new QName("descripcio"));
                             Attribute data_inici = startElement.getAttributeByName(new QName("data_inici"));
                             Attribute data_fi = startElement.getAttributeByName(new QName("data_fi"));
-                            avaluacio.setCodi(Integer.parseInt(codiAvaluacio.getValue()));
+                            avaluacio.setCodi(Long.parseLong(codiAvaluacio.getValue()));
                             avaluacio.setDescripcio(descripcioAvaluacio.getValue());
-                            avaluacio.setData_inici(data_inici.getValue());
-                            avaluacio.setData_fi(data_fi.getValue());
+                            avaluacio.setDataInici(data_inici.getValue());
+                            avaluacio.setDataFi(data_fi.getValue());
                             avaluacioList.add(avaluacio);
                             break;
                         case "NOTES":
@@ -135,12 +122,12 @@ public class XmlParser {
                             noteLists.add(noteList);
                             break;
                         case "NOTA":
-                            note = new Note();
+                            nota = new Nota();
                             Attribute qualificacioNote = startElement.getAttributeByName(new QName("qualificacio"));
                             Attribute descNote = startElement.getAttributeByName(new QName("desc"));
-                            note.setQualificacio(Integer.parseInt(qualificacioNote.getValue()));
-                            note.setDesc(descNote.getValue());
-                            noteList.add(note);
+                            nota.setQualificacio(Long.parseLong(qualificacioNote.getValue()));
+                            nota.setDescripcio(descNote.getValue());
+                            noteList.add(nota);
                             break;
                         case "SUBMATERIA":
                             submateria = new Submateria();
@@ -148,8 +135,8 @@ public class XmlParser {
                             Attribute cursSubmateria = startElement.getAttributeByName(new QName("curs"));
                             Attribute descripcioSubmateria = startElement.getAttributeByName(new QName("descripcio"));
                             Attribute curtaSubmateria = startElement.getAttributeByName(new QName("curta"));
-                            submateria.setCodi(Integer.parseInt(codiSubmateria.getValue()));
-                            submateria.setCurs(Integer.parseInt(cursSubmateria.getValue()));
+                            submateria.setCodi(Long.parseLong(codiSubmateria.getValue()));
+                            submateria.setCurs(Long.parseLong(cursSubmateria.getValue()));
                             submateria.setDescripcio(descripcioSubmateria.getValue());
                             submateria.setCurta(curtaSubmateria.getValue());
                             submateries.add(submateria);
@@ -159,7 +146,7 @@ public class XmlParser {
                             Attribute codiActivitat = startElement.getAttributeByName(new QName("codi"));
                             Attribute descripcioActivitat = startElement.getAttributeByName(new QName("descripcio"));
                             Attribute curtaActivitat = startElement.getAttributeByName(new QName("curta"));
-                            activitat.setCodi(Integer.parseInt(codiActivitat.getValue()));
+                            activitat.setCodi(Long.parseLong(codiActivitat.getValue()));
                             activitat.setDescripcio(descripcioActivitat.getValue());
                             activitat.setCurta(curtaActivitat.getValue());
                             activitats.add(activitat);
@@ -176,8 +163,8 @@ public class XmlParser {
                             alumne.setNom(nomAlumne.getValue());
                             alumne.setAp1(ap1Alumne.getValue());
                             alumne.setAp2(ap2Alumne.getValue());
-                            alumne.setExpedient(Integer.parseInt(expedientAlumne.getValue()));
-                            alumne.setGrup(Integer.parseInt(grupAlumne.getValue()));
+                            alumne.setExpedient(Long.parseLong(expedientAlumne.getValue()));
+                            alumne.setGrup(Long.parseLong(grupAlumne.getValue()));
                             alumnes.add(alumne);
                             break;
                         case "PROFESSOR":
@@ -194,9 +181,9 @@ public class XmlParser {
                             professor.setAp2(ap2Professor.getValue());
                             professor.setUsername(usernameProfessor.getValue());
                             if (departamentProfessor.getValue().equals("")) {
-                                professor.setDepartament(0);
+                                professor.setDepartament((long) 0);
                             } else {
-                                professor.setDepartament(Integer.parseInt(departamentProfessor.getValue()));
+                                professor.setDepartament(Long.parseLong(departamentProfessor.getValue()));
                             }
                             professors.add(professor);
                             break;
@@ -225,20 +212,20 @@ public class XmlParser {
                             if (grupSessio != null) {
                                 sessio.setGrup(grupSessio.getValue());
                             }
-                            sessio.setDia(diaSessio.getValue());
-                            sessio.setHora(horaSessio.getValue());
-                            sessio.setDurada(duradaSessio.getValue());
+                            sessio.setDia(Integer.parseInt(diaSessio.getValue()));
+                            sessio.setHora(Integer.parseInt(horaSessio.getValue()));
+                            sessio.setDurada(Integer.parseInt(duradaSessio.getValue()));
                             if (aulaSessio != null) {
-                                sessio.setAula(aulaSessio.getValue());
+                                sessio.setAula(Long.parseLong(aulaSessio.getValue()));
                             }
                             if (submateriaSessio != null) {
-                                sessio.setSubmateria(submateriaSessio.getValue());
+                                sessio.setSubmateria(Long.parseLong(submateriaSessio.getValue()));
                             }
                             if (activitatSessio != null) {
-                                sessio.setActivitat(activitatSessio.getValue());
+                                sessio.setActivitat(Long.parseLong(activitatSessio.getValue()));
                             }
                             if (placaSessio != null) {
-                                sessio.setPlaca(placaSessio.getValue());
+                                sessio.setPlaca(Long.parseLong(placaSessio.getValue()));
                             }
                             if (professorSessio != null && alumneSessio == null) {
                                 sessio.setHorari("HorariP");
@@ -247,6 +234,13 @@ public class XmlParser {
                             } else sessio.setHorari("HorariG");
                             sessions.add(sessio);
                             break;
+                        case "AULE":
+                            aula = new Aula();
+                            Attribute codiAula = startElement.getAttributeByName(new QName("codi"));
+                            Attribute descripcioAula = startElement.getAttributeByName(new QName("descripcio"));
+                            aula.setCodi(Long.parseLong(codiAula.getValue()));
+                            aula.setDescripcio(descripcioAula.getValue());
+                            aules.add(aula);
                         case "TUTOR":
                             tutor = new Tutor();
                             Attribute codiAlumneTutor = startElement.getAttributeByName(new QName("codiAlumne"));
@@ -267,7 +261,7 @@ public class XmlParser {
                             departament = new Departament();
                             Attribute codiDepartament = startElement.getAttributeByName(new QName("codi"));
                             Attribute descripcioDepartament = startElement.getAttributeByName(new QName("descripcio"));
-                            departament.setCodi(Integer.parseInt(codiDepartament.getValue()));
+                            departament.setCodi(Long.parseLong(codiDepartament.getValue()));
                             departament.setDescripcio(descripcioDepartament.getValue());
                             departaments.add(departament);
                             break;
@@ -290,4 +284,3 @@ public class XmlParser {
         return parsedXML;
     }
 }
-*/
