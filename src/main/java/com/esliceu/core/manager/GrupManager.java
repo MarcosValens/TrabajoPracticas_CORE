@@ -14,4 +14,8 @@ public class GrupManager {
     public void createOrUpdate(Grup grup) {
         grupRepository.save(grup);
     }
+
+    public Grup findById(Long id){
+        return grupRepository.findById(id).orElse(null);
+    }
 }

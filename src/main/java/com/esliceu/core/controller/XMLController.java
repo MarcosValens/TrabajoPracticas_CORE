@@ -40,7 +40,8 @@ public class XMLController {
     @GetMapping("/xml")
     public ResponseEntity<String> upload(){
         File file = new File("./exportacioDadesCentre.xml");
-        this.xmlParser.insertData(file);
+        this.xmlParser.prepare(file);
+        this.xmlParser.insertData();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
