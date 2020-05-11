@@ -56,7 +56,7 @@ public class XmlParser {
                 final String descripcio = element.getAttribute("descripcio");
                 departament.setCodi(codi);
                 departament.setDescripcio(descripcio);
-                departamentManager.create(departament);
+                departamentManager.createOrUpdate(departament);
             }
 
             //Buscamos todos las aulas y las añadimos a la BBDD
@@ -69,7 +69,7 @@ public class XmlParser {
                 Aula aula = new Aula();
                 aula.setCodi(codi);
                 aula.setDescripcio(descripcio);
-                aulaManager.create(aula);
+                aulaManager.createOrUpdate(aula);
             }
 
             //Buscamos todas las actividades y las añadimos a la BBDD
@@ -86,7 +86,7 @@ public class XmlParser {
                 activitat.setCodi(codi);
                 activitat.setDescripcio(descripcio);
                 activitat.setCurta(curta);
-                activitatManager.create(activitat);
+                activitatManager.createOrUpdate(activitat);
             }
 
             //Buscamos todos los profesores y los añadimos a la BBDD asignando su correspondiente departamento si tienen
@@ -113,7 +113,7 @@ public class XmlParser {
                     Departament departamentProfessor = departamentManager.findById(Long.parseLong(departament));
                     professor.setDepartament(departamentProfessor);
                 }
-                professorManager.create(professor);
+                professorManager.createOrUpdate(professor);
             }
 
             //Buscamos todos los cursos y los añadimos a la BBDD
@@ -126,7 +126,7 @@ public class XmlParser {
                 Curs curs = new Curs();
                 curs.setCodi(codi);
                 curs.setDescripcio(descripcio);
-                cursManager.create(curs);
+                cursManager.createOrUpdate(curs);
                 //Por cada curso sacamos sus grupos
                 NodeList nodeListGrups = element.getElementsByTagName("GRUP");
                 for (int j = 0; j < nodeListGrups.getLength() ; j++) {
@@ -157,7 +157,7 @@ public class XmlParser {
                     Curs grupCurso = cursManager.findById(codi);
                     grup.setCurs(grupCurso);
                     grup.setProfessors(professors);
-                    grupManager.create(grup);
+                    grupManager.createOrUpdate(grup);
                 }
             }
 
