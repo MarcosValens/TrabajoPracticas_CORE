@@ -14,4 +14,8 @@ public class CursManager {
     public void create(Curs curs) {
         cursRepository.save(curs);
     }
+
+    public Curs findById(Long id){
+        return cursRepository.findById(id).orElse(null);
+    }
 }

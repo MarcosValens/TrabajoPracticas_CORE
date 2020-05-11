@@ -14,4 +14,8 @@ public class ProfessorManager {
     public void create(Professor professor) {
         professorRepository.save(professor);
     }
+
+    public Professor findById(String codi){
+        return professorRepository.findById(codi).orElse(null);
+    }
 }
