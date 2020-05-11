@@ -1,10 +1,11 @@
 package com.esliceu.core.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "curs")
-public class Curs {
+public class Curs implements Serializable {
 
     @Id
     @Column(name = "codi")

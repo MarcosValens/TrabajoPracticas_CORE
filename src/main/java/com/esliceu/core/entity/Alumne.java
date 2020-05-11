@@ -8,7 +8,6 @@ import java.io.Serializable;
 public class Alumne implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codi")
     private String codi;
 
@@ -24,7 +23,7 @@ public class Alumne implements Serializable {
     @Column(name = "expedient")
     private Long expedient;
 
-    @Column(name = "grup")
+    @JoinColumn(name = "grup")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Grup grup;
 

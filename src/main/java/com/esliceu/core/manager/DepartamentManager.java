@@ -14,4 +14,8 @@ public class DepartamentManager {
     public void createOrUpdate(Departament departament) {
         departamentRepository.save(departament);
     }
+
+    public Departament findById(long codi){
+        return departamentRepository.findById(codi).orElse(null);
+    }
 }

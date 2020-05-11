@@ -20,7 +20,7 @@ public class XMLManager {
     @Autowired
     private XmlParser xmlParser;
 
-    public boolean readXML(MultipartFile fileMultiPart) {
+    /*public boolean readXML(MultipartFile fileMultiPart) {
 
         File file;
         List<List> listaObjetosXML;
@@ -30,7 +30,8 @@ public class XMLManager {
             boolean insertBD = false;
 
             file = convertMultiPartToFile(fileMultiPart);
-            listaObjetosXML = xmlParser.parseXML(file);
+            listaObjetosXML = xmlParser.insertData(file);
+            *//*            insertBD=insertarBD(listaObjetosXML);*//*
 
             if (listaObjetosXML != null) {
                 insertBD = insertarBD();
@@ -44,8 +45,8 @@ public class XMLManager {
             e.printStackTrace();
             return false;
         }
-        return false;
-    }
+        return true;
+    }*/
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
 

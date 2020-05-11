@@ -8,33 +8,21 @@ import java.io.Serializable;
 public class Nota implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "codi")
-    private Long codi;
-
     @Column(name = "qualificacio")
     private Long qualificacio;
 
     @Column(name = "descripcio", length = 300)
     private String descripcio;
 
-    @Column(name = "curs")
+    @JoinColumn(name = "curs")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Curs curs;
 
-    @Column(name = "submateria")
+    @JoinColumn(name = "submateria")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Submateria submateria;
 
     public Nota() {
-    }
-
-    public Long getCodi() {
-        return codi;
-    }
-
-    public void setCodi(Long codi) {
-        this.codi = codi;
     }
 
     public Long getQualificacio() {
