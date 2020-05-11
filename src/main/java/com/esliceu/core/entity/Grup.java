@@ -1,5 +1,8 @@
 package com.esliceu.core.entity;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -19,11 +22,8 @@ public class Grup implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Curs curs;
 
-    @JoinColumn(name = "avalucacio")
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    private Avaluacio avaluacio;
-
     @ManyToMany()
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Professor> professors;
 
     public Grup() {
@@ -43,14 +43,6 @@ public class Grup implements Serializable {
 
     public void setNom(String nom) {
         this.nom = nom;
-    }
-
-    public Avaluacio getAvaluacio() {
-        return avaluacio;
-    }
-
-    public void setAvaluacio(Avaluacio avaluacio) {
-        this.avaluacio = avaluacio;
     }
 
     public Curs getCurs() {

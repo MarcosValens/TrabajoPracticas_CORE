@@ -81,4 +81,12 @@ public class Professor implements Serializable {
     public void setDepartament(Departament departament) {
         this.departament = departament;
     }
+
+    public List<Grup> getGrups() {
+        return grups;
+    }
+
+    public void setGrups(List<Grup> grups) {
+        this.grups = grups;
+    }
 }

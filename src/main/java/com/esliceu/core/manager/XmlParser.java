@@ -1,15 +1,9 @@
 package com.esliceu.core.manager;
 
-import com.esliceu.core.entity.Activitat;
-import com.esliceu.core.entity.Aula;
-import com.esliceu.core.entity.Departament;
-import com.esliceu.core.entity.Professor;
+import com.esliceu.core.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,6 +12,8 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -35,6 +31,12 @@ public class XmlParser {
     @Autowired
     private ActivitatManager activitatManager;
 
+    @Autowired
+    private CursManager cursManager;
+
+    @Autowired
+    private GrupManager grupManager;
+
     public void insertData(File file) {
         try {
             FileInputStream fileIS = new FileInputStream(file);
@@ -43,6 +45,7 @@ public class XmlParser {
             Document xmlDocument = builder.parse(fileIS);
             XPath xPath = XPathFactory.newInstance().newXPath();
 
+            //Buscamos todos los departamentos y los añadimos a la BBDD
             final String findDepartaments = "CENTRE_EXPORT/DEPARTAMENTS/DEPARTAMENT";
             final NodeList nodeListDepartaments = (NodeList) xPath.compile(findDepartaments).evaluate(xmlDocument, XPathConstants.NODESET);
             for (int i = 0; i < nodeListDepartaments.getLength(); i++) {
@@ -53,9 +56,10 @@ public class XmlParser {
                 final String descripcio = element.getAttribute("descripcio");
                 departament.setCodi(codi);
                 departament.setDescripcio(descripcio);
-                departamentManager.create(departament);
+                departamentManager.createOrUpdate(departament);
             }
 
+            //Buscamos todos las aulas y las añadimos a la BBDD
             final String findAules = "CENTRE_EXPORT/AULES/AULA";
             final NodeList nodeListAules = (NodeList) xPath.compile(findAules).evaluate(xmlDocument, XPathConstants.NODESET);
             for (int i = 0; i < nodeListAules.getLength(); i++) {
@@ -65,12 +69,13 @@ public class XmlParser {
                 Aula aula = new Aula();
                 aula.setCodi(codi);
                 aula.setDescripcio(descripcio);
-                aulaManager.create(aula);
+                aulaManager.createOrUpdate(aula);
             }
 
+            //Buscamos todas las actividades y las añadimos a la BBDD
             final String findActivitats = "CENTRE_EXPORT/ACTIVITATS/ACTIVITAT";
             final NodeList nodeListActivitats = (NodeList) xPath.compile(findActivitats).evaluate(xmlDocument, XPathConstants.NODESET);
-            for (int i = 0; i < nodeListActivitats.getLength() ; i++) {
+            for (int i = 0; i < nodeListActivitats.getLength(); i++) {
                 Element element = (Element) nodeListActivitats.item(i);
 
                 final Long codi = Long.parseLong(element.getAttribute("codi"));
@@ -81,12 +86,13 @@ public class XmlParser {
                 activitat.setCodi(codi);
                 activitat.setDescripcio(descripcio);
                 activitat.setCurta(curta);
-                activitatManager.create(activitat);
+                activitatManager.createOrUpdate(activitat);
             }
 
+            //Buscamos todos los profesores y los añadimos a la BBDD asignando su correspondiente departamento si tienen
             final String findProfessors = "CENTRE_EXPORT/PROFESSORS/PROFESSOR";
             final NodeList nodeListProfessors = (NodeList) xPath.compile(findProfessors).evaluate(xmlDocument, XPathConstants.NODESET);
-            for (int i = 0; i <nodeListProfessors.getLength() ; i++) {
+            for (int i = 0; i < nodeListProfessors.getLength(); i++) {
                 Element element = (Element) nodeListProfessors.item(i);
 
                 final String codi = element.getAttribute("codi");
@@ -102,12 +108,60 @@ public class XmlParser {
                 professor.setAp1(ap1);
                 professor.setAp2(ap2);
                 professor.setUsername(username);
-                if (departament != null && !departament.equals("")){
+                //Aqui se asigna el departamento del profesor
+                if (departament != null && !departament.equals("")) {
                     Departament departamentProfessor = departamentManager.findById(Long.parseLong(departament));
                     professor.setDepartament(departamentProfessor);
                 }
-                professorManager.create(professor);
+                professorManager.createOrUpdate(professor);
             }
+
+            //Buscamos todos los cursos y los añadimos a la BBDD
+            final String findCursos = "CENTRE_EXPORT/CURSOS/CURS";
+            final NodeList nodeListCursos = (NodeList) xPath.compile(findCursos).evaluate(xmlDocument, XPathConstants.NODESET);
+            for (int i = 0; i < nodeListCursos.getLength(); i++) {
+                Element element = (Element) nodeListCursos.item(i);
+                final Long codi = Long.parseLong(element.getAttribute("codi"));
+                final String descripcio = element.getAttribute("descripcio");
+                Curs curs = new Curs();
+                curs.setCodi(codi);
+                curs.setDescripcio(descripcio);
+                cursManager.createOrUpdate(curs);
+                //Por cada curso sacamos sus grupos
+                NodeList nodeListGrups = element.getElementsByTagName("GRUP");
+                for (int j = 0; j < nodeListGrups.getLength() ; j++) {
+                    Element elementGrup = (Element) nodeListGrups.item(j);
+
+                    Grup grup = new Grup();
+                    final long codiGrup = Long.parseLong(elementGrup.getAttribute("codi"));
+                    final String nom = elementGrup.getAttribute("nom");
+
+                    grup.setCodi(codiGrup);
+                    grup.setNom(nom);
+
+                    //Sacamos todos los atributos de ese grupo para poder buscar todos sus tutores
+                    NamedNodeMap nodeListAttr = elementGrup.getAttributes();
+                    List<Professor> professors = new ArrayList<>();
+                    for (int k = 0; k <nodeListAttr.getLength() ; k++) {
+                        Attr attr = (Attr) nodeListAttr.item(k);
+                        //Buscamos cada tutor en la BBDD y se lo asignamos al grupo
+                        if (attr.getName().contains("tutor")){
+                            final String tutor = attr.getValue();
+                            Professor professorTutor = professorManager.findById(tutor);
+                            if (professorTutor != null){
+                                professors.add(professorTutor);
+                            }
+                        }
+                    }
+                    //Buscamos el curso por la ID y se lo asignamos al grupo
+                    Curs grupCurso = cursManager.findById(codi);
+                    grup.setCurs(grupCurso);
+                    grup.setProfessors(professors);
+                    grupManager.createOrUpdate(grup);
+                }
+            }
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
