@@ -1,5 +1,6 @@
 package com.esliceu.core.manager;
 
+import com.esliceu.core.entity.Activitat;
 import com.esliceu.core.entity.Aula;
 import com.esliceu.core.entity.Departament;
 import com.esliceu.core.entity.Professor;
@@ -30,6 +31,9 @@ public class XmlParser {
 
     @Autowired
     private ProfessorManager professorManager;
+
+    @Autowired
+    private ActivitatManager activitatManager;
 
     public void insertData(File file) {
         try {
@@ -66,10 +70,10 @@ public class XmlParser {
                 aulaManager.create(aula);
             }
 
-            final String findProfessors = "CENTRE_EXPORT/PROFESSORS/PROFESSOR";
+            /*final String findProfessors = "CENTRE_EXPORT/PROFESSORS/PROFESSOR";
             final NodeList nodeListProfessors = (NodeList) xPath.compile(findProfessors).evaluate(xmlDocument, XPathConstants.NODESET);
             for (int i = 0; i <nodeListProfessors.getLength() ; i++) {
-                Element element = (Element) nodeListAules.item(i);
+                Element element = (Element) nodeListProfessors.item(i);
 
                 final String codi = element.getAttribute("codi");
                 final String nom = element.getAttribute("nom");
@@ -86,6 +90,22 @@ public class XmlParser {
                 professor.setUsername(username);
 
                 professorManager.create(professor);
+            }*/
+
+            final String findActivitats = "CENTRE_EXPORT/ACTIVITATS/ACTIVITAT";
+            final NodeList nodeListActivitats = (NodeList) xPath.compile(findActivitats).evaluate(xmlDocument, XPathConstants.NODESET);
+            for (int i = 0; i < nodeListActivitats.getLength() ; i++) {
+                Element element = (Element) nodeListActivitats.item(i);
+
+                final Long codi = Long.parseLong(element.getAttribute("codi"));
+                final String descripcio = element.getAttribute("descripcio");
+                final String curta = element.getAttribute("curta");
+
+                Activitat activitat = new Activitat();
+                activitat.setCodi(codi);
+                activitat.setDescripcio(descripcio);
+                activitat.setCurta(curta);
+                activitatManager.create(activitat);
             }
         } catch (Exception e) {
             e.printStackTrace();
