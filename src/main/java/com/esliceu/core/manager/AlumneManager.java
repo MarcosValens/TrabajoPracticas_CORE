@@ -11,7 +11,7 @@ public class AlumneManager {
     @Autowired
     private AlumneRepository alumneRepository;
 
-    public void create(Alumne alumne) {
+    public void createOrUpdate(Alumne alumne) {
         alumneRepository.save(alumne);
     }
 }

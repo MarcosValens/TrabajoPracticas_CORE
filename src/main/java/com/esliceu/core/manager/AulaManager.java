@@ -11,7 +11,7 @@ public class AulaManager {
     @Autowired
     private AulaRepository aulaRepository;
 
-    public void create(Aula aula) {
+    public void createOrUpdate(Aula aula) {
         aulaRepository.save(aula);
     }
 }

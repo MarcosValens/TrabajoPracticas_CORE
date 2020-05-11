@@ -11,7 +11,7 @@ public class ActivitatManager {
     @Autowired
     private ActivitatRepository activitatRepository;
 
-    public void create(Activitat activitat) {
+    public void createOrUpdate(Activitat activitat) {
         activitatRepository.save(activitat);
     }
 }

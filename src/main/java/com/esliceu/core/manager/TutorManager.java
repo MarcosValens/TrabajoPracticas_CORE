@@ -11,7 +11,7 @@ public class TutorManager {
     @Autowired
     private TutorRepository tutorRepository;
 
-    public void create(Tutor tutor) {
+    public void createOrUpdate(Tutor tutor) {
         tutorRepository.save(tutor);
     }
 }
