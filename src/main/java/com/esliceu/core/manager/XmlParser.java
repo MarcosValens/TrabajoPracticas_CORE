@@ -70,7 +70,8 @@ public class XmlParser {
         Departament departament;
 
         /*EL RESULTADO DE LA FUNCION*/
-        List<List> parsedXML = new ArrayList<>();
+
+
 
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
         try {

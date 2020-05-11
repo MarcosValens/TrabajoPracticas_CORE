@@ -8,10 +8,6 @@ import java.io.Serializable;
 public class Nota implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "codi")
-    private Long codi;
-
     @Column(name = "qualificacio")
     private Long qualificacio;
 
