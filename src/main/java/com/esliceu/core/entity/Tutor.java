@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "activitat")
+@Table(name = "tutor")
 public class Tutor implements Serializable {
 
     @Id
@@ -23,11 +23,8 @@ public class Tutor implements Serializable {
     @Column(name = "llinatge2", length = 300)
     private String llinatge2;
 
-    @Column(name = "relacio", length = 300)
+    @Column(name = "relacio", length = 50)
     private String relacio;
-
-    @Column(name = "alumne")
-    private Long alumne;
 
     public Tutor() {
     }
@@ -70,13 +67,5 @@ public class Tutor implements Serializable {
 
     public void setRelacio(String relacio) {
         this.relacio = relacio;
-    }
-
-    public Long getAlumne() {
-        return alumne;
-    }
-
-    public void setAlumne(Long alumne) {
-        this.alumne = alumne;
     }
 }

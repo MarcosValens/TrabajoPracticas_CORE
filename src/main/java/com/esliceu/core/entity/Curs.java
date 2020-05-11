@@ -1,22 +1,18 @@
 package com.esliceu.core.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "curs")
-public class Curs {
+public class Curs implements Serializable {
 
     @Id
-    @Column(name = "codi", unique = true)
+    @Column(name = "codi")
     private Long codi;
 
     @Column(name = "descripcio", length = 300)
     private String descripcio;
-
-    private Long grup;
 
     public Curs() {
     }
@@ -37,11 +33,4 @@ public class Curs {
         this.descripcio = descripcio;
     }
 
-    public Long getGrup() {
-        return grup;
-    }
-
-    public void setGrup(Long grup) {
-        this.grup = grup;
-    }
 }

@@ -1,19 +1,71 @@
 package com.esliceu.core.entity;
 
-public class Sessio {
-    private String horari;
-    private String professor;
-    private String alumne;
-    private String curs;
-    private String grup;
-    private int dia;
-    private int hora;
-    private int durada;
-    private long aula;
-    private long submateria;
-    private long activitat;
-    private long placa;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "sessio")
+public class Sessio implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "horari")
+    private String horari;
+
+    @JoinColumn(name = "professor")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Professor professor;
+
+    @JoinColumn(name = "alumne")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Alumne alumne;
+
+    @JoinColumn(name = "curs")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Curs curs;
+
+    @JoinColumn(name = "grup")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Grup grup;
+
+    @Column(name = "dia")
+    private int dia;
+
+    @Column(name = "hora")
+    private LocalDateTime hora;
+
+    @Column(name = "durada")
+    private int durada;
+
+    @JoinColumn(name = "aula")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Aula aula;
+
+    @JoinColumn(name = "submateria")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Submateria submateria;
+
+    @JoinColumn(name = "activitat")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Activitat activitat;
+
+    @Column(name = "placa")
+    private Long placa;
+
+    public Sessio() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getHorari() {
         return horari;
@@ -23,35 +75,35 @@ public class Sessio {
         this.horari = horari;
     }
 
-    public String getProfessor() {
+    public Professor getProfessor() {
         return professor;
     }
 
-    public void setProfessor(String professor) {
+    public void setProfessor(Professor professor) {
         this.professor = professor;
     }
 
-    public String getAlumne() {
+    public Alumne getAlumne() {
         return alumne;
     }
 
-    public void setAlumne(String alumne) {
+    public void setAlumne(Alumne alumne) {
         this.alumne = alumne;
     }
 
-    public String getCurs() {
+    public Curs getCurs() {
         return curs;
     }
 
-    public void setCurs(String curs) {
+    public void setCurs(Curs curs) {
         this.curs = curs;
     }
 
-    public String getGrup() {
+    public Grup getGrup() {
         return grup;
     }
 
-    public void setGrup(String grup) {
+    public void setGrup(Grup grup) {
         this.grup = grup;
     }
 
@@ -63,11 +115,11 @@ public class Sessio {
         this.dia = dia;
     }
 
-    public int getHora() {
+    public LocalDateTime getHora() {
         return hora;
     }
 
-    public void setHora(int hora) {
+    public void setHora(LocalDateTime hora) {
         this.hora = hora;
     }
 
@@ -79,35 +131,36 @@ public class Sessio {
         this.durada = durada;
     }
 
-    public long getAula() {
+    public Aula getAula() {
         return aula;
     }
 
-    public void setAula(long aula) {
+    public void setAula(Aula aula) {
         this.aula = aula;
     }
 
-    public long getSubmateria() {
+    public Submateria getSubmateria() {
         return submateria;
     }
 
-    public void setSubmateria(long submateria) {
+    public void setSubmateria(Submateria submateria) {
         this.submateria = submateria;
     }
 
-    public long getActivitat() {
+    public Activitat getActivitat() {
         return activitat;
     }
 
-    public void setActivitat(long activitat) {
+    public void setActivitat(Activitat activitat) {
         this.activitat = activitat;
     }
 
-    public long getPlaca() {
+    public Long getPlaca() {
         return placa;
     }
 
-    public void setPlaca(long placa) {
+    public void setPlaca(Long placa) {
         this.placa = placa;
     }
+
 }

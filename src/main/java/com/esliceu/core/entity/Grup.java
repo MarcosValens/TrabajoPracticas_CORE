@@ -1,10 +1,8 @@
 package com.esliceu.core.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "grup")
@@ -17,9 +15,16 @@ public class Grup implements Serializable {
     @Column(name = "nom", length = 100)
     private String nom;
 
-    @Column(name = "tutor")
-    private Long tutor;
+    @JoinColumn(name = "curs")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Curs curs;
 
+    @JoinColumn(name = "avalucacio")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Avaluacio avaluacio;
+
+    @ManyToMany()
+    private List<Professor> professors;
 
     public Grup() {
     }
@@ -40,11 +45,27 @@ public class Grup implements Serializable {
         this.nom = nom;
     }
 
-    public Long getTutor() {
-        return tutor;
+    public Avaluacio getAvaluacio() {
+        return avaluacio;
     }
 
-    public void setTutor(Long tutor) {
-        this.tutor = tutor;
+    public void setAvaluacio(Avaluacio avaluacio) {
+        this.avaluacio = avaluacio;
+    }
+
+    public Curs getCurs() {
+        return curs;
+    }
+
+    public void setCurs(Curs curs) {
+        this.curs = curs;
+    }
+
+    public List<Professor> getProfessors() {
+        return professors;
+    }
+
+    public void setProfessors(List<Professor> professors) {
+        this.professors = professors;
     }
 }

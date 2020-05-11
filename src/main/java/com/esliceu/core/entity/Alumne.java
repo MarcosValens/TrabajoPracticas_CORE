@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class Alumne implements Serializable {
 
     @Id
-    @Column(name = "codi", unique = true)
+    @Column(name = "codi")
     private String codi;
 
     @Column(name = "nom", length = 100)
@@ -23,8 +23,9 @@ public class Alumne implements Serializable {
     @Column(name = "expedient")
     private Long expedient;
 
-    @Column(name = "grup")
-    private Long grup;
+    @JoinColumn(name = "grup")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Grup grup;
 
     public Alumne() {
     }
@@ -69,11 +70,12 @@ public class Alumne implements Serializable {
         this.expedient = expedient;
     }
 
-    public Long getGrup() {
+    public Grup getGrup() {
         return grup;
     }
 
-    public void setGrup(Long grup) {
+    public void setGrup(Grup grup) {
         this.grup = grup;
     }
+
 }

@@ -1,9 +1,6 @@
 package com.esliceu.core.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -20,8 +17,9 @@ public class Submateria implements Serializable {
     @Column(name = "curta", length = 100)
     private String curta;
 
-    @Column(name = "curs")
-    private Long curs;
+    @JoinColumn(name = "curs")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Curs curs;
 
     public Submateria() {
     }
@@ -50,11 +48,12 @@ public class Submateria implements Serializable {
         this.curta = curta;
     }
 
-    public Long getCurs() {
+    public Curs getCurs() {
         return curs;
     }
 
-    public void setCurs(Long submateria) {
-        this.curs = submateria;
+    public void setCurs(Curs curs) {
+        this.curs = curs;
     }
+
 }

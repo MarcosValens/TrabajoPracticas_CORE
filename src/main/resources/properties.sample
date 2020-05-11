@@ -1,4 +1,5 @@
 ## Spring DataSource Properties ##
+
 # Driver que usará Spring, por defecto nosotros usamos "com.mysql.cj.jdbc.Driver".
 spring.datasource.driver-class-name = com.mysql.cj.jdbc.Driver
 
@@ -11,8 +12,15 @@ spring.datasource.username = root
 # Contrasña para acceder a la Base de Datos.
 spring.datasource.password =
 
+# El tamaño total que el archivo no puede superar
+spring.servlet.multipart.max-file-size=10MB
+
+# El tamaño total que la solicitud no puede superar
+spring.servlet.multipart.max-request-size=12MB
+
 
 ## Hibernate Properties ##
+
 # Dialecto de SQL que usará Hibernate, por defecto, nosotros usamos "org.hibernate.dialect.MySQL5InnoDBDialect".
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
 
@@ -24,3 +32,9 @@ spring.jpa.properties.hibernate.format_sql = false
 
 # Indica que acción realizará Hibernate al arrancar, valores posibles: create, create-drop, validate, update, none
 spring.jpa.hibernate.ddl-auto = create
+
+
+## Other Properties ##
+
+# Directorio de upload para las fotos
+upload.directory=
