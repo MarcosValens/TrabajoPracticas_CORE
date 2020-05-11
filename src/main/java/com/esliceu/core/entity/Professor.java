@@ -24,7 +24,7 @@ public class Professor implements Serializable {
     @Column(name = "username", length = 300)
     private String username;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "departament")
     private Departament departament;
 

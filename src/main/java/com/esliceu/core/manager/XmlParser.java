@@ -51,8 +51,6 @@ public class XmlParser {
                 Departament departament = new Departament();
                 final long codi = Long.parseLong(element.getAttribute("codi"));
                 final String descripcio = element.getAttribute("descripcio");
-                System.out.println(codi);
-                System.out.println(descripcio);
                 departament.setCodi(codi);
                 departament.setDescripcio(descripcio);
                 departamentManager.create(departament);
@@ -70,28 +68,6 @@ public class XmlParser {
                 aulaManager.create(aula);
             }
 
-            /*final String findProfessors = "CENTRE_EXPORT/PROFESSORS/PROFESSOR";
-            final NodeList nodeListProfessors = (NodeList) xPath.compile(findProfessors).evaluate(xmlDocument, XPathConstants.NODESET);
-            for (int i = 0; i <nodeListProfessors.getLength() ; i++) {
-                Element element = (Element) nodeListProfessors.item(i);
-
-                final String codi = element.getAttribute("codi");
-                final String nom = element.getAttribute("nom");
-                final String ap1 = element.getAttribute("ap1");
-                final String ap2 = element.getAttribute("ap2");
-                final String username = element.getAttribute("username");
-                //final long departament = Long.parseLong(element.getAttribute("departament"));
-
-                Professor professor = new Professor();
-                professor.setCodi(codi);
-                professor.setNom(nom);
-                professor.setAp1(ap1);
-                professor.setAp2(ap2);
-                professor.setUsername(username);
-
-                professorManager.create(professor);
-            }*/
-
             final String findActivitats = "CENTRE_EXPORT/ACTIVITATS/ACTIVITAT";
             final NodeList nodeListActivitats = (NodeList) xPath.compile(findActivitats).evaluate(xmlDocument, XPathConstants.NODESET);
             for (int i = 0; i < nodeListActivitats.getLength() ; i++) {
@@ -106,6 +82,31 @@ public class XmlParser {
                 activitat.setDescripcio(descripcio);
                 activitat.setCurta(curta);
                 activitatManager.create(activitat);
+            }
+
+            final String findProfessors = "CENTRE_EXPORT/PROFESSORS/PROFESSOR";
+            final NodeList nodeListProfessors = (NodeList) xPath.compile(findProfessors).evaluate(xmlDocument, XPathConstants.NODESET);
+            for (int i = 0; i <nodeListProfessors.getLength() ; i++) {
+                Element element = (Element) nodeListProfessors.item(i);
+
+                final String codi = element.getAttribute("codi");
+                final String nom = element.getAttribute("nom");
+                final String ap1 = element.getAttribute("ap1");
+                final String ap2 = element.getAttribute("ap2");
+                final String username = element.getAttribute("username");
+                final String departament = element.getAttribute("departament");
+
+                Professor professor = new Professor();
+                professor.setCodi(codi);
+                professor.setNom(nom);
+                professor.setAp1(ap1);
+                professor.setAp2(ap2);
+                professor.setUsername(username);
+                if (departament != null && !departament.equals("")){
+                    Departament departamentProfessor = departamentManager.findById(Long.parseLong(departament));
+                    professor.setDepartament(departamentProfessor);
+                }
+                professorManager.create(professor);
             }
         } catch (Exception e) {
             e.printStackTrace();
