@@ -1,9 +1,6 @@
 package com.esliceu.core.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
@@ -24,6 +21,10 @@ public class Avaluacio implements Serializable {
 
     @Column(name = "data_fi", columnDefinition = "DATE")
     private LocalDate dataFi;
+
+    @JoinColumn(name = "grup")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Grup grup;
 
     public Avaluacio() {
     }
@@ -58,5 +59,13 @@ public class Avaluacio implements Serializable {
 
     public void setDataFi(LocalDate dataFi) {
         this.dataFi = dataFi;
+    }
+
+    public Grup getGrup() {
+        return grup;
+    }
+
+    public void setGrup(Grup grup) {
+        this.grup = grup;
     }
 }
