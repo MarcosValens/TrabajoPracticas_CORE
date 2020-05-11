@@ -11,7 +11,7 @@ public class CursManager {
     @Autowired
     private CursRepository cursRepository;
 
-    public void create(Curs curs) {
+    public void createOrUpdate(Curs curs) {
         cursRepository.save(curs);
     }
 

@@ -11,7 +11,7 @@ public class DepartamentManager {
     @Autowired
     private DepartamentRepository departamentRepository;
 
-    public void create(Departament departament) {
+    public void createOrUpdate(Departament departament) {
         departamentRepository.save(departament);
     }
 
