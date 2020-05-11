@@ -17,7 +17,7 @@ public class Submateria implements Serializable {
     @Column(name = "curta", length = 100)
     private String curta;
 
-    @Column(name = "curs")
+    @JoinColumn(name = "curs")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Curs curs;
 

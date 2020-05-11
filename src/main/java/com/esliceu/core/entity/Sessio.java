@@ -16,19 +16,19 @@ public class Sessio implements Serializable {
     @Column(name = "horari")
     private String horari;
 
-    @Column(name = "professor")
+    @JoinColumn(name = "professor")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Professor professor;
 
-    @Column(name = "alumne")
+    @JoinColumn(name = "alumne")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Alumne alumne;
 
-    @Column(name = "curs")
+    @JoinColumn(name = "curs")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Curs curs;
 
-    @Column(name = "grup")
+    @JoinColumn(name = "grup")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Grup grup;
 
@@ -41,15 +41,15 @@ public class Sessio implements Serializable {
     @Column(name = "durada")
     private int durada;
 
-    @Column(name = "aula")
+    @JoinColumn(name = "aula")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Aula aula;
 
-    @Column(name = "submateria")
+    @JoinColumn(name = "submateria")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Submateria submateria;
 
-    @Column(name = "activitat")
+    @JoinColumn(name = "activitat")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Activitat activitat;
 

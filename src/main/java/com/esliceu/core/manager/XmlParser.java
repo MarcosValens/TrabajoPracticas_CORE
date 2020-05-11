@@ -1,289 +1,115 @@
 package com.esliceu.core.manager;
 
-import com.esliceu.core.entity.*;
-import com.esliceu.core.utils.DateParser;
+import com.esliceu.core.entity.Activitat;
+import com.esliceu.core.entity.Aula;
+import com.esliceu.core.entity.Departament;
+import com.esliceu.core.entity.Professor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.namespace.QName;
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.*;
 
 
 @Service
 public class XmlParser {
 
-    public List<List> parseXML(File file) throws Exception {
+    @Autowired
+    private DepartamentManager departamentManager;
 
-        String fileName = file.getPath();
+    @Autowired
+    private AulaManager aulaManager;
 
-        /*PRIMER BLOQUE "CURS"*/
-        List<Curs> cursList = new ArrayList<>();
-        List<Grup> grupList = new ArrayList<>();
-        List<Avaluacio> avaluacioList = new ArrayList<>();
-        List<List> avaluacioLists = new ArrayList<>();
-        List<Nota> noteList = new ArrayList<>();
-        List<List> noteLists = new ArrayList<>();
-        Curs curs;
-        Grup grup;
-        Avaluacio avaluacio;
-        Nota nota;
+    @Autowired
+    private ProfessorManager professorManager;
 
-        /*SEGUNDO BLOQUE "SUBMATERIES"*/
-        List<Submateria> submateries = new ArrayList<>();
-        Submateria submateria;
+    @Autowired
+    private ActivitatManager activitatManager;
 
-        /*TERCER BLOQUE "ACTIVITATS"*/
-        List<Activitat> activitats = new ArrayList<>();
-        Activitat activitat;
-
-        /*CUARTO BLOQUE "ALUMNE"*/
-        List<Alumne> alumnes = new ArrayList<>();
-        Alumne alumne;
-
-        /*CUARTO BLOQUE "PROFESSOR"*/
-        List<Professor> professors = new ArrayList<>();
-        Professor professor;
-
-        /*QUINTO BLOQUE "SESSIO"*/
-
-        List<Sessio> sessions = new ArrayList<>();
-        Sessio sessio;
-
-        /*SEXTO BLOQUE "AULA"*/
-        List<Aula> aules = new ArrayList<>();
-        Aula aula;
-
-        /*SEPTIMO BLOQUE "TUTOR"*/
-        List<Tutor> tutors = new ArrayList<>();
-        Tutor tutor;
-
-        /*OCTAVO BLOQUE "DEPARTAMENT"*/
-        List<Departament> departaments = new ArrayList<>();
-        Departament departament;
-
-        /*EL RESULTADO DE LA FUNCION*/
-
-
-
-        XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+    public void insertData(File file) {
         try {
-            XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(new FileInputStream(fileName));
-            while (xmlEventReader.hasNext()) {
-                XMLEvent xmlEvent = xmlEventReader.nextEvent();
-                if (xmlEvent.isStartElement()) {
-                    StartElement startElement = xmlEvent.asStartElement();
-                    switch (startElement.getName().getLocalPart()) {
-                        case "CURS":
-                            curs = new Curs();
-                            //Get the 'id' attribute from curs element
-                            Attribute codiCurs = startElement.getAttributeByName(new QName("codi"));
-                            Attribute descripcioCurs = startElement.getAttributeByName(new QName("descripcio"));
-                            curs.setCodi(Long.parseLong(codiCurs.getValue()));
-                            curs.setDescripcio(descripcioCurs.getValue());
-                            cursList.add(curs);
-                            curs.setGrup(grupList);
-                            break;
-                        case "GRUP":
-                            grup = new Grup();
-                            Attribute codiGrup = startElement.getAttributeByName(new QName("codi"));
-                            Attribute nomGrup = startElement.getAttributeByName(new QName("nom"));
-                            Attribute tutorGrup = startElement.getAttributeByName(new QName("tutor"));
-                            grup.setCodi(Long.parseLong(codiGrup.getValue()));
-                            grup.setNom(nomGrup.getValue());
-                            grup.setTutor(Long.parseLong(tutorGrup.getValue()));
-                            grupList.add(grup);
-                            grup.setAvaluacions(avaluacioLists);
-                            break;
-                        case "AVALUACIONS":
-                            if (!avaluacioList.isEmpty()) {
-                                avaluacioList = new ArrayList<>();
-                            }
-                            avaluacioLists.add(avaluacioList);
-                            break;
-                        case "AVALUACIO":
-                            avaluacio = new Avaluacio();
-                            Attribute codiAvaluacio = startElement.getAttributeByName(new QName("codi"));
-                            Attribute descripcioAvaluacio = startElement.getAttributeByName(new QName("descripcio"));
-                            Attribute data_inici = startElement.getAttributeByName(new QName("data_inici"));
-                            Attribute data_fi = startElement.getAttributeByName(new QName("data_fi"));
-                            avaluacio.setCodi(Long.parseLong(codiAvaluacio.getValue()));
-                            avaluacio.setDescripcio(descripcioAvaluacio.getValue());
-                            avaluacio.setDataInici(DateParser.dataParser(data_inici.getValue()));
-                            avaluacio.setDataFi(DateParser.dataParser(data_fi.getValue()));
-                            avaluacioList.add(avaluacio);
-                            break;
-                        case "NOTES":
-                            noteList = new ArrayList<>();
-                            noteLists.add(noteList);
-                            break;
-                        case "NOTA":
-                            nota = new Nota();
-                            Attribute qualificacioNote = startElement.getAttributeByName(new QName("qualificacio"));
-                            Attribute descNote = startElement.getAttributeByName(new QName("desc"));
-                            nota.setQualificacio(Long.parseLong(qualificacioNote.getValue()));
-                            nota.setDescripcio(descNote.getValue());
-                            noteList.add(nota);
-                            break;
-                        case "SUBMATERIA":
-                            submateria = new Submateria();
-                            Attribute codiSubmateria = startElement.getAttributeByName(new QName("codi"));
-                            Attribute cursSubmateria = startElement.getAttributeByName(new QName("curs"));
-                            Attribute descripcioSubmateria = startElement.getAttributeByName(new QName("descripcio"));
-                            Attribute curtaSubmateria = startElement.getAttributeByName(new QName("curta"));
-                            submateria.setCodi(Long.parseLong(codiSubmateria.getValue()));
-                            submateria.setCurs(Long.parseLong(cursSubmateria.getValue()));
-                            submateria.setDescripcio(descripcioSubmateria.getValue());
-                            submateria.setCurta(curtaSubmateria.getValue());
-                            submateries.add(submateria);
-                            break;
-                        case "ACTIVITAT":
-                            activitat = new Activitat();
-                            Attribute codiActivitat = startElement.getAttributeByName(new QName("codi"));
-                            Attribute descripcioActivitat = startElement.getAttributeByName(new QName("descripcio"));
-                            Attribute curtaActivitat = startElement.getAttributeByName(new QName("curta"));
-                            activitat.setCodi(Long.parseLong(codiActivitat.getValue()));
-                            activitat.setDescripcio(descripcioActivitat.getValue());
-                            activitat.setCurta(curtaActivitat.getValue());
-                            activitats.add(activitat);
-                            break;
-                        case "ALUMNE":
-                            alumne = new Alumne();
-                            Attribute codiAlumne = startElement.getAttributeByName(new QName("codi"));
-                            Attribute nomAlumne = startElement.getAttributeByName(new QName("nom"));
-                            Attribute ap1Alumne = startElement.getAttributeByName(new QName("ap1"));
-                            Attribute ap2Alumne = startElement.getAttributeByName(new QName("ap2"));
-                            Attribute expedientAlumne = startElement.getAttributeByName(new QName("expedient"));
-                            Attribute grupAlumne = startElement.getAttributeByName(new QName("grup"));
-                            alumne.setCodi(codiAlumne.getValue());
-                            alumne.setNom(nomAlumne.getValue());
-                            alumne.setAp1(ap1Alumne.getValue());
-                            alumne.setAp2(ap2Alumne.getValue());
-                            alumne.setExpedient(Long.parseLong(expedientAlumne.getValue()));
-                            alumne.setGrup(Long.parseLong(grupAlumne.getValue()));
-                            alumnes.add(alumne);
-                            break;
-                        case "PROFESSOR":
-                            professor = new Professor();
-                            Attribute codiProfessor = startElement.getAttributeByName(new QName("codi"));
-                            Attribute nomProfessor = startElement.getAttributeByName(new QName("nom"));
-                            Attribute ap1Professor = startElement.getAttributeByName(new QName("ap1"));
-                            Attribute ap2Professor = startElement.getAttributeByName(new QName("ap2"));
-                            Attribute usernameProfessor = startElement.getAttributeByName(new QName("username"));
-                            Attribute departamentProfessor = startElement.getAttributeByName(new QName("departament"));
-                            professor.setCodi(codiProfessor.getValue());
-                            professor.setNom(nomProfessor.getValue());
-                            professor.setAp1(ap1Professor.getValue());
-                            professor.setAp2(ap2Professor.getValue());
-                            professor.setUsername(usernameProfessor.getValue());
-                            if (departamentProfessor.getValue().equals("")) {
-                                professor.setDepartament((long) 0);
-                            } else {
-                                professor.setDepartament(Long.parseLong(departamentProfessor.getValue()));
-                            }
-                            professors.add(professor);
-                            break;
-                        case "SESSIO":
-                            sessio = new Sessio();
-                            Attribute professorSessio = startElement.getAttributeByName(new QName("professor"));
-                            Attribute alumneSessio = startElement.getAttributeByName(new QName("alumne"));
-                            Attribute cursSessio = startElement.getAttributeByName(new QName("curs"));
-                            Attribute grupSessio = startElement.getAttributeByName(new QName("grup"));
-                            Attribute diaSessio = startElement.getAttributeByName(new QName("dia"));
-                            Attribute horaSessio = startElement.getAttributeByName(new QName("hora"));
-                            Attribute duradaSessio = startElement.getAttributeByName(new QName("durada"));
-                            Attribute aulaSessio = startElement.getAttributeByName(new QName("aula"));
-                            Attribute submateriaSessio = startElement.getAttributeByName(new QName("submateria"));
-                            Attribute activitatSessio = startElement.getAttributeByName(new QName("activitat"));
-                            Attribute placaSessio = startElement.getAttributeByName(new QName("placa"));
-                            if (professorSessio != null) {
-                                Professor professor1 = new Professor();
-                                professor1.setCodi(professorSessio.getValue());
-                                sessio.setProfessor(professor1);
-                            }
-                            if (alumneSessio != null) {
-                                sessio.setAlumne(alumneSessio.getValue());
-                            }
-                            if (cursSessio != null) {
-                                sessio.setCurs(cursSessio.getValue());
-                            }
-                            if (grupSessio != null) {
-                                sessio.setGrup(grupSessio.getValue());
-                            }
-                            sessio.setDia(Integer.parseInt(diaSessio.getValue()));
-                            sessio.setHora(Integer.parseInt(horaSessio.getValue()));
-                            sessio.setDurada(Integer.parseInt(duradaSessio.getValue()));
-                            if (aulaSessio != null) {
-                                sessio.setAula(Long.parseLong(aulaSessio.getValue()));
-                            }
-                            if (submateriaSessio != null) {
+            FileInputStream fileIS = new FileInputStream(file);
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            Document xmlDocument = builder.parse(fileIS);
+            XPath xPath = XPathFactory.newInstance().newXPath();
 
-                                Submateria submateria1 = SubmateriaManager.findby(Long.parseLong(submateriaSessio.getValue()));
-                                sessio.setSubmateria(submateria1);
-                            }
-                            if (activitatSessio != null) {
-                                sessio.setActivitat(Long.parseLong(activitatSessio.getValue()));
-                            }
-                            if (placaSessio != null) {
-                                sessio.setPlaca(Long.parseLong(placaSessio.getValue()));
-                            }
-                            sessions.add(sessio);
-                            break;
-                        case "AULE":
-                            aula = new Aula();
-                            Attribute codiAula = startElement.getAttributeByName(new QName("codi"));
-                            Attribute descripcioAula = startElement.getAttributeByName(new QName("descripcio"));
-                            aula.setCodi(Long.parseLong(codiAula.getValue()));
-                            aula.setDescripcio(descripcioAula.getValue());
-                            aules.add(aula);
-                        case "TUTOR":
-                            tutor = new Tutor();
-                            Attribute codiAlumneTutor = startElement.getAttributeByName(new QName("codiAlumne"));
-                            Attribute codiTutor = startElement.getAttributeByName(new QName("codiTutor"));
-                            Attribute llinatge1Tutor = startElement.getAttributeByName(new QName("llinatge1"));
-                            Attribute llinatge2Tutor = startElement.getAttributeByName(new QName("llinatge2"));
-                            Attribute nomTutor = startElement.getAttributeByName(new QName("nom"));
-                            Attribute relacioTutor = startElement.getAttributeByName(new QName("relacio"));
-
-                            tutor.setCodiAlumne(codiAlumneTutor.getValue());
-                            tutor.setCodiTutor(codiTutor.getValue());
-                            tutor.setLlinatge1(llinatge1Tutor.getValue());
-                            tutor.setLlinatge2(llinatge2Tutor.getValue());
-                            tutor.setNom(nomTutor.getValue());
-                            tutor.setRelacio(relacioTutor.getValue());
-                            tutors.add(tutor);
-                            break;
-                        case "DEPARTAMENT":
-                            departament = new Departament();
-                            Attribute codiDepartament = startElement.getAttributeByName(new QName("codi"));
-                            Attribute descripcioDepartament = startElement.getAttributeByName(new QName("descripcio"));
-                            departament.setCodi(Long.parseLong(codiDepartament.getValue()));
-                            departament.setDescripcio(descripcioDepartament.getValue());
-                            departaments.add(departament);
-                            break;
-                    }
-                }
+            final String findDepartaments = "CENTRE_EXPORT/DEPARTAMENTS/DEPARTAMENT";
+            final NodeList nodeListDepartaments = (NodeList) xPath.compile(findDepartaments).evaluate(xmlDocument, XPathConstants.NODESET);
+            for (int i = 0; i < nodeListDepartaments.getLength(); i++) {
+                //Departament
+                Element element = (Element) nodeListDepartaments.item(i);
+                Departament departament = new Departament();
+                final long codi = Long.parseLong(element.getAttribute("codi"));
+                final String descripcio = element.getAttribute("descripcio");
+                departament.setCodi(codi);
+                departament.setDescripcio(descripcio);
+                departamentManager.create(departament);
             }
 
-        } catch (FileNotFoundException | XMLStreamException e) {
+            final String findAules = "CENTRE_EXPORT/AULES/AULA";
+            final NodeList nodeListAules = (NodeList) xPath.compile(findAules).evaluate(xmlDocument, XPathConstants.NODESET);
+            for (int i = 0; i < nodeListAules.getLength(); i++) {
+                Element element = (Element) nodeListAules.item(i);
+                final long codi = Integer.parseInt(element.getAttribute("codi"));
+                final String descripcio = element.getAttribute("descripcio");
+                Aula aula = new Aula();
+                aula.setCodi(codi);
+                aula.setDescripcio(descripcio);
+                aulaManager.create(aula);
+            }
+
+            final String findActivitats = "CENTRE_EXPORT/ACTIVITATS/ACTIVITAT";
+            final NodeList nodeListActivitats = (NodeList) xPath.compile(findActivitats).evaluate(xmlDocument, XPathConstants.NODESET);
+            for (int i = 0; i < nodeListActivitats.getLength() ; i++) {
+                Element element = (Element) nodeListActivitats.item(i);
+
+                final Long codi = Long.parseLong(element.getAttribute("codi"));
+                final String descripcio = element.getAttribute("descripcio");
+                final String curta = element.getAttribute("curta");
+
+                Activitat activitat = new Activitat();
+                activitat.setCodi(codi);
+                activitat.setDescripcio(descripcio);
+                activitat.setCurta(curta);
+                activitatManager.create(activitat);
+            }
+
+            final String findProfessors = "CENTRE_EXPORT/PROFESSORS/PROFESSOR";
+            final NodeList nodeListProfessors = (NodeList) xPath.compile(findProfessors).evaluate(xmlDocument, XPathConstants.NODESET);
+            for (int i = 0; i <nodeListProfessors.getLength() ; i++) {
+                Element element = (Element) nodeListProfessors.item(i);
+
+                final String codi = element.getAttribute("codi");
+                final String nom = element.getAttribute("nom");
+                final String ap1 = element.getAttribute("ap1");
+                final String ap2 = element.getAttribute("ap2");
+                final String username = element.getAttribute("username");
+                final String departament = element.getAttribute("departament");
+
+                Professor professor = new Professor();
+                professor.setCodi(codi);
+                professor.setNom(nom);
+                professor.setAp1(ap1);
+                professor.setAp2(ap2);
+                professor.setUsername(username);
+                if (departament != null && !departament.equals("")){
+                    Departament departamentProfessor = departamentManager.findById(Long.parseLong(departament));
+                    professor.setDepartament(departamentProfessor);
+                }
+                professorManager.create(professor);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        parsedXML.add(cursList);
-        parsedXML.add(noteLists);
-        parsedXML.add(submateries);
-        parsedXML.add(activitats);
-        parsedXML.add(alumnes);
-        parsedXML.add(professors);
-        parsedXML.add(sessions);
-        parsedXML.add(tutors);
-        parsedXML.add(departaments);
-        return parsedXML;
     }
 }

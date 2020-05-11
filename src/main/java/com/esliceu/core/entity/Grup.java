@@ -15,11 +15,11 @@ public class Grup implements Serializable {
     @Column(name = "nom", length = 100)
     private String nom;
 
-    @Column(name = "curs")
+    @JoinColumn(name = "curs")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Curs curs;
 
-    @Column(name = "avalucacio")
+    @JoinColumn(name = "avalucacio")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Avaluacio avaluacio;
 
