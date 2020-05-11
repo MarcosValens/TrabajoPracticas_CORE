@@ -11,7 +11,7 @@ public class GrupManager {
     @Autowired
     private GrupRepository grupRepository;
 
-    public void create(Grup grup) {
+    public void createOrUpdate(Grup grup) {
         grupRepository.save(grup);
     }
 }

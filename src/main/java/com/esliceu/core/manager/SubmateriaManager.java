@@ -11,7 +11,7 @@ public class SubmateriaManager {
     @Autowired
     private SubmateriaRepository submateriaRepository;
 
-    public void create(Submateria submateria) {
+    public void createOrUpdate(Submateria submateria) {
         submateriaRepository.save(submateria);
     }
 }

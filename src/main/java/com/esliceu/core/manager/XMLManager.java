@@ -23,24 +23,28 @@ public class XMLManager {
     public boolean readXML(MultipartFile fileMultiPart) {
 
         File file;
-        List<List> listaObjetosXML = new ArrayList<>();
+        List<List> listaObjetosXML;
 
         try {
 
-            boolean insertBD;
+            boolean insertBD = false;
 
             file = convertMultiPartToFile(fileMultiPart);
             listaObjetosXML = xmlParser.parseXML(file);
-            /*            insertBD=insertarBD(listaObjetosXML);*/
 
+            if (listaObjetosXML != null) {
+                insertBD = insertarBD();
+            }
 
-            // Leer cada objeto y con el manager correspondiente a cada objeto meter en la base de datos
+            if (insertBD == true) {
+                return true;
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-        return true;
+        return false;
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
@@ -53,14 +57,11 @@ public class XMLManager {
         return convFile;
     }
 
-/*    public boolean
-
     // Inserta en la base de datos todos los objetos de la lista obtenida del XML
-    public boolean insertarBD(List<>listaXML){
-
+    public boolean insertarBD() {
 
 
         return true;
 
-    }*/
+    }
 }

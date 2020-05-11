@@ -11,7 +11,7 @@ public class NotaManager {
     @Autowired
     private NotaRepository notaRepository;
 
-    public void create(Nota nota) {
+    public void createOrUpdate(Nota nota) {
         notaRepository.save(nota);
     }
 }
