@@ -18,7 +18,7 @@ public class XMLManager {
     @Autowired
     private XmlParser xmlParser;
 
-    public boolean readAndInsertXML(MultipartFile fileMultiPart) {
+    /*public boolean readAndInsertXML(MultipartFile fileMultiPart) {
 
         File file;
 
@@ -32,9 +32,9 @@ public class XMLManager {
             return false;
         }
         return true;
-    }
+    }*/
 
-    private File convertMultiPartToFile(MultipartFile file) throws IOException {
+    /*private File convertMultiPartToFile(MultipartFile file) throws IOException {
 
         // Juntamos las partes del archivo ya que cuando hace el upload se sube pòr partes
         File convFile = new File(environment.getProperty("upload.directory") + file.getOriginalFilename());
@@ -42,5 +42,5 @@ public class XMLManager {
         fos.write(file.getBytes());
         fos.close();
         return convFile;
-    }
+    }*/
 }
