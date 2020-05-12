@@ -14,4 +14,8 @@ public class TutorManager {
     public void createOrUpdate(Tutor tutor) {
         tutorRepository.save(tutor);
     }
+
+    public Tutor findById(String codi){
+        return tutorRepository.findById(codi).orElse(null);
+    }
 }

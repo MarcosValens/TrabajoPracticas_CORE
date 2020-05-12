@@ -1,7 +1,11 @@
 package com.esliceu.core.entity;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "alumne")
@@ -26,6 +30,10 @@ public class Alumne implements Serializable {
     @JoinColumn(name = "grup")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Grup grup;
+
+    @OneToMany(mappedBy = "alumne")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<TutorAlumne> tutorsAlumnes;
 
     public Alumne() {
     }
@@ -78,4 +86,11 @@ public class Alumne implements Serializable {
         this.grup = grup;
     }
 
+    public List<TutorAlumne> getTutorsAlumnes() {
+        return tutorsAlumnes;
+    }
+
+    public void setTutorsAlumnes(List<TutorAlumne> tutorsAlumnes) {
+        this.tutorsAlumnes = tutorsAlumnes;
+    }
 }

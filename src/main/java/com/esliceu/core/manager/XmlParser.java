@@ -48,6 +48,15 @@ public class XmlParser {
     @Autowired
     private SubmateriaManager submateriaManager;
 
+    @Autowired
+    private AlumneManager alumneManager;
+
+    @Autowired
+    private TutorManager tutorManager;
+
+    @Autowired
+    private TutorAlumneManager tutorAlumneManager;
+
     private XPath xPath;
     private Document xmlDocument;
 
@@ -70,10 +79,10 @@ public class XmlParser {
             final NodeList nodeListDepartaments = (NodeList) this.xPath.compile(findDepartaments).evaluate(this.xmlDocument, XPathConstants.NODESET);
             for (int i = 0; i < nodeListDepartaments.getLength(); i++) {
                 //Departament
-                Element element = (Element) nodeListDepartaments.item(i);
+                Element elementDepartament = (Element) nodeListDepartaments.item(i);
                 Departament departament = new Departament();
-                final long codi = Long.parseLong(element.getAttribute("codi"));
-                final String descripcio = element.getAttribute("descripcio");
+                final long codi = Long.parseLong(elementDepartament.getAttribute("codi"));
+                final String descripcio = elementDepartament.getAttribute("descripcio");
                 departament.setCodi(codi);
                 departament.setDescripcio(descripcio);
                 departamentManager.createOrUpdate(departament);
@@ -89,9 +98,9 @@ public class XmlParser {
             final String findAules = "CENTRE_EXPORT/AULES/AULA";
             final NodeList nodeListAules = (NodeList) this.xPath.compile(findAules).evaluate(this.xmlDocument, XPathConstants.NODESET);
             for (int i = 0; i < nodeListAules.getLength(); i++) {
-                Element element = (Element) nodeListAules.item(i);
-                final long codi = Integer.parseInt(element.getAttribute("codi"));
-                final String descripcio = element.getAttribute("descripcio");
+                Element elementAula = (Element) nodeListAules.item(i);
+                final long codi = Integer.parseInt(elementAula.getAttribute("codi"));
+                final String descripcio = elementAula.getAttribute("descripcio");
                 Aula aula = new Aula();
                 aula.setCodi(codi);
                 aula.setDescripcio(descripcio);
@@ -108,11 +117,11 @@ public class XmlParser {
             final String findActivitats = "CENTRE_EXPORT/ACTIVITATS/ACTIVITAT";
             final NodeList nodeListActivitats = (NodeList) this.xPath.compile(findActivitats).evaluate(this.xmlDocument, XPathConstants.NODESET);
             for (int i = 0; i < nodeListActivitats.getLength(); i++) {
-                Element element = (Element) nodeListActivitats.item(i);
+                Element elementActivitat = (Element) nodeListActivitats.item(i);
 
-                final Long codi = Long.parseLong(element.getAttribute("codi"));
-                final String descripcio = element.getAttribute("descripcio");
-                final String curta = element.getAttribute("curta");
+                final Long codi = Long.parseLong(elementActivitat.getAttribute("codi"));
+                final String descripcio = elementActivitat.getAttribute("descripcio");
+                final String curta = elementActivitat.getAttribute("curta");
 
                 Activitat activitat = new Activitat();
                 activitat.setCodi(codi);
@@ -131,14 +140,14 @@ public class XmlParser {
             final String findProfessors = "CENTRE_EXPORT/PROFESSORS/PROFESSOR";
             final NodeList nodeListProfessors = (NodeList) this.xPath.compile(findProfessors).evaluate(this.xmlDocument, XPathConstants.NODESET);
             for (int i = 0; i < nodeListProfessors.getLength(); i++) {
-                Element element = (Element) nodeListProfessors.item(i);
+                Element elementProfessor = (Element) nodeListProfessors.item(i);
 
-                final String codi = element.getAttribute("codi");
-                final String nom = element.getAttribute("nom");
-                final String ap1 = element.getAttribute("ap1");
-                final String ap2 = element.getAttribute("ap2");
-                final String username = element.getAttribute("username");
-                final String departament = element.getAttribute("departament");
+                final String codi = elementProfessor.getAttribute("codi");
+                final String nom = elementProfessor.getAttribute("nom");
+                final String ap1 = elementProfessor.getAttribute("ap1");
+                final String ap2 = elementProfessor.getAttribute("ap2");
+                final String username = elementProfessor.getAttribute("username");
+                final String departament = elementProfessor.getAttribute("departament");
 
                 Professor professor = new Professor();
                 professor.setCodi(codi);
@@ -205,7 +214,7 @@ public class XmlParser {
 
                     NodeList nodeListAvaluacio = elementGrup.getElementsByTagName("AVALUACIO");
 
-                    for (int k = 0; k < nodeListAvaluacio.getLength() ; k++) {
+                    for (int k = 0; k < nodeListAvaluacio.getLength(); k++) {
                         Element elementAvaluacio = (Element) nodeListAvaluacio.item(k);
                         final Long codiAvaluacio = Long.parseLong(elementAvaluacio.getAttribute("codi"));
                         final String descripcioAvaluacio = elementAvaluacio.getAttribute("descripcio");
@@ -228,7 +237,7 @@ public class XmlParser {
                 Curs cursAvaluacio = cursManager.findById(codi);
                 cursAvaluacio.setNotes(new ArrayList<>());
                 List<Nota> notesCurs = cursAvaluacio.getNotes();
-                for (int j = 0; j < nodeListNotes.getLength() ; j++) {
+                for (int j = 0; j < nodeListNotes.getLength(); j++) {
                     Element notaElement = (Element) nodeListNotes.item(j);
                     final long qualificacioNota = Long.parseLong(notaElement.getAttribute("qualificacio"));
                     final String descNota = notaElement.getAttribute("desc");
@@ -246,18 +255,18 @@ public class XmlParser {
         }
     }
 
-    private void crearSubmateria(){
+    private void crearSubmateria() {
         try {
             //Buscamos todas las submaterias y las añadimos a la BBDD
             final String findSubmateries = "CENTRE_EXPORT/SUBMATERIES/SUBMATERIA";
             final NodeList nodeListSubmateries = (NodeList) this.xPath.compile(findSubmateries).evaluate(this.xmlDocument, XPathConstants.NODESET);
             for (int i = 0; i < nodeListSubmateries.getLength(); i++) {
-                Element element = (Element) nodeListSubmateries.item(i);
+                Element elementSubmateria = (Element) nodeListSubmateries.item(i);
 
-                final Long codi = Long.parseLong(element.getAttribute("codi"));
-                final String descripcio = element.getAttribute("descripcio");
-                final String curta = element.getAttribute("curta");
-                final Long curs = Long.parseLong(element.getAttribute("curs"));
+                final Long codi = Long.parseLong(elementSubmateria.getAttribute("codi"));
+                final String descripcio = elementSubmateria.getAttribute("descripcio");
+                final String curta = elementSubmateria.getAttribute("curta");
+                final Long curs = Long.parseLong(elementSubmateria.getAttribute("curs"));
                 Curs cursSubmateria = cursManager.findById(curs);
 
                 Submateria submateria = new Submateria();
@@ -265,8 +274,74 @@ public class XmlParser {
                 submateria.setDescripcio(descripcio);
                 submateria.setCurta(curta);
                 submateria.setCurs(cursSubmateria);
-
                 submateriaManager.createOrUpdate(submateria);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void crearAlumno() {
+        try {
+            //Buscamos todos los alumnos y los añadimos a la BBDD
+            final String findAlumnes = "CENTRE_EXPORT/ALUMNES/ALUMNE";
+            final NodeList nodeListAlumnes = (NodeList) this.xPath.compile(findAlumnes).evaluate(this.xmlDocument, XPathConstants.NODESET);
+            for (int i = 0; i < nodeListAlumnes.getLength(); i++) {
+                Element elementAlumne = (Element) nodeListAlumnes.item(i);
+
+                final String codi = elementAlumne.getAttribute("codi");
+                final String nom = elementAlumne.getAttribute("nom");
+                final String ap1 = elementAlumne.getAttribute("ap1");
+                final String ap2 = elementAlumne.getAttribute("ap2");
+                final Long expedient = Long.parseLong(elementAlumne.getAttribute("expedient"));
+                final Long grup = Long.parseLong(elementAlumne.getAttribute("grup"));
+                Grup grupAlumne = grupManager.findById(grup);
+
+                Alumne alumne = new Alumne();
+                alumne.setCodi(codi);
+                alumne.setNom(nom);
+                alumne.setAp1(ap1);
+                alumne.setAp2(ap2);
+                alumne.setExpedient(expedient);
+                alumne.setGrup(grupAlumne);
+
+                alumneManager.createOrUpdate(alumne);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void crearTutores() {
+        try {
+            //Buscamos todos los tutores y los añadimos a la BBDD
+            final String findTutors = "CENTRE_EXPORT/TUTORS/TUTOR";
+            final NodeList nodeListTutors = (NodeList) this.xPath.compile(findTutors).evaluate(this.xmlDocument, XPathConstants.NODESET);
+            for (int i = 0; i < nodeListTutors.getLength(); i++) {
+                Element elementTutor = (Element) nodeListTutors.item(i);
+
+                final String codiAlumne = elementTutor.getAttribute("codiAlumne");
+                Alumne alumneTutor = alumneManager.findById(codiAlumne);
+                final String codiTutor = elementTutor.getAttribute("codiTutor");
+                final String llinatge1 = elementTutor.getAttribute("llinatge1");
+                final String llinatge2 = elementTutor.getAttribute("llinatge2");
+                final String nomTutor = elementTutor.getAttribute("nom");
+                final String relacio = elementTutor.getAttribute("relacio");
+
+                Tutor tutor = new Tutor();
+                tutor.setCodi(codiTutor);
+                tutor.setLlinatge1(llinatge1);
+                tutor.setLlinatge2(llinatge2);
+                tutor.setNom(nomTutor);
+                tutorManager.createOrUpdate(tutor);
+
+
+                TutorAlumne tutorAlumne = new TutorAlumne();
+                tutorAlumne.setTutor(tutor);
+                tutorAlumne.setAlumne(alumneTutor);
+                tutorAlumne.setRelacio(relacio);
+                tutorAlumneManager.createOrUpdate(tutorAlumne);
 
             }
         } catch (Exception e) {
@@ -281,5 +356,7 @@ public class XmlParser {
         crearProfessors();
         crearCursosGruposAvaluacionesNotas();
         crearSubmateria();
+        crearAlumno();
+        crearTutores();
     }
 }
