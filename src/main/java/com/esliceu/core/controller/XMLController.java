@@ -23,7 +23,7 @@ public class XMLController {
     @Autowired
     XmlParser xmlParser;
 
-    /*@PutMapping("/uploadxml")
+    @PutMapping("/uploadxml")
     @Transactional
     public ResponseEntity<String> uploadXML(@RequestPart(value = "file") final MultipartFile uploadfile) {
 
@@ -35,12 +35,11 @@ public class XMLController {
         } else {
             return new ResponseEntity<>("L'XML s'ha desat correctament", HttpStatus.OK);
         }
-    }*/
+    }
 
     @GetMapping("/xml")
     public ResponseEntity<String> xml(){
-        xmlParser.prepare(new File("exportacioDadesCentre.xml"));
-        xmlParser.insertData();
+        xmlParser.insertData(new File("exportacioDadesCentre.xml"));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
