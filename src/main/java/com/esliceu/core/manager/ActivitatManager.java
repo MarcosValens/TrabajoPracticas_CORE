@@ -14,4 +14,8 @@ public class ActivitatManager {
     public void createOrUpdate(Activitat activitat) {
         activitatRepository.save(activitat);
     }
+
+    public Activitat findById(Long id){
+        return activitatRepository.findById(id).orElse(null);
+    }
 }

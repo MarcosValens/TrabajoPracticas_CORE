@@ -14,4 +14,8 @@ public class SubmateriaManager {
     public void createOrUpdate(Submateria submateria) {
         submateriaRepository.save(submateria);
     }
+
+    public Submateria findById(Long id){
+        return submateriaRepository.findById(id).orElse(null);
+    }
 }

@@ -1,7 +1,9 @@
 package com.esliceu.core.manager;
 
 import com.esliceu.core.entity.*;
+import com.esliceu.core.utils.DateParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.*;
 
@@ -13,6 +15,7 @@ import javax.xml.xpath.XPathFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -56,6 +59,9 @@ public class XmlParser {
 
     @Autowired
     private TutorAlumneManager tutorAlumneManager;
+
+    @Autowired
+    private SessioManager sessioManager;
 
     private XPath xPath;
     private Document xmlDocument;
@@ -349,6 +355,83 @@ public class XmlParser {
         }
     }
 
+    public void crearSesionesProfesores() {
+        try {
+            //Buscamos todas las submaterias y las añadimos a la BBDD
+            final String findHorariP = "CENTRE_EXPORT/HORARIP";
+            final NodeList nodeListHorariP = (NodeList) this.xPath.compile(findHorariP).evaluate(this.xmlDocument, XPathConstants.NODESET);
+            for (int i = 0; i < nodeListHorariP.getLength(); i++) {
+                Element elementHorariP = (Element) nodeListHorariP.item(i);
+
+                final String curs = elementHorariP.getAttribute("curs");
+                Curs cursSessioP = null;
+                if (curs != null && !curs.equals("")) {
+                    cursSessioP = cursManager.findById(Long.parseLong(curs));
+                }
+                final String grup = elementHorariP.getAttribute("grup");
+                Grup grupSessioP = null;
+                if (grup != null && !grup.equals("")) {
+                    grupSessioP = grupManager.findById(Long.parseLong(grup));
+                }
+                final String dia = elementHorariP.getAttribute("dia");
+                Integer diaSessioP = null;
+                if (dia != null && !dia.equals("")) {
+                    diaSessioP = Integer.parseInt(dia);
+                }
+                final String hora = elementHorariP.getAttribute("hora");
+                LocalDateTime horaSessioP = null;
+                if (hora != null && !hora.equals("")) {
+                    horaSessioP = DateParser.horaParser(hora);
+                }
+                final String durada = elementHorariP.getAttribute("durada");
+                Integer duradaSessioP = null;
+                if (durada != null && !durada.equals("")) {
+                    duradaSessioP = Integer.parseInt(durada);
+                }
+                final String aulaCodi = elementHorariP.getAttribute("aula");
+                Aula aulaSessioP = null;
+                if (aulaCodi != null && !aulaCodi.equals("")) {
+                    aulaSessioP = aulaManager.findById(Long.parseLong(aulaCodi));
+                }
+                final String submateria = elementHorariP.getAttribute("submateria");
+                Submateria submateriaSessioP = null;
+                if (submateria != null && !submateria.equals("")) {
+                    submateriaSessioP = submateriaManager.findById(Long.parseLong(submateria));
+                }
+
+                final String activitatCodi = elementHorariP.getAttribute("activitat");
+                Activitat activitatSessioP = null;
+                System.out.println(activitatCodi);
+                if (activitatCodi != null && !activitatCodi.equals("")) {
+                    activitatSessioP = activitatManager.findById(Long.parseLong(activitatCodi));
+                }
+                final String placa = elementHorariP.getAttribute("placa");
+                Long placaSessioP = null;
+                if (placa != null && !placa.equals("")) {
+                    placaSessioP = Long.parseLong(placa);
+                }
+
+                final String codiProfessor = elementHorariP.getAttribute("professor");
+                Professor professorSessioP = professorManager.findById(codiProfessor);
+                Sessio sessio = new Sessio();
+                sessio.setCurs(cursSessioP);
+                sessio.setGrup(grupSessioP);
+                sessio.setHora(horaSessioP);
+                sessio.setDia(diaSessioP);
+                sessio.setDurada(duradaSessioP);
+                sessio.setAula(aulaSessioP);
+                sessio.setSubmateria(submateriaSessioP);
+                sessio.setActivitat(activitatSessioP);
+                sessio.setPlaca(placaSessioP);
+                sessio.setProfessor(professorSessioP);
+
+                sessioManager.createOrUpdate(sessio);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void insertData() {
         crearDepartaments();
         crearAules();
@@ -358,5 +441,6 @@ public class XmlParser {
         crearSubmateria();
         crearAlumno();
         crearTutores();
+        crearSesionesProfesores();
     }
 }
