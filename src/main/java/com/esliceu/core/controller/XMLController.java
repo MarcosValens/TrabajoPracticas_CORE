@@ -21,9 +21,9 @@ public class XMLController {
     @Transactional
     public ResponseEntity<String> uploadXML(@RequestPart(value = "file") final MultipartFile uploadfile) {
 
-        boolean correcto = xmlManager.readAndInsertXML(uploadfile);
+        boolean readAndInsertXML = xmlManager.readAndInsertXML(uploadfile);
 
-        if (correcto == false) {
+        if (readAndInsertXML == false) {
             return new ResponseEntity<>("L'XML no s'ha pogut desar", HttpStatus.BAD_REQUEST);
 
         } else {
