@@ -1,7 +1,11 @@
 package com.esliceu.core.entity;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "nota")
@@ -14,13 +18,9 @@ public class Nota implements Serializable {
     @Column(name = "descripcio", length = 300)
     private String descripcio;
 
-    @JoinColumn(name = "curs")
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    private Curs curs;
 
-    @JoinColumn(name = "submateria")
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    private Submateria submateria;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Curs> curs;
 
     public Nota() {
     }
@@ -41,15 +41,11 @@ public class Nota implements Serializable {
         this.descripcio = descripcio;
     }
 
-    public Curs getCurs() {
+    public List<Curs> getCurs() {
         return curs;
     }
 
-    public void setCurs(Curs curs) { this.curs = curs; }
-
-    public Submateria getSubmateria() {
-        return submateria;
+    public void setCurs(List<Curs> curs) {
+        this.curs = curs;
     }
-
-    public void setSubmateria(Submateria submateria) { this.submateria = submateria; }
 }

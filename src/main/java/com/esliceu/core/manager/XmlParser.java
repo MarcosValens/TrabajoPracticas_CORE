@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -40,6 +41,9 @@ public class XmlParser {
 
     @Autowired
     private AvaluacioManager avaluacioManager;
+
+    @Autowired
+    private NotaManager notaManager;
 
     private XPath xPath;
     private Document xmlDocument;
@@ -151,21 +155,21 @@ public class XmlParser {
         }
     }
 
-    private void crearCursosYGrupos() {
+    private void crearCursosGruposAvaluacionesNotas() {
         try {
             //Buscamos todos los cursos y los añadimos a la BBDD
             final String findCursos = "CENTRE_EXPORT/CURSOS/CURS";
             final NodeList nodeListCursos = (NodeList) this.xPath.compile(findCursos).evaluate(this.xmlDocument, XPathConstants.NODESET);
             for (int i = 0; i < nodeListCursos.getLength(); i++) {
-                Element element = (Element) nodeListCursos.item(i);
-                final Long codi = Long.parseLong(element.getAttribute("codi"));
-                final String descripcio = element.getAttribute("descripcio");
+                Element elementCurs = (Element) nodeListCursos.item(i);
+                final Long codi = Long.parseLong(elementCurs.getAttribute("codi"));
+                final String descripcio = elementCurs.getAttribute("descripcio");
                 Curs curs = new Curs();
                 curs.setCodi(codi);
                 curs.setDescripcio(descripcio);
                 cursManager.createOrUpdate(curs);
                 //Por cada curso sacamos sus grupos
-                NodeList nodeListGrups = element.getElementsByTagName("GRUP");
+                NodeList nodeListGrups = elementCurs.getElementsByTagName("GRUP");
                 for (int j = 0; j < nodeListGrups.getLength(); j++) {
                     Element elementGrup = (Element) nodeListGrups.item(j);
 
@@ -217,6 +221,22 @@ public class XmlParser {
                         avaluacioManager.createOrUpdate(avaluacio);
                     }
                 }
+                NodeList nodeListNotes = elementCurs.getElementsByTagName("NOTA");
+                Curs cursAvaluacio = cursManager.findById(codi);
+                cursAvaluacio.setNotes(new ArrayList<>());
+                List<Nota> notesCurs = cursAvaluacio.getNotes();
+                for (int j = 0; j < nodeListNotes.getLength() ; j++) {
+                    Element notaElement = (Element) nodeListNotes.item(j);
+                    final long qualificacioNota = Long.parseLong(notaElement.getAttribute("qualificacio"));
+                    final String descNota = notaElement.getAttribute("desc");
+
+                    Nota nota = new Nota();
+                    nota.setQualificacio(qualificacioNota);
+                    nota.setDescripcio(descNota);
+                    notesCurs.add(nota);
+                    notaManager.createOrUpdate(nota);
+                }
+                cursManager.createOrUpdate(cursAvaluacio);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -228,6 +248,6 @@ public class XmlParser {
         crearAules();
         crearActivitats();
         crearProfessors();
-        crearCursosYGrupos();
+        crearCursosGruposAvaluacionesNotas();
     }
 }
