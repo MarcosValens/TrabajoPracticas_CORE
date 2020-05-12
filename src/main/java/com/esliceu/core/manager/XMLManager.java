@@ -8,8 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class XMLManager {
@@ -20,33 +18,21 @@ public class XMLManager {
     @Autowired
     private XmlParser xmlParser;
 
-    /*public boolean readXML(MultipartFile fileMultiPart) {
+    public boolean readAndInsertXML(MultipartFile fileMultiPart) {
 
         File file;
-        List<List> listaObjetosXML;
 
         try {
 
-            boolean insertBD = false;
-
             file = convertMultiPartToFile(fileMultiPart);
-            listaObjetosXML = xmlParser.insertData(file);
-            *//*            insertBD=insertarBD(listaObjetosXML);*//*
-
-            if (listaObjetosXML != null) {
-                insertBD = insertarBD();
-            }
-
-            if (insertBD == true) {
-                return true;
-            }
+            xmlParser.insertData(file);
 
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
         return true;
-    }*/
+    }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
 
@@ -56,13 +42,5 @@ public class XMLManager {
         fos.write(file.getBytes());
         fos.close();
         return convFile;
-    }
-
-    // Inserta en la base de datos todos los objetos de la lista obtenida del XML
-    public boolean insertarBD() {
-
-
-        return true;
-
     }
 }
