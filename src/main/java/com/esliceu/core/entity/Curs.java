@@ -1,7 +1,11 @@
 package com.esliceu.core.entity;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "curs")
@@ -13,6 +17,9 @@ public class Curs implements Serializable {
 
     @Column(name = "descripcio", length = 300)
     private String descripcio;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Nota> notes;
 
     public Curs() {
     }
@@ -33,4 +40,11 @@ public class Curs implements Serializable {
         this.descripcio = descripcio;
     }
 
+    public List<Nota> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Nota> notes) {
+        this.notes = notes;
+    }
 }
