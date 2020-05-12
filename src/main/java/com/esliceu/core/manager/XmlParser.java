@@ -45,6 +45,9 @@ public class XmlParser {
     @Autowired
     private NotaManager notaManager;
 
+    @Autowired
+    private SubmateriaManager submateriaManager;
+
     private XPath xPath;
     private Document xmlDocument;
 
@@ -243,11 +246,40 @@ public class XmlParser {
         }
     }
 
+    private void crearSubmateria(){
+        try {
+            //Buscamos todas las submaterias y las añadimos a la BBDD
+            final String findSubmateries = "CENTRE_EXPORT/SUBMATERIES/SUBMATERIA";
+            final NodeList nodeListSubmateries = (NodeList) this.xPath.compile(findSubmateries).evaluate(this.xmlDocument, XPathConstants.NODESET);
+            for (int i = 0; i < nodeListSubmateries.getLength(); i++) {
+                Element element = (Element) nodeListSubmateries.item(i);
+
+                final Long codi = Long.parseLong(element.getAttribute("codi"));
+                final String descripcio = element.getAttribute("descripcio");
+                final String curta = element.getAttribute("curta");
+                final Long curs = Long.parseLong(element.getAttribute("curs"));
+                Curs cursSubmateria = cursManager.findById(curs);
+
+                Submateria submateria = new Submateria();
+                submateria.setCodi(codi);
+                submateria.setDescripcio(descripcio);
+                submateria.setCurta(curta);
+                submateria.setCurs(cursSubmateria);
+
+                submateriaManager.createOrUpdate(submateria);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void insertData() {
         crearDepartaments();
         crearAules();
         crearActivitats();
         crearProfessors();
         crearCursosGruposAvaluacionesNotas();
+        crearSubmateria();
     }
 }
