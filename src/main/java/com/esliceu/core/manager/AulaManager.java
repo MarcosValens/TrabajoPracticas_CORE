@@ -14,4 +14,8 @@ public class AulaManager {
     public void createOrUpdate(Aula aula) {
         aulaRepository.save(aula);
     }
+
+    public Aula findById(Long id){
+        return aulaRepository.findById(id).orElse(null);
+    }
 }

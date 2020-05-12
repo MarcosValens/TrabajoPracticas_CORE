@@ -14,4 +14,8 @@ public class AlumneManager {
     public void createOrUpdate(Alumne alumne) {
         alumneRepository.save(alumne);
     }
+
+    public Alumne findById(String codi){
+        return alumneRepository.findById(codi).orElse(null);
+    }
 }

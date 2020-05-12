@@ -1,10 +1,11 @@
 package com.esliceu.core.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "tutor")
@@ -12,7 +13,7 @@ public class Tutor implements Serializable {
 
     @Id
     @Column(name = "codi")
-    private Long codi;
+    private String codi;
 
     @Column(name = "nom", length = 300)
     private String nom;
@@ -23,17 +24,18 @@ public class Tutor implements Serializable {
     @Column(name = "llinatge2", length = 300)
     private String llinatge2;
 
-    @Column(name = "relacio", length = 50)
-    private String relacio;
+    @OneToMany(mappedBy = "tutor")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<TutorAlumne> tutorsAlumnes;
 
     public Tutor() {
     }
 
-    public Long getCodi() {
+    public String getCodi() {
         return codi;
     }
 
-    public void setCodi(Long codi) {
+    public void setCodi(String codi) {
         this.codi = codi;
     }
 
@@ -61,11 +63,11 @@ public class Tutor implements Serializable {
         this.llinatge2 = llinatge2;
     }
 
-    public String getRelacio() {
-        return relacio;
+    public List<TutorAlumne> getTutorsAlumnes() {
+        return tutorsAlumnes;
     }
 
-    public void setRelacio(String relacio) {
-        this.relacio = relacio;
+    public void setTutorsAlumnes(List<TutorAlumne> tutorsAlumnes) {
+        this.tutorsAlumnes = tutorsAlumnes;
     }
 }
