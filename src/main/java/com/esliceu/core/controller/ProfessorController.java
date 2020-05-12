@@ -14,17 +14,13 @@ import java.util.List;
 
 @RestController
 public class ProfessorController {
-    List<Curs> cursos = new LinkedList<>();
-    List<Grup> grups = new LinkedList<>();
-    Curs curs1 = new Curs();
-    Curs curs2 = new Curs();
-    Grup grup1 = new Grup();
-    Grup grup2 = new Grup();
-    Grup grup3 = new Grup();
-    Grup grup4 = new Grup();
+
 
     @GetMapping("/cursos")
     public ResponseEntity<List<Curs>> getCursos() {
+        List<Curs> cursos = new LinkedList<>();
+        Curs curs1 = new Curs();
+        Curs curs2 = new Curs();
         curs1.setCodi((long) 1);
         curs1.setDescripcio("1º ESO");
         curs2.setCodi((long) 2);
@@ -36,6 +32,13 @@ public class ProfessorController {
 
     @GetMapping("/grupos")
     public ResponseEntity<List<Grup>> getGrupos() {
+        List<Grup> grups = new LinkedList<>();
+        Curs curs1 = new Curs();
+        Curs curs2 = new Curs();
+        Grup grup1 = new Grup();
+        Grup grup2 = new Grup();
+        Grup grup3 = new Grup();
+        Grup grup4 = new Grup();
         curs1.setCodi((long) 1);
         curs1.setDescripcio("1º ESO");
         curs2.setCodi((long) 2);
@@ -56,6 +59,7 @@ public class ProfessorController {
         grups.add(grup2);
         grups.add(grup3);
         grups.add(grup4);
+        System.out.println(grups);
         return new ResponseEntity<>(grups,HttpStatus.OK);
     }
 
