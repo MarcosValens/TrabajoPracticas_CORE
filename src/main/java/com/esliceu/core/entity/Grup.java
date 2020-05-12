@@ -5,6 +5,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,9 +23,9 @@ public class Grup implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Curs curs;
 
-    @ManyToMany()
+    @ManyToMany(mappedBy = "grups")
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Professor> professors;
+    private List<Professor> professors = new ArrayList<>();
 
     public Grup() {
     }
@@ -59,5 +60,10 @@ public class Grup implements Serializable {
 
     public void setProfessors(List<Professor> professors) {
         this.professors = professors;
+    }
+
+    public void addProfessor(Professor professor){
+        professors.add(professor);
+        professor.getGrups().add(this);
     }
 }

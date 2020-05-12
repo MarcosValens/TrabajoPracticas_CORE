@@ -67,7 +67,7 @@ public class XmlParser {
     private XPath xPath;
     private Document xmlDocument;
 
-    public void prepare(File file) {
+    private void prepare(File file) {
         try {
             FileInputStream fileIS = new FileInputStream(file);
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -214,7 +214,6 @@ public class XmlParser {
 
                     //Sacamos todos los atributos de ese grupo para poder buscar todos sus tutores
                     NamedNodeMap nodeListAttr = elementGrup.getAttributes();
-                    List<Professor> professors = new ArrayList<>();
                     for (int k = 0; k < nodeListAttr.getLength(); k++) {
                         Attr attr = (Attr) nodeListAttr.item(k);
                         //Buscamos cada tutor en la BBDD y se lo asignamos al grupo
@@ -222,14 +221,13 @@ public class XmlParser {
                             final String tutor = attr.getValue();
                             Professor professorTutor = professorManager.findById(tutor);
                             if (professorTutor != null) {
-                                professors.add(professorTutor);
+                                grup.addProfessor(professorTutor);
                             }
                         }
                     }
                     //Buscamos el curso por la ID y se lo asignamos al grupo
                     Curs grupCurso = cursManager.findById(codi);
                     grup.setCurs(grupCurso);
-                    grup.setProfessors(professors);
                     grupManager.createOrUpdate(grup);
 
                     NodeList nodeListAvaluacio = elementGrup.getElementsByTagName("AVALUACIO");
@@ -255,8 +253,6 @@ public class XmlParser {
                 }
                 NodeList nodeListNotes = elementCurs.getElementsByTagName("NOTA");
                 Curs cursAvaluacio = cursManager.findById(codi);
-                cursAvaluacio.setNotes(new ArrayList<>());
-                List<Nota> notesCurs = cursAvaluacio.getNotes();
                 for (int j = 0; j < nodeListNotes.getLength(); j++) {
                     Element notaElement = (Element) nodeListNotes.item(j);
                     final long qualificacioNota = Long.parseLong(notaElement.getAttribute("qualificacio"));
@@ -265,7 +261,7 @@ public class XmlParser {
                     Nota nota = new Nota();
                     nota.setQualificacio(qualificacioNota);
                     nota.setDescripcio(descNota);
-                    notesCurs.add(nota);
+                    nota.addCurs(cursAvaluacio);
                     notaManager.createOrUpdate(nota);
                 }
                 cursManager.createOrUpdate(cursAvaluacio);
@@ -581,7 +577,8 @@ public class XmlParser {
         }
     }
 
-    public void insertData() {
+    public void insertData(File file) {
+        this.prepare(file);
         long startTime = System.currentTimeMillis();
         crearDepartaments();
         crearAules();

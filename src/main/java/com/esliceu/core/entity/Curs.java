@@ -5,6 +5,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,7 +20,10 @@ public class Curs implements Serializable {
     private String descripcio;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Nota> notes;
+    @JoinTable(name = "notes_cursos",
+    joinColumns = @JoinColumn(name = "curs_codi"),
+    inverseJoinColumns = @JoinColumn(name = "nota_qualificacio"))
+    private List<Nota> notes = new ArrayList<>();
 
     public Curs() {
     }
@@ -46,5 +50,10 @@ public class Curs implements Serializable {
 
     public void setNotes(List<Nota> notes) {
         this.notes = notes;
+    }
+
+    public void addNota(Nota nota){
+        notes.add(nota);
+        nota.getCursos().add(this);
     }
 }
