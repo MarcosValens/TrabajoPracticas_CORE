@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 public final class DateParser {
@@ -17,11 +18,11 @@ public final class DateParser {
         return date1;
     }
 
-    public static LocalDateTime horaParser(String hora){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.ENGLISH);
-        LocalDateTime localDateTime = LocalDateTime.parse(hora, formatter);
-        return localDateTime;
+    public static LocalTime horaParser(String hora){
+        return LocalTime.parse(hora);
     }
+
+
 
     private DateParser() {
     }

@@ -5,6 +5,7 @@ import org.springframework.data.relational.core.sql.In;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "sessio")
@@ -38,7 +39,7 @@ public class Sessio implements Serializable {
     private Integer dia;
 
     @Column(name = "hora")
-    private LocalDateTime hora;
+    private LocalTime hora;
 
     @Column(name = "durada")
     private Integer durada;
@@ -109,11 +110,11 @@ public class Sessio implements Serializable {
         this.grup = grup;
     }
 
-    public LocalDateTime getHora() {
+    public LocalTime getHora() {
         return hora;
     }
 
-    public void setHora(LocalDateTime hora) {
+    public void setHora(LocalTime hora) {
         this.hora = hora;
     }
 

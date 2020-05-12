@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -80,6 +81,7 @@ public class XmlParser {
 
     private void crearDepartaments() {
         try {
+            long startTime = System.currentTimeMillis();
             //Buscamos todos los departamentos y los añadimos a la BBDD
             final String findDepartaments = "CENTRE_EXPORT/DEPARTAMENTS/DEPARTAMENT";
             final NodeList nodeListDepartaments = (NodeList) this.xPath.compile(findDepartaments).evaluate(this.xmlDocument, XPathConstants.NODESET);
@@ -93,6 +95,8 @@ public class XmlParser {
                 departament.setDescripcio(descripcio);
                 departamentManager.createOrUpdate(departament);
             }
+            long endTime = System.currentTimeMillis() - startTime;
+            System.out.println(endTime);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -100,6 +104,7 @@ public class XmlParser {
 
     private void crearAules() {
         try {
+            long startTime = System.currentTimeMillis();
             //Buscamos todos las aulas y las añadimos a la BBDD
             final String findAules = "CENTRE_EXPORT/AULES/AULA";
             final NodeList nodeListAules = (NodeList) this.xPath.compile(findAules).evaluate(this.xmlDocument, XPathConstants.NODESET);
@@ -112,6 +117,8 @@ public class XmlParser {
                 aula.setDescripcio(descripcio);
                 aulaManager.createOrUpdate(aula);
             }
+            long endTime = System.currentTimeMillis() - startTime;
+            System.out.println(endTime);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -119,6 +126,7 @@ public class XmlParser {
 
     private void crearActivitats() {
         try {
+            long startTime = System.currentTimeMillis();
             //Buscamos todas las actividades y las añadimos a la BBDD
             final String findActivitats = "CENTRE_EXPORT/ACTIVITATS/ACTIVITAT";
             final NodeList nodeListActivitats = (NodeList) this.xPath.compile(findActivitats).evaluate(this.xmlDocument, XPathConstants.NODESET);
@@ -135,6 +143,8 @@ public class XmlParser {
                 activitat.setCurta(curta);
                 activitatManager.createOrUpdate(activitat);
             }
+            long endTime = System.currentTimeMillis() - startTime;
+            System.out.println(endTime);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -142,6 +152,7 @@ public class XmlParser {
 
     private void crearProfessors() {
         try {
+            long startTime = System.currentTimeMillis();
             //Buscamos todos los profesores y los añadimos a la BBDD asignando su correspondiente departamento si tienen
             final String findProfessors = "CENTRE_EXPORT/PROFESSORS/PROFESSOR";
             final NodeList nodeListProfessors = (NodeList) this.xPath.compile(findProfessors).evaluate(this.xmlDocument, XPathConstants.NODESET);
@@ -168,6 +179,8 @@ public class XmlParser {
                 }
                 professorManager.createOrUpdate(professor);
             }
+            long endTime = System.currentTimeMillis() - startTime;
+            System.out.println(endTime);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -175,6 +188,7 @@ public class XmlParser {
 
     private void crearCursosGruposAvaluacionesNotas() {
         try {
+            long startTime = System.currentTimeMillis();
             //Buscamos todos los cursos y los añadimos a la BBDD
             final String findCursos = "CENTRE_EXPORT/CURSOS/CURS";
             final NodeList nodeListCursos = (NodeList) this.xPath.compile(findCursos).evaluate(this.xmlDocument, XPathConstants.NODESET);
@@ -256,6 +270,8 @@ public class XmlParser {
                 }
                 cursManager.createOrUpdate(cursAvaluacio);
             }
+            long endTime = System.currentTimeMillis() - startTime;
+            System.out.println(endTime);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -263,6 +279,7 @@ public class XmlParser {
 
     private void crearSubmateria() {
         try {
+            long startTime = System.currentTimeMillis();
             //Buscamos todas las submaterias y las añadimos a la BBDD
             final String findSubmateries = "CENTRE_EXPORT/SUBMATERIES/SUBMATERIA";
             final NodeList nodeListSubmateries = (NodeList) this.xPath.compile(findSubmateries).evaluate(this.xmlDocument, XPathConstants.NODESET);
@@ -283,6 +300,8 @@ public class XmlParser {
                 submateriaManager.createOrUpdate(submateria);
 
             }
+            long endTime = System.currentTimeMillis() - startTime;
+            System.out.println(endTime);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -290,6 +309,7 @@ public class XmlParser {
 
     private void crearAlumno() {
         try {
+            long startTime = System.currentTimeMillis();
             //Buscamos todos los alumnos y los añadimos a la BBDD
             final String findAlumnes = "CENTRE_EXPORT/ALUMNES/ALUMNE";
             final NodeList nodeListAlumnes = (NodeList) this.xPath.compile(findAlumnes).evaluate(this.xmlDocument, XPathConstants.NODESET);
@@ -314,6 +334,8 @@ public class XmlParser {
 
                 alumneManager.createOrUpdate(alumne);
             }
+            long endTime = System.currentTimeMillis() - startTime;
+            System.out.println(endTime);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -321,6 +343,7 @@ public class XmlParser {
 
     private void crearTutores() {
         try {
+            long startTime = System.currentTimeMillis();
             //Buscamos todos los tutores y los añadimos a la BBDD
             final String findTutors = "CENTRE_EXPORT/TUTORS/TUTOR";
             final NodeList nodeListTutors = (NodeList) this.xPath.compile(findTutors).evaluate(this.xmlDocument, XPathConstants.NODESET);
@@ -350,15 +373,18 @@ public class XmlParser {
                 tutorAlumneManager.createOrUpdate(tutorAlumne);
 
             }
+            long endTime = System.currentTimeMillis() - startTime;
+            System.out.println(endTime);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void crearSesionesProfesores() {
+    private void crearSesionesProfesores() {
         try {
-            //Buscamos todas las submaterias y las añadimos a la BBDD
-            final String findHorariP = "CENTRE_EXPORT/HORARIP";
+            long startTime = System.currentTimeMillis();
+            //Buscamos todas las sesiones de profesores y las añadimos a la BBDD
+            final String findHorariP = "CENTRE_EXPORT/HORARIP/SESSIO";
             final NodeList nodeListHorariP = (NodeList) this.xPath.compile(findHorariP).evaluate(this.xmlDocument, XPathConstants.NODESET);
             for (int i = 0; i < nodeListHorariP.getLength(); i++) {
                 Element elementHorariP = (Element) nodeListHorariP.item(i);
@@ -379,7 +405,7 @@ public class XmlParser {
                     diaSessioP = Integer.parseInt(dia);
                 }
                 final String hora = elementHorariP.getAttribute("hora");
-                LocalDateTime horaSessioP = null;
+                LocalTime horaSessioP = null;
                 if (hora != null && !hora.equals("")) {
                     horaSessioP = DateParser.horaParser(hora);
                 }
@@ -401,7 +427,6 @@ public class XmlParser {
 
                 final String activitatCodi = elementHorariP.getAttribute("activitat");
                 Activitat activitatSessioP = null;
-                System.out.println(activitatCodi);
                 if (activitatCodi != null && !activitatCodi.equals("")) {
                     activitatSessioP = activitatManager.findById(Long.parseLong(activitatCodi));
                 }
@@ -413,6 +438,7 @@ public class XmlParser {
 
                 final String codiProfessor = elementHorariP.getAttribute("professor");
                 Professor professorSessioP = professorManager.findById(codiProfessor);
+
                 Sessio sessio = new Sessio();
                 sessio.setCurs(cursSessioP);
                 sessio.setGrup(grupSessioP);
@@ -427,12 +453,136 @@ public class XmlParser {
 
                 sessioManager.createOrUpdate(sessio);
             }
+            long endTime = System.currentTimeMillis() - startTime;
+            System.out.println(endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void crearSesionesAlumnos() {
+        try {
+            long startTime = System.currentTimeMillis();
+            //Buscamos todas las sesiones de cada alumno y las añadimos a la BBDD
+            final String findHorariA = "CENTRE_EXPORT/HORARIA/SESSIO";
+            final NodeList nodeListHorariA = (NodeList) this.xPath.compile(findHorariA).evaluate(this.xmlDocument, XPathConstants.NODESET);
+            for (int i = 0; i < nodeListHorariA.getLength(); i++) {
+                Element elementHorariA = (Element) nodeListHorariA.item(i);
+
+                final String dia = elementHorariA.getAttribute("dia");
+                Integer diaSessioA = null;
+                if (dia != null && !dia.equals("")) {
+                    diaSessioA = Integer.parseInt(dia);
+                }
+                final String hora = elementHorariA.getAttribute("hora");
+                LocalTime horaSessioA = null;
+                if (hora != null && !hora.equals("")) {
+                    horaSessioA = DateParser.horaParser(hora);
+                }
+                final String durada = elementHorariA.getAttribute("durada");
+                Integer duradaSessioA = null;
+                if (durada != null && !durada.equals("")) {
+                    duradaSessioA = Integer.parseInt(durada);
+                }
+                final String aulaCodi = elementHorariA.getAttribute("aula");
+                Aula aulaSessioA = null;
+                if (aulaCodi != null && !aulaCodi.equals("")) {
+                    aulaSessioA = aulaManager.findById(Long.parseLong(aulaCodi));
+                }
+                final String submateria = elementHorariA.getAttribute("submateria");
+                Submateria submateriaSessioA = null;
+                if (submateria != null && !submateria.equals("")) {
+                    submateriaSessioA = submateriaManager.findById(Long.parseLong(submateria));
+                }
+                final String codiAlumne = elementHorariA.getAttribute("alumne");
+                Alumne alumneSessioA = alumneManager.findById(codiAlumne);
+
+                Sessio sessio = new Sessio();
+                sessio.setHora(horaSessioA);
+                sessio.setDia(diaSessioA);
+                sessio.setDurada(duradaSessioA);
+                sessio.setAula(aulaSessioA);
+                sessio.setSubmateria(submateriaSessioA);
+                sessio.setAlumne(alumneSessioA);
+
+                sessioManager.createOrUpdate(sessio);
+            }
+            long endTime = System.currentTimeMillis() - startTime;
+            System.out.println(endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void crearSesionesGrupos() {
+        try {
+            long startTime = System.currentTimeMillis();
+            //Buscamos todas las sesiones de cada alumno y las añadimos a la BBDD
+            final String findHorariG = "CENTRE_EXPORT/HORARIG/SESSIO";
+            final NodeList nodeListHorariG = (NodeList) this.xPath.compile(findHorariG).evaluate(this.xmlDocument, XPathConstants.NODESET);
+            for (int i = 0; i < nodeListHorariG.getLength(); i++) {
+                Element elementHorariG = (Element) nodeListHorariG.item(i);
+
+                final String curs = elementHorariG.getAttribute("curs");
+                Curs cursSessioG = null;
+                if (curs != null && !curs.equals("")) {
+                    cursSessioG = cursManager.findById(Long.parseLong(curs));
+                }
+                final String grup = elementHorariG.getAttribute("grup");
+                Grup grupSessioG = grupManager.findById(Long.parseLong(grup));
+
+                final String dia = elementHorariG.getAttribute("dia");
+                Integer diaSessioG = null;
+                if (dia != null && !dia.equals("")) {
+                    diaSessioG = Integer.parseInt(dia);
+                }
+                final String hora = elementHorariG.getAttribute("hora");
+                LocalTime horaSessioG = null;
+                if (hora != null && !hora.equals("")) {
+                    horaSessioG = DateParser.horaParser(hora);
+                }
+                final String durada = elementHorariG.getAttribute("durada");
+                Integer duradaSessioG = null;
+                if (durada != null && !durada.equals("")) {
+                    duradaSessioG = Integer.parseInt(durada);
+                }
+                final String aulaCodi = elementHorariG.getAttribute("aula");
+                Aula aulaSessioG = null;
+                if (aulaCodi != null && !aulaCodi.equals("")) {
+                    aulaSessioG = aulaManager.findById(Long.parseLong(aulaCodi));
+                }
+                final String submateria = elementHorariG.getAttribute("submateria");
+                Submateria submateriaSessioG = null;
+                if (submateria != null && !submateria.equals("")) {
+                    submateriaSessioG = submateriaManager.findById(Long.parseLong(submateria));
+                }
+                final String activitatCodi = elementHorariG.getAttribute("activitat");
+                Activitat activitatSessioG = null;
+                if (activitatCodi != null && !activitatCodi.equals("")) {
+                    activitatSessioG = activitatManager.findById(Long.parseLong(activitatCodi));
+                }
+
+                Sessio sessio = new Sessio();
+                sessio.setGrup(grupSessioG);
+                sessio.setCurs(cursSessioG);
+                sessio.setHora(horaSessioG);
+                sessio.setDia(diaSessioG);
+                sessio.setDurada(duradaSessioG);
+                sessio.setAula(aulaSessioG);
+                sessio.setSubmateria(submateriaSessioG);
+                sessio.setActivitat(activitatSessioG);
+
+                sessioManager.createOrUpdate(sessio);
+            }
+            long endTime = System.currentTimeMillis() - startTime;
+            System.out.println(endTime);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void insertData() {
+        long startTime = System.currentTimeMillis();
         crearDepartaments();
         crearAules();
         crearActivitats();
@@ -442,5 +592,9 @@ public class XmlParser {
         crearAlumno();
         crearTutores();
         crearSesionesProfesores();
+        crearSesionesAlumnos();
+        crearSesionesGrupos();
+        long endTime = System.currentTimeMillis() - startTime;
+        System.out.println(endTime);
     }
 }
