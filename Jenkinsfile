@@ -5,6 +5,7 @@ pipeline {
       steps {
         sh  '''
             echo "Copiamos el properties dentro del proyecto"
+            cp /jenkinsProperties/application.properties src/main/resources/application.properties
             '''
       }
     }
