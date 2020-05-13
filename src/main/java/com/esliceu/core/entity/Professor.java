@@ -1,11 +1,18 @@
 package com.esliceu.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "professor")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "codi")
 public class Professor implements Serializable {
 
     @Id
@@ -29,7 +36,11 @@ public class Professor implements Serializable {
     private Departament departament;
 
     @ManyToMany()
-    private List<Grup> grups;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JoinTable(name = "professor_grup",
+    joinColumns = @JoinColumn(name = "professor_codi"),
+    inverseJoinColumns = @JoinColumn(name = "grup_codi"))
+    private List<Grup> grups = new ArrayList<>();
 
     public Professor() {
     }
@@ -80,5 +91,18 @@ public class Professor implements Serializable {
 
     public void setDepartament(Departament departament) {
         this.departament = departament;
+    }
+
+    public List<Grup> getGrups() {
+        return grups;
+    }
+
+    public void setGrups(List<Grup> grups) {
+        this.grups = grups;
+    }
+
+    public void addGrup(Grup grup){
+        grups.add(grup);
+        grup.getProfessors().add(this);
     }
 }

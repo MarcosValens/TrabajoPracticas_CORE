@@ -11,7 +11,7 @@ public class AvaluacioManager {
     @Autowired
     private AvaluacioRepository avaluacioRepository;
 
-    public void create(Avaluacio avaluacio) {
+    public void createOrUpdate(Avaluacio avaluacio) {
         avaluacioRepository.save(avaluacio);
     }
 }

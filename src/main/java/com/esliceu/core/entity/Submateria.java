@@ -1,10 +1,14 @@
 package com.esliceu.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "submateria")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "codi")
 public class Submateria implements Serializable {
 
     @Id
@@ -18,7 +22,7 @@ public class Submateria implements Serializable {
     private String curta;
 
     @JoinColumn(name = "curs")
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Curs curs;
 
     public Submateria() {

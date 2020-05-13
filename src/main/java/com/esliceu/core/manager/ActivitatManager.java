@@ -11,7 +11,11 @@ public class ActivitatManager {
     @Autowired
     private ActivitatRepository activitatRepository;
 
-    public void create(Activitat activitat) {
+    public void createOrUpdate(Activitat activitat) {
         activitatRepository.save(activitat);
+    }
+
+    public Activitat findById(Long id){
+        return activitatRepository.findById(id).orElse(null);
     }
 }

@@ -1,11 +1,17 @@
 package com.esliceu.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.springframework.data.relational.core.sql.In;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "sessio")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Sessio implements Serializable {
 
     @Id
@@ -17,40 +23,40 @@ public class Sessio implements Serializable {
     private String horari;
 
     @JoinColumn(name = "professor")
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Professor professor;
 
     @JoinColumn(name = "alumne")
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Alumne alumne;
 
     @JoinColumn(name = "curs")
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Curs curs;
 
     @JoinColumn(name = "grup")
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Grup grup;
 
     @Column(name = "dia")
-    private int dia;
+    private Integer dia;
 
     @Column(name = "hora")
-    private LocalDateTime hora;
+    private LocalTime hora;
 
     @Column(name = "durada")
-    private int durada;
+    private Integer durada;
 
     @JoinColumn(name = "aula")
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Aula aula;
 
     @JoinColumn(name = "submateria")
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Submateria submateria;
 
     @JoinColumn(name = "activitat")
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Activitat activitat;
 
     @Column(name = "placa")
@@ -107,28 +113,12 @@ public class Sessio implements Serializable {
         this.grup = grup;
     }
 
-    public int getDia() {
-        return dia;
-    }
-
-    public void setDia(int dia) {
-        this.dia = dia;
-    }
-
-    public LocalDateTime getHora() {
+    public LocalTime getHora() {
         return hora;
     }
 
-    public void setHora(LocalDateTime hora) {
+    public void setHora(LocalTime hora) {
         this.hora = hora;
-    }
-
-    public int getDurada() {
-        return durada;
-    }
-
-    public void setDurada(int durada) {
-        this.durada = durada;
     }
 
     public Aula getAula() {
@@ -163,4 +153,19 @@ public class Sessio implements Serializable {
         this.placa = placa;
     }
 
+    public Integer getDia() {
+        return dia;
+    }
+
+    public void setDia(Integer dia) {
+        this.dia = dia;
+    }
+
+    public Integer getDurada() {
+        return durada;
+    }
+
+    public void setDurada(Integer durada) {
+        this.durada = durada;
+    }
 }

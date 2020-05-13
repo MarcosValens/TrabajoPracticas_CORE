@@ -1,11 +1,18 @@
 package com.esliceu.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "grup")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "codi")
 public class Grup implements Serializable {
 
     @Id
@@ -19,12 +26,9 @@ public class Grup implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Curs curs;
 
-    @JoinColumn(name = "avalucacio")
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    private Avaluacio avaluacio;
-
-    @ManyToMany()
-    private List<Professor> professors;
+    @ManyToMany(mappedBy = "grups")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Professor> professors = new ArrayList<>();
 
     public Grup() {
     }
@@ -45,14 +49,6 @@ public class Grup implements Serializable {
         this.nom = nom;
     }
 
-    public Avaluacio getAvaluacio() {
-        return avaluacio;
-    }
-
-    public void setAvaluacio(Avaluacio avaluacio) {
-        this.avaluacio = avaluacio;
-    }
-
     public Curs getCurs() {
         return curs;
     }
@@ -67,5 +63,10 @@ public class Grup implements Serializable {
 
     public void setProfessors(List<Professor> professors) {
         this.professors = professors;
+    }
+
+    public void addProfessor(Professor professor){
+        professors.add(professor);
+        professor.getGrups().add(this);
     }
 }

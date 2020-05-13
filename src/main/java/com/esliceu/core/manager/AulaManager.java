@@ -11,7 +11,11 @@ public class AulaManager {
     @Autowired
     private AulaRepository aulaRepository;
 
-    public void create(Aula aula) {
+    public void createOrUpdate(Aula aula) {
         aulaRepository.save(aula);
+    }
+
+    public Aula findById(Long id){
+        return aulaRepository.findById(id).orElse(null);
     }
 }

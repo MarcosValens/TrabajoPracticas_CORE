@@ -5,13 +5,31 @@ import com.esliceu.core.repository.AlumneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AlumneManager {
 
     @Autowired
     private AlumneRepository alumneRepository;
 
-    public void create(Alumne alumne) {
+    public void createOrUpdate(Alumne alumne) {
         alumneRepository.save(alumne);
+    }
+
+    public void delete(String codi) {
+        alumneRepository.deleteById(codi);
+    }
+
+    public Alumne findById(String codi) {
+        return alumneRepository.findById(codi).orElse(null);
+    }
+
+    public List<Alumne> findAll() {
+        return (List<Alumne>) alumneRepository.findAll();
+    }
+
+    public List<Alumne> findByGrup(String codiGrup) {
+        return alumneRepository.findByGrup(codiGrup);
     }
 }

@@ -1,15 +1,16 @@
 package com.esliceu.core.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
 @Table(name = "avaluacio")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "codi")
 public class Avaluacio implements Serializable {
 
     @Id
@@ -24,6 +25,10 @@ public class Avaluacio implements Serializable {
 
     @Column(name = "data_fi", columnDefinition = "DATE")
     private LocalDate dataFi;
+
+    @JoinColumn(name = "grup")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    private Grup grup;
 
     public Avaluacio() {
     }
@@ -58,5 +63,13 @@ public class Avaluacio implements Serializable {
 
     public void setDataFi(LocalDate dataFi) {
         this.dataFi = dataFi;
+    }
+
+    public Grup getGrup() {
+        return grup;
+    }
+
+    public void setGrup(Grup grup) {
+        this.grup = grup;
     }
 }

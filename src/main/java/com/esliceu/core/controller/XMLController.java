@@ -21,26 +21,25 @@ public class XMLController {
     private XMLManager xmlManager;
 
     @Autowired
-    private XmlParser xmlParser;
+    XmlParser xmlParser;
 
-    /*@PutMapping("/uploadxml")
+    @PutMapping("/uploadxml")
     @Transactional
     public ResponseEntity<String> uploadXML(@RequestPart(value = "file") final MultipartFile uploadfile) {
 
-        boolean correcto = xmlManager.readXML(uploadfile);
+        boolean readAndInsertXML = xmlManager.readAndInsertXML(uploadfile);
 
-        if (correcto == true) {
+        if (readAndInsertXML == false) {
             return new ResponseEntity<>("L'XML no s'ha pogut desar", HttpStatus.BAD_REQUEST);
 
         } else {
             return new ResponseEntity<>("L'XML s'ha desat correctament", HttpStatus.OK);
         }
-    }*/
+    }
 
     @GetMapping("/xml")
-    public ResponseEntity<String> upload(){
-        File file = new File("./exportacioDadesCentre.xml");
-        this.xmlParser.insertData(file);
+    public ResponseEntity<String> xml(){
+        xmlParser.insertData(new File("exportacioDadesCentre.xml"));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -11,7 +11,11 @@ public class TutorManager {
     @Autowired
     private TutorRepository tutorRepository;
 
-    public void create(Tutor tutor) {
+    public void createOrUpdate(Tutor tutor) {
         tutorRepository.save(tutor);
+    }
+
+    public Tutor findById(String codi){
+        return tutorRepository.findById(codi).orElse(null);
     }
 }

@@ -1,10 +1,16 @@
 package com.esliceu.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "nota")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "qualificacio")
 public class Nota implements Serializable {
 
     @Id
@@ -14,13 +20,9 @@ public class Nota implements Serializable {
     @Column(name = "descripcio", length = 300)
     private String descripcio;
 
-    @JoinColumn(name = "curs")
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    private Curs curs;
 
-    @JoinColumn(name = "submateria")
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    private Submateria submateria;
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "notes")
+    private List<Curs> cursos = new ArrayList<>();
 
     public Nota() {
     }
@@ -41,15 +43,16 @@ public class Nota implements Serializable {
         this.descripcio = descripcio;
     }
 
-    public Curs getCurs() {
-        return curs;
+    public List<Curs> getCursos() {
+        return cursos;
     }
 
-    public void setCurs(Curs curs) { this.curs = curs; }
-
-    public Submateria getSubmateria() {
-        return submateria;
+    public void setCursos(List<Curs> cursos) {
+        this.cursos = cursos;
     }
 
-    public void setSubmateria(Submateria submateria) { this.submateria = submateria; }
+    public void addCurs(Curs curs){
+        cursos.add(curs);
+        curs.getNotes().add(this);
+    }
 }
