@@ -1,45 +1,44 @@
 package com.esliceu.core.controller;
 
 import com.esliceu.core.entity.Alumne;
+import com.esliceu.core.manager.AlumneManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedList;
 import java.util.List;
 
 
 @RestController
 public class AlumneController {
 
+    @Autowired
+    AlumneManager alumneManager;
+
     @GetMapping("/getTodosAlumnosCurso")
     public ResponseEntity<List<Alumne>> getTodosAlumnosCurso() {
-        List<Alumne> alumnes = new LinkedList<>();
-        for (int i = 0; i < 5; i++) {
-            Alumne alumne = new Alumne();
-            alumne.setNom("Alumne " + i);
-            alumne.setAp1("Cognom Alumne " + i);
-            alumne.setAp2("Cognom Alumne " + i);
-            alumne.setCodi("0000" + i);
-            alumne.setExpedient(Long.parseLong("0000" + i));
-            alumnes.add(alumne);
-        }
-        return new ResponseEntity<>(alumnes, HttpStatus.OK);
+        List<Alumne> alumnos = alumneManager.findAll();
+        return new ResponseEntity<>(alumnos, HttpStatus.OK);
     }
 
     @GetMapping("/getTodosAlumnosGrupo")
-    public ResponseEntity<String> getTodosAlumnosGrupo(@RequestBody String grupo) {
-        return new ResponseEntity<>("Alumnos", HttpStatus.OK);
+    public ResponseEntity<List<Alumne>> getTodosAlumnosGrupo(@RequestBody String grup) {
+        List<Alumne> alumnos = alumneManager.findByGrup(grup);
+        return new ResponseEntity<>(alumnos, HttpStatus.OK);
     }
 
-    @GetMapping("/getDatosAlumno")
-    public ResponseEntity<Alumne> getDatosAlumno() {
-        Alumne alumne = new Alumne();
-        alumne.setCodi("1");
-        alumne.setNom("Christian");
-        alumne.setAp1("Martinez");
-        alumne.setAp2("Piza");
-        return new ResponseEntity<>(alumne, HttpStatus.OK);
+    @GetMapping("/getAlumno")
+    public ResponseEntity<Alumne> getAlumne(String codi) {
+        Alumne alumno = alumneManager.findById(codi);
+        return new ResponseEntity<>(alumno, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteAlumno")
+    public ResponseEntity<String> deleteAlumne(String codi) {
+        alumneManager.delete(codi);
+        return new ResponseEntity<String>("Alumno eliminado", HttpStatus.OK);
     }
 
     @PutMapping("/subirFoto")
@@ -47,7 +46,7 @@ public class AlumneController {
         return new ResponseEntity<>("Foto subida", HttpStatus.OK);
     }
 
-    @PostMapping("/subirFoto")
+    @PostMapping("/actualizarFoto")
     public ResponseEntity<String> subirFotoNueva() {
         return new ResponseEntity<>("Foto subida", HttpStatus.OK);
     }
