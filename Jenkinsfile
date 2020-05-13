@@ -38,6 +38,7 @@ pipeline {
     }
     stage('Build docker image') {
             when{
+
                 branch 'produccion'
             }
             steps {
