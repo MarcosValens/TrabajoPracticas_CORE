@@ -30,7 +30,7 @@ public class AlumneController {
     }
 
     @GetMapping("/getAlumno")
-    public ResponseEntity<Alumne> getAlumne(String codi) {
+    public ResponseEntity<Alumne> getAlumne(@RequestParam("codi") String codi) {
         Alumne alumno = alumneManager.findById(codi);
         return new ResponseEntity<>(alumno, HttpStatus.OK);
     }

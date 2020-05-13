@@ -1,5 +1,8 @@
 package com.esliceu.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "nota")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "qualificacio")
 public class Nota implements Serializable {
 
     @Id
