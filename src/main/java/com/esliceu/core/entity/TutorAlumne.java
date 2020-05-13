@@ -1,5 +1,7 @@
 package com.esliceu.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -11,6 +13,7 @@ public class TutorAlumne implements Serializable {
     @Id
     @JoinColumn(name = "alumne")
     @ManyToOne
+    @JsonBackReference
     private Alumne alumne;
 
     @Id
