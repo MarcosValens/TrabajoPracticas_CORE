@@ -17,7 +17,7 @@ public class Nota implements Serializable {
     @Column(name = "qualificacio")
     private Long qualificacio;
 
-    @Column(name = "descripcio", length = 300)
+    @Column(name = "descripcio", length = 50)
     private String descripcio;
 
 

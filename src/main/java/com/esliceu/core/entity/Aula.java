@@ -32,4 +32,8 @@ public class Aula  implements Serializable {
     public void setDescripcio(String descripcio) {
         this.descripcio = descripcio;
     }
+
+    public String getDescripcio() {
+        return descripcio;
+    }
 }

@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "tutor")
+@Table(name = "tutor_legal")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "codi")
 public class Tutor implements Serializable {
 
@@ -19,13 +19,13 @@ public class Tutor implements Serializable {
     @Column(name = "codi")
     private String codi;
 
-    @Column(name = "nom", length = 300)
+    @Column(name = "nom", length = 100)
     private String nom;
 
-    @Column(name = "llinatge1", length = 300)
+    @Column(name = "llinatge1", length = 100)
     private String llinatge1;
 
-    @Column(name = "llinatge2", length = 300)
+    @Column(name = "llinatge2", length = 100)
     private String llinatge2;
 
     @OneToMany(mappedBy = "tutor")
