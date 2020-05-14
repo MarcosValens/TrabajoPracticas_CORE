@@ -19,27 +19,24 @@ public class Sessio implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "horari")
-    private String horari;
-
-    @JoinColumn(name = "professor")
+    @JoinColumn(name = "professor_codi")
     @ManyToOne(cascade = CascadeType.ALL)
     private Professor professor;
 
-    @JoinColumn(name = "alumne")
+    @JoinColumn(name = "alumno_codi")
     @ManyToOne(cascade = CascadeType.ALL)
     private Alumne alumne;
 
-    @JoinColumn(name = "curs")
+    @JoinColumn(name = "curs_codi")
     @ManyToOne(cascade = CascadeType.ALL)
     private Curs curs;
 
-    @JoinColumn(name = "grup")
+    @JoinColumn(name = "grup_codi")
     @ManyToOne(cascade = CascadeType.ALL)
     private Grup grup;
 
     @Column(name = "dia")
-    private Integer dia;
+    private Short dia;
 
     @Column(name = "hora")
     private LocalTime hora;
@@ -47,15 +44,15 @@ public class Sessio implements Serializable {
     @Column(name = "durada")
     private Integer durada;
 
-    @JoinColumn(name = "aula")
+    @JoinColumn(name = "aula_codi")
     @ManyToOne(cascade = CascadeType.ALL)
     private Aula aula;
 
-    @JoinColumn(name = "submateria")
+    @JoinColumn(name = "submateria_codi")
     @ManyToOne(cascade = CascadeType.ALL)
     private Submateria submateria;
 
-    @JoinColumn(name = "activitat")
+    @JoinColumn(name = "activitat_codi")
     @ManyToOne(cascade = CascadeType.ALL)
     private Activitat activitat;
 
@@ -71,14 +68,6 @@ public class Sessio implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getHorari() {
-        return horari;
-    }
-
-    public void setHorari(String horari) {
-        this.horari = horari;
     }
 
     public Professor getProfessor() {
@@ -153,11 +142,11 @@ public class Sessio implements Serializable {
         this.placa = placa;
     }
 
-    public Integer getDia() {
+    public Short getDia() {
         return dia;
     }
 
-    public void setDia(Integer dia) {
+    public void setDia(Short dia) {
         this.dia = dia;
     }
 

@@ -20,10 +20,10 @@ public class Grup implements Serializable {
     @Column(name = "codi")
     private Long codi;
 
-    @Column(name = "nom", length = 100)
+    @Column(name = "nom", length = 20)
     private String nom;
 
-    @JoinColumn(name = "curs")
+    @JoinColumn(name = "curso_codi")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Curs curs;
 

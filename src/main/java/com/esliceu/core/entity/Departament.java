@@ -15,7 +15,7 @@ public class Departament implements Serializable {
     @Column(name = "codi")
     private Long codi;
 
-    @Column(name = "descripcio", length = 300)
+    @Column(name = "descripcio", length = 100)
     private String descripcio;
 
     public Departament() {

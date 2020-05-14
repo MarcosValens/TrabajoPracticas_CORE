@@ -6,18 +6,18 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "alumne_tutor")
+@Table(name = "alumno_tutor")
 @IdClass(TutorAlumneID.class)
 public class TutorAlumne implements Serializable {
 
     @Id
-    @JoinColumn(name = "alumne")
+    @JoinColumn(name = "alumno_codi")
     @ManyToOne
     @JsonBackReference
     private Alumne alumne;
 
     @Id
-    @JoinColumn(name = "tutor")
+    @JoinColumn(name = "tutor_codi")
     @ManyToOne
     private Tutor tutor;
 

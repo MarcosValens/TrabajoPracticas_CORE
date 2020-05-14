@@ -17,7 +17,7 @@ public class Avaluacio implements Serializable {
     @Column(name = "codi")
     private Long codi;
 
-    @Column(name = "descripcio", length = 300)
+    @Column(name = "descripcio", length = 50)
     private String descripcio;
 
     @Column(name = "data_inici", columnDefinition = "DATE")
@@ -26,7 +26,7 @@ public class Avaluacio implements Serializable {
     @Column(name = "data_fi", columnDefinition = "DATE")
     private LocalDate dataFi;
 
-    @JoinColumn(name = "grup")
+    @JoinColumn(name = "grup_codi")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Grup grup;
 
