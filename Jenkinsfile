@@ -38,7 +38,6 @@ pipeline {
     }
     stage('Build docker image') {
             when{
-
                 branch 'produccion'
             }
             steps {
@@ -46,6 +45,7 @@ pipeline {
                     echo "Contruimos la imagen docker"
                     docker build -t imagen-core .
                     '''
+                cleanWs()
             }
     }
 
@@ -56,7 +56,10 @@ pipeline {
         steps  {
             sh  '''
                 echo "Subimos la imagen docker creada"
+                docker tag  imagen-menjador  registry-back.esliceu.com/imagen-menjador
+                docker push registry-back.esliceu.com/imagen-menjador
                 '''
+            cleanWs()
         }
     }
 
@@ -68,6 +71,7 @@ pipeline {
         sh  '''
             echo "desplegamos"
             '''
+        cleanWs()
         }
     }
   }
