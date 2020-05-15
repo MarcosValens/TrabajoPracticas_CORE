@@ -69,7 +69,8 @@ pipeline {
         }
         steps  {
         sh  '''
-            echo "desplegamos"
+            echo "desplegamos"core_i_menjador
+            ssh deploy.esliceu.com "cd core_i_menjador; docker-compose up -d"
             '''
         cleanWs()
         }
