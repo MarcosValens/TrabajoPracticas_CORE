@@ -13,7 +13,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "curso")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "codi")
 public class Curs implements Serializable {
 
     @Id
