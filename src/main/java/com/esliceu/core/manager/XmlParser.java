@@ -396,9 +396,9 @@ public class XmlParser {
                     grupSessioP = grupManager.findById(Long.parseLong(grup));
                 }
                 final String dia = elementHorariP.getAttribute("dia");
-                Integer diaSessioP = null;
+                Short diaSessioP = null;
                 if (dia != null && !dia.equals("")) {
-                    diaSessioP = Integer.parseInt(dia);
+                    diaSessioP = Short.parseShort(dia);
                 }
                 final String hora = elementHorariP.getAttribute("hora");
                 LocalTime horaSessioP = null;
@@ -466,9 +466,9 @@ public class XmlParser {
                 Element elementHorariA = (Element) nodeListHorariA.item(i);
 
                 final String dia = elementHorariA.getAttribute("dia");
-                Integer diaSessioA = null;
+                Short diaSessioA = null;
                 if (dia != null && !dia.equals("")) {
-                    diaSessioA = Integer.parseInt(dia);
+                    diaSessioA = Short.parseShort(dia);
                 }
                 final String hora = elementHorariA.getAttribute("hora");
                 LocalTime horaSessioA = null;
@@ -528,9 +528,9 @@ public class XmlParser {
                 Grup grupSessioG = grupManager.findById(Long.parseLong(grup));
 
                 final String dia = elementHorariG.getAttribute("dia");
-                Integer diaSessioG = null;
+                Short diaSessioG = null;
                 if (dia != null && !dia.equals("")) {
-                    diaSessioG = Integer.parseInt(dia);
+                    diaSessioG = Short.parseShort(dia);
                 }
                 final String hora = elementHorariG.getAttribute("hora");
                 LocalTime horaSessioG = null;
@@ -578,20 +578,33 @@ public class XmlParser {
     }
 
     public void insertData(File file) {
+        System.out.println("Insert Data");
         this.prepare(file);
         long startTime = System.currentTimeMillis();
+        System.out.println("DEPARTAMENTS");
         crearDepartaments();
+        System.out.println("AULES");
         crearAules();
+        System.out.println("ACTIVITATS");
         crearActivitats();
+        System.out.println("PROFESSORS");
         crearProfessors();
+        System.out.println("CURSOS GRUPOS AVALUACIONES NOTAS");
         crearCursosGruposAvaluacionesNotas();
+        System.out.println("SUBMATERIA");
         crearSubmateria();
+        System.out.println("ALUMNO");
         crearAlumno();
+        System.out.println("TUTORES");
         crearTutores();
+        System.out.println("SESIONES PROFESORES");
         crearSesionesProfesores();
+        System.out.println("SESSIONES ALUMNOS");
         crearSesionesAlumnos();
+        System.out.println("SESSIONES GRUPOS");
         crearSesionesGrupos();
         long endTime = System.currentTimeMillis() - startTime;
         System.out.println(endTime);
+        System.out.println("Ha acabado");
     }
 }

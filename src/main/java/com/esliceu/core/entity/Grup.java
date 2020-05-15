@@ -1,6 +1,7 @@
 package com.esliceu.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -19,15 +20,16 @@ public class Grup implements Serializable {
     @Column(name = "codi")
     private Long codi;
 
-    @Column(name = "nom", length = 100)
+    @Column(name = "nom", length = 20)
     private String nom;
 
-    @JoinColumn(name = "curs")
+    @JoinColumn(name = "curso_codi")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Curs curs;
 
     @ManyToMany(mappedBy = "grups")
     @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonIgnore
     private List<Professor> professors = new ArrayList<>();
 
     public Grup() {

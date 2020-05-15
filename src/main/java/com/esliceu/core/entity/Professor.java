@@ -16,28 +16,28 @@ import java.util.List;
 public class Professor implements Serializable {
 
     @Id
-    @Column(name = "codi")
+    @Column(name = "codi", length = 100)
     private String codi;
 
-    @Column(name = "nom", length = 300)
+    @Column(name = "nom", length = 100)
     private String nom;
 
-    @Column(name = "ap1", length = 300)
+    @Column(name = "ap1", length = 100)
     private String ap1;
 
-    @Column(name = "ap2", length = 300)
+    @Column(name = "ap2", length = 100)
     private String ap2;
 
-    @Column(name = "username", length = 300)
+    @Column(name = "username", length = 100)
     private String username;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "departament")
+    @JoinColumn(name = "departament_codi")
     private Departament departament;
 
     @ManyToMany()
     @LazyCollection(LazyCollectionOption.FALSE)
-    @JoinTable(name = "professor_grup",
+    @JoinTable(name = "grup_professor",
     joinColumns = @JoinColumn(name = "professor_codi"),
     inverseJoinColumns = @JoinColumn(name = "grup_codi"))
     private List<Grup> grups = new ArrayList<>();
