@@ -32,7 +32,7 @@ public class Professor implements Serializable {
     private String username;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "usuariApp_id", referencedColumnName = "email")
+    @JoinColumn(name = "usuari_app_id", referencedColumnName = "email")
     private UsuariApp usuariApp;
 
     @ManyToOne(cascade = CascadeType.ALL)

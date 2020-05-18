@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @Component
-public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler {
 
     private String homeUrl = "http://localhost:8080/";
 
