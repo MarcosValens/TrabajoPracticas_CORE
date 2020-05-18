@@ -31,6 +31,9 @@ public class Professor implements Serializable {
     @Column(name = "username", length = 100)
     private String username;
 
+    @OneToOne(mappedBy = "professor")
+    private UsuariApp usuariApp;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "departament_codi")
     private Departament departament;
@@ -38,8 +41,8 @@ public class Professor implements Serializable {
     @ManyToMany()
     @LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(name = "grup_professor",
-    joinColumns = @JoinColumn(name = "professor_codi"),
-    inverseJoinColumns = @JoinColumn(name = "grup_codi"))
+            joinColumns = @JoinColumn(name = "professor_codi"),
+            inverseJoinColumns = @JoinColumn(name = "grup_codi"))
     private List<Grup> grups = new ArrayList<>();
 
     public Professor() {
@@ -97,11 +100,19 @@ public class Professor implements Serializable {
         return grups;
     }
 
+    public UsuariApp getUsuariApp() {
+        return usuariApp;
+    }
+
+    public void setUsuariApp(UsuariApp usuariApp) {
+        this.usuariApp = usuariApp;
+    }
+
     public void setGrups(List<Grup> grups) {
         this.grups = grups;
     }
 
-    public void addGrup(Grup grup){
+    public void addGrup(Grup grup) {
         grups.add(grup);
         grup.getProfessors().add(this);
     }

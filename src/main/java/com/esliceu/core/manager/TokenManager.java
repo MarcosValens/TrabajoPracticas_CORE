@@ -47,7 +47,7 @@ public class TokenManager implements Serializable {
     public String validateToken(String token) {
         try {
             Jwts.parser()
-                    .setSigningKey(environment.getProperty("jwt.secret").getBytes())
+                    .setSigningKey(environment.getProperty("SIGNING_KEY_TOKEN").getBytes())
                     .parseClaimsJws(token)
                     .getBody();
             return "OK";
