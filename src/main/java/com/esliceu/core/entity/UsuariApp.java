@@ -22,4 +22,12 @@ public class UsuariApp implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public Professor getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
+    }
 }
