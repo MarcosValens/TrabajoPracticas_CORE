@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
