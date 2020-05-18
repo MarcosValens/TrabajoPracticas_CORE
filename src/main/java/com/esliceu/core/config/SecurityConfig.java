@@ -1,5 +1,6 @@
 package com.esliceu.core.config;
 
+import com.esliceu.core.filter.CustomAuthenticationSuccessHandler;
 import com.esliceu.core.manager.GoogleUserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private GoogleUserManager googleUserManager;
 
+    @Autowired
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -25,6 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2Login()
                 .userInfoEndpoint()
-                .oidcUserService(googleUserManager);
+                .oidcUserService(googleUserManager)
+                .and()
+                .successHandler(customAuthenticationSuccessHandler);
     }
 }
