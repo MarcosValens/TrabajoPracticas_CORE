@@ -14,8 +14,6 @@ public class UsuariAppManager {
     public UsuariApp findByEmail(String email) {
 
         UsuariApp usuariApp = usuariAppRepository.findByEmail(email);
-        System.out.println("Metodo findByEmail");
-        System.out.println(usuariApp);
         return usuariApp;
     }
 

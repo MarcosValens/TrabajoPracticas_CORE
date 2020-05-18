@@ -2,7 +2,7 @@ package com.esliceu.core.filter;
 
 import com.esliceu.core.entity.UsuariApp;
 import com.esliceu.core.manager.UsuariAppManager;
-import com.esliceu.core.utils.JwTokenUtil;
+import com.esliceu.core.manager.TokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
@@ -38,16 +38,14 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Map attributes = oidcUser.getAttributes();
         String email = (String) attributes.get("email");
         UsuariApp usuariApp = usuariAppManager.findByEmail(email);
-        String acces_token = JwTokenUtil.generateAcessToken(usuariApp);
-        String refresh_token = JwTokenUtil.generateRefreshToken(usuariApp);
+        String acces_token = TokenManager.generateAcessToken(usuariApp);
+        String refresh_token = TokenManager.generateRefreshToken(usuariApp);
 
         String redirectionUrl = UriComponentsBuilder.fromUriString(environment.getProperty("REDIRECT_URL"))
                 .queryParam("acces_token", acces_token)
                 .queryParam("refresh_token", refresh_token)
                 .build().toUriString();
 
-        System.out.println("Va a redirigir");
-        System.out.println(redirectionUrl);
         getRedirectStrategy().sendRedirect(request, response, redirectionUrl);
 
     }
