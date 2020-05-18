@@ -11,6 +11,10 @@ public class UsuariApp implements Serializable {
     @Column(name = "email", length = 30, nullable = false)
     private String email;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "professor_id", referencedColumnName = "codi")
+    private Professor professor;
+
     public String getEmail() {
         return email;
     }
