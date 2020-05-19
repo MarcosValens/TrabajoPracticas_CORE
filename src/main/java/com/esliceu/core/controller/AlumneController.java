@@ -2,6 +2,7 @@ package com.esliceu.core.controller;
 
 import com.esliceu.core.entity.Alumne;
 import com.esliceu.core.manager.AlumneManager;
+import com.esliceu.core.manager.GrupManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,9 @@ public class AlumneController {
     @Autowired
     AlumneManager alumneManager;
 
+    @Autowired
+    GrupManager grupManager;
+
     @GetMapping("/getTodosAlumnosCurso")
     public ResponseEntity<List<Alumne>> getTodosAlumnosCurso() {
         List<Alumne> alumnos = alumneManager.findAll();
@@ -25,8 +29,8 @@ public class AlumneController {
     }
 
     @GetMapping("/getTodosAlumnosGrupo")
-    public ResponseEntity<List<Alumne>> getTodosAlumnosGrupo(@RequestBody String grup) {
-        List<Alumne> alumnos = alumneManager.findByGrup(grup);
+    public ResponseEntity<List<Alumne>> getTodosAlumnosGrupo(@RequestParam("codi") Long grup) {
+        List<Alumne> alumnos = alumneManager.findByGrup(grupManager.findById(grup));
         return new ResponseEntity<>(alumnos, HttpStatus.OK);
     }
 
