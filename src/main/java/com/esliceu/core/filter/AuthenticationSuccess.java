@@ -42,7 +42,7 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
         String acces_token = tokenManager.generateAcessToken(usuariApp);
         String refresh_token = tokenManager.generateRefreshToken(usuariApp);
 
-        String redirectionUrl = UriComponentsBuilder.fromUriString(environment.getProperty("REDIRECT_URL") + "/#/login/oatuh/calback")
+        String redirectionUrl = UriComponentsBuilder.fromUriString(environment.getProperty("REDIRECT_URL"))
                 .queryParam("acces_token", acces_token)
                 .queryParam("refresh_token", refresh_token)
                 .build().toUriString();
