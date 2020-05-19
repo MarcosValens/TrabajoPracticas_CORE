@@ -56,7 +56,7 @@ pipeline {
         steps  {
             sh  '''
                 echo "Subimos la imagen docker creada"
-                docker tag  imagen-menjador  registry-back.esliceu.com/imagen-core
+                docker tag  imagen-core  registry-back.esliceu.com/imagen-core
                 docker push registry-back.esliceu.com/imagen-core
                 '''
             cleanWs()
