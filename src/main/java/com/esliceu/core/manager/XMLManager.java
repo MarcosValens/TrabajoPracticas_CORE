@@ -26,7 +26,7 @@ public class XMLManager {
 
             file = convertMultiPartToFile(fileMultiPart);
             xmlParser.insertData(file);
-
+            file.delete();
         } catch (Exception e) {
             e.printStackTrace();
             return false;
