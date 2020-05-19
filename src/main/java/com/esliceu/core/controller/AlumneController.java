@@ -22,12 +22,6 @@ public class AlumneController {
     @Autowired
     GrupManager grupManager;
 
-    @GetMapping("/getTodosAlumnosCurso")
-    public ResponseEntity<List<Alumne>> getTodosAlumnosCurso() {
-        List<Alumne> alumnos = alumneManager.findAll();
-        return new ResponseEntity<>(alumnos, HttpStatus.OK);
-    }
-
     @GetMapping("/getTodosAlumnosGrupo")
     public ResponseEntity<List<Alumne>> getTodosAlumnosGrupo(@RequestParam("codi") Long grup) {
         List<Alumne> alumnos = alumneManager.findByGrup(grupManager.findById(grup));
