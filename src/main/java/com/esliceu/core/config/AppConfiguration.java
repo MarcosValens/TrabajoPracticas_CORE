@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class InterceptorsConfig implements WebMvcConfigurer {
+public class AppConfiguration implements WebMvcConfigurer {
 
     @Bean
     public TokenFilter getTokenFilter() {
@@ -16,6 +16,6 @@ public class InterceptorsConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(getTokenFilter()).addPathPatterns("/private/**");
+        registry.addInterceptor(getTokenFilter()).addPathPatterns("/private/**"); // Este filtro valida el token
     }
 }

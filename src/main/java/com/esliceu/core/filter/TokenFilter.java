@@ -2,14 +2,11 @@ package com.esliceu.core.filter;
 
 import com.esliceu.core.manager.TokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Order(Ordered.HIGHEST_PRECEDENCE)
 public class TokenFilter implements HandlerInterceptor {
 
     @Autowired
