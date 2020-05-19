@@ -10,14 +10,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class CorsConfig implements WebMvcConfigurer {
+public class CorsConfiguration implements WebMvcConfigurer {
 
     @Autowired
     private Environment environment;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-
         registry.addMapping("/**")
                 .allowCredentials(true)
                 .allowedOrigins(environment.getProperty("cors.allowed"))

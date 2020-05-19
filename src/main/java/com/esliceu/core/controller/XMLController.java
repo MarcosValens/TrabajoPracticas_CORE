@@ -29,7 +29,7 @@ public class XMLController {
 
         boolean readAndInsertXML = xmlManager.readAndInsertXML(uploadfile);
 
-        if (readAndInsertXML == false) {
+        if (!readAndInsertXML) {
             return new ResponseEntity<>("L'XML no s'ha pogut desar", HttpStatus.BAD_REQUEST);
 
         } else {
