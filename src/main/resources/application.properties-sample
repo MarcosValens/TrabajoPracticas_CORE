@@ -7,7 +7,7 @@ spring.datasource.driver-class-name = com.mysql.cj.jdbc.Driver
 spring.datasource.url = jdbc:mysql://localhost:3306/core?useSSL=false&createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
 
 # Nombre de Usuario para acceder a la Base de Datos.
-spring.datasource.username = root
+spring.datasource.username =
 
 # Contrasña para acceder a la Base de Datos.
 spring.datasource.password =
@@ -15,12 +15,11 @@ spring.datasource.password =
 # URL que permitirá CORS, por ejemplo "http:localhost:8888"
 cors.allowed = http://localhost:8888
 
-# El tamaño total que el archivo no puede superar
+## Propiedades de subida de archivo
+multipart.max-file-size=10MB
+multipart.max-request-size=10MB
 spring.servlet.multipart.max-file-size=10MB
-
-# El tamaño total que la solicitud no puede superar
-spring.servlet.multipart.max-request-size=12MB
-
+spring.servlet.multipart.max-request-size=10MB
 
 
 ## Hibernate Properties ##
@@ -35,7 +34,7 @@ spring.jpa.show-sql = false
 spring.jpa.properties.hibernate.format_sql = false
 
 # Indica que acción realizará Hibernate al arrancar, valores posibles: create, create-drop, validate, update, none
-spring.jpa.hibernate.ddl-auto = update
+spring.jpa.hibernate.ddl-auto = validate
 
 
 
