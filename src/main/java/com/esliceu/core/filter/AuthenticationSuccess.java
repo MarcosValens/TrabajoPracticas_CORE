@@ -19,8 +19,6 @@ import java.util.Map;
 @Component
 public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler {
 
-    private String homeUrl = "http://localhost:8080/";
-
     @Autowired
     private UsuariAppManager usuariAppManager;
 
