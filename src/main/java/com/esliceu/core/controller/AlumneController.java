@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -42,17 +43,17 @@ public class AlumneController {
         return new ResponseEntity<String>("Alumno eliminado", HttpStatus.OK);
     }
 
-    @PutMapping("/subirFoto")
-    public ResponseEntity<String> subirFoto() {
+    @PostMapping("/foto")
+    public ResponseEntity<String> subirFoto(@RequestPart(value = "file") final MultipartFile uploadfile) {
         return new ResponseEntity<>("Foto subida", HttpStatus.OK);
     }
 
-    @PostMapping("/actualizarFoto")
-    public ResponseEntity<String> subirFotoNueva() {
+    @PutMapping("/foto")
+    public ResponseEntity<String> subirFotoNueva(@RequestPart(value = "file") final MultipartFile uploadfile) {
         return new ResponseEntity<>("Foto subida", HttpStatus.OK);
     }
 
-    @DeleteMapping("/eliminarFoto")
+    @DeleteMapping("/foto")
     public ResponseEntity<String> eliminarFoto() {
         return new ResponseEntity<>("Foto eliminada", HttpStatus.OK);
     }
