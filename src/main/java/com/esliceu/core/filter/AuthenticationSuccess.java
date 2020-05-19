@@ -42,12 +42,19 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
         String acces_token = tokenManager.generateAcessToken(usuariApp);
         String refresh_token = tokenManager.generateRefreshToken(usuariApp);
 
+        // Una manera mejor de hacerlo pero da problemas con el #
+
+        /*
         String redirectionUrl = UriComponentsBuilder.fromUriString(environment.getProperty("REDIRECT_URL"))
                 .queryParam("acces_token", acces_token)
                 .queryParam("refresh_token", refresh_token)
                 .build().toUriString();
 
-        getRedirectStrategy().sendRedirect(request, response, redirectionUrl);
+         */
+
+        String redirectionURL = environment.getProperty("REDIRECT_URL") + "?acces_token=" + acces_token + "&refresh_token=" + refresh_token;
+
+        getRedirectStrategy().sendRedirect(request, response, redirectionURL);
 
     }
 }
