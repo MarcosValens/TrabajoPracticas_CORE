@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class UsuariApp implements Serializable {
 
     @Id
-    @Column(name = "email", length = 30, nullable = false)
+    @Column(name = "email", length = 200, nullable = false)
     private String email;
 
     @OneToOne(mappedBy = "usuariApp")
