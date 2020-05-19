@@ -20,25 +20,25 @@ public class TokenManager implements Serializable {
     private static Environment environment;
 
     public static String generateAcessToken(UsuariApp usuariApp) {
-        Claims claims = Jwts.claims().setSubject(usuariApp.getEmail());
 
         return Jwts.builder()
-                .setClaims(claims)
+                .setClaims(Jwts.claims().setSubject(usuariApp.getEmail()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()))
-                .signWith(SignatureAlgorithm.HS256, Objects.requireNonNull(environment.getProperty("SIGNING_KEY_TOKEN")).getBytes())
-                .compact();
+                .setIssuer(environment.getProperty("ISSUER"))
+                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS * 1000)
+                        .signWith(SignatureAlgorithm.HS256, Objects.requireNonNull(environment.getProperty("SIGNING_KEY_TOKEN")).getBytes())
+                        .compact();
     }
 
     public static String generateRefreshToken(UsuariApp usuariApp) {
-        Claims claims = Jwts.claims().setSubject(usuariApp.getEmail());
 
         return Jwts.builder()
-                .setClaims(claims)
+                .setClaims(Jwts.claims().setSubject(usuariApp.getEmail()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()))
-                .signWith(SignatureAlgorithm.HS256, Objects.requireNonNull(environment.getProperty("SIGNING_KEY_TOKEN")).getBytes())
-                .compact();
+                .setIssuer(environment.getProperty("ISSUER"))
+                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS * 1000)
+                        .signWith(SignatureAlgorithm.HS256, Objects.requireNonNull(environment.getProperty("SIGNING_KEY_TOKEN")).getBytes())
+                        .compact();
     }
 
     public String validateToken(String token) {

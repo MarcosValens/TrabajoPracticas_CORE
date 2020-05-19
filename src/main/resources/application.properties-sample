@@ -38,12 +38,11 @@ spring.jpa.properties.hibernate.format_sql = false
 spring.jpa.hibernate.ddl-auto = update
 
 
-## Google Oauth ##
-spring.security.oauth2.client.registration.google.client-id=678601391969-05t106jj5h7rcni6hpn86udn1gatmbk1.apps.googleusercontent.com
-spring.security.oauth2.client.registration.google.client-secret=IRer_oXUVSNLD7S2sklSR9jH
-#spring.security.oauth2.client.registration.google.redirect-uri=http://localhost:8080/auth/google/callback
-#spring.security.oauth2.client.registration..google.scope=email profile
 
+## Google Oauth ##
+spring.security.oauth2.client.registration.google.client-id=948246576038-vpqk3f4mntnqsq3n28lupuoc1dis91sm.apps.googleusercontent.com
+spring.security.oauth2.client.registration.google.client-secret=1XxkfVavFyzE2wpPC9JAyijS
+spring.security.oauth2.client.registration.google.redirect-uri=http://localhost:8080/oauth2/callback/google
 
 
 ## Other Properties ##
@@ -53,7 +52,8 @@ upload.directory=
 
 
 ## Token JwT ##
-ACCES_TOKEN_EXPIRE=5 * 60 * 60
-REFRESH_TOKEN_EXPIRE=20 * 60 * 60
+ACCES_TOKEN_EXPIRE=18000
+REFRESH_TOKEN_EXPIRE=36000
 SIGNING_KEY_TOKEN=1234
-REDIRECT_URL=http://localhost:8080
+REDIRECT_URL=http://localhost:8888/
+ISSUER=https://esliceu.com
