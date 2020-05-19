@@ -33,7 +33,6 @@ public class AlumneController {
     @GetMapping("/getAlumno")
     public ResponseEntity<Alumne> getAlumne(@RequestParam("codi") String codi) {
         Alumne alumno = alumneManager.findById(codi);
-        System.out.println(alumno);
         return new ResponseEntity<>(alumno, HttpStatus.OK);
     }
 
