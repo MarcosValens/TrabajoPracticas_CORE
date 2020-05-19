@@ -23,7 +23,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .antMatcher("/**").authorizeRequests()
-                .antMatchers(new String[]{"/"}).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
@@ -37,5 +36,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .oidcUserService(googleUserManager)
                 .and()
                 .successHandler(authenticationSuccess);
+
     }
 }
