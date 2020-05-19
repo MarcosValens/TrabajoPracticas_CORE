@@ -6,6 +6,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -17,28 +18,32 @@ import java.util.Objects;
 public class TokenManager implements Serializable {
 
     @Autowired
-    private static Environment environment;
+    private Environment environment;
 
-    public static String generateAcessToken(UsuariApp usuariApp) {
+    public String generateAcessToken(UsuariApp usuariApp) {
+
+        long ACCES_TOKEN_EXPIRE = Long.parseLong(Objects.requireNonNull(environment.getProperty("ACCES_TOKEN_EXPIRE")));
 
         return Jwts.builder()
                 .setClaims(Jwts.claims().setSubject(usuariApp.getEmail()))
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setIssuer(environment.getProperty("ISSUER"))
-                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(environment.getProperty("ACCES_TOKEN_EXPIRE"))))
-                        .signWith(SignatureAlgorithm.HS256, Objects.requireNonNull(environment.getProperty("SIGNING_KEY_TOKEN")).getBytes())
-                        .compact();
+                .setIssuedAt(new Date(System.currentTimeMillis() + ACCES_TOKEN_EXPIRE))
+                .setIssuer("https://esliceu.com")
+                .setExpiration(new Date(System.currentTimeMillis()))
+                .signWith(SignatureAlgorithm.HS256, Objects.requireNonNull(environment.getProperty("SIGNING_KEY_TOKEN")).getBytes())
+                .compact();
     }
 
-    public static String generateRefreshToken(UsuariApp usuariApp) {
+    public String generateRefreshToken(UsuariApp usuariApp) {
+
+        long REFRESH_TOKEN_EXPIRE = Long.parseLong(Objects.requireNonNull(environment.getProperty("REFRESH_TOKEN_EXPIRE")));
 
         return Jwts.builder()
                 .setClaims(Jwts.claims().setSubject(usuariApp.getEmail()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setIssuer(environment.getProperty("ISSUER"))
-                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(environment.getProperty("REFRESH_TOKEN_EXPIRE"))))
-                        .signWith(SignatureAlgorithm.HS256, Objects.requireNonNull(environment.getProperty("SIGNING_KEY_TOKEN")).getBytes())
-                        .compact();
+                .setIssuer("https://esliceu.com")
+                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRE))
+                .signWith(SignatureAlgorithm.HS256, Objects.requireNonNull(environment.getProperty("SIGNING_KEY_TOKEN")).getBytes())
+                .compact();
     }
 
     public String validateToken(String token) {

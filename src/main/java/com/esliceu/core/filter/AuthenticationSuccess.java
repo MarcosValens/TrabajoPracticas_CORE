@@ -25,6 +25,9 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
     @Autowired
     private Environment environment;
 
+    @Autowired
+    TokenManager tokenManager;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 
@@ -36,8 +39,8 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
         Map attributes = oidcUser.getAttributes();
         String email = (String) attributes.get("email");
         UsuariApp usuariApp = usuariAppManager.findByEmail(email);
-        String acces_token = TokenManager.generateAcessToken(usuariApp);
-        String refresh_token = TokenManager.generateRefreshToken(usuariApp);
+        String acces_token = tokenManager.generateAcessToken(usuariApp);
+        String refresh_token = tokenManager.generateRefreshToken(usuariApp);
 
         String redirectionUrl = UriComponentsBuilder.fromUriString(environment.getProperty("REDIRECT_URL") + "/#/login/oatuh/calback")
                 .queryParam("acces_token", acces_token)
