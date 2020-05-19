@@ -44,14 +44,14 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
         // Una manera mejor de hacerlo pero da problemas con el #
 
         /*
-        String redirectionUrl = UriComponentsBuilder.fromUriString(environment.getProperty("REDIRECT_URL"))
+        String redirectionUrl = UriComponentsBuilder.fromUriString(environment.getProperty("FRONTEND_URL"))
                 .queryParam("acces_token", acces_token)
                 .queryParam("refresh_token", refresh_token)
                 .build().toUriString();
 
          */
 
-        String redirectionURL = environment.getProperty("REDIRECT_URL") + "?acces_token=" + acces_token + "&refresh_token=" + refresh_token;
+        String redirectionURL = environment.getProperty("FRONTEND_URL") + "?access_token=" + acces_token + "&refresh_token=" + refresh_token + "#/login/oatuh/calback";
 
         getRedirectStrategy().sendRedirect(request, response, redirectionURL);
 

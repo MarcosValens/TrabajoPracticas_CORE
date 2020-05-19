@@ -54,4 +54,4 @@ upload.directory=
 ACCES_TOKEN_EXPIRE=1800000
 REFRESH_TOKEN_EXPIRE=3600000
 SIGNING_KEY_TOKEN=1234
-REDIRECT_URL=http://localhost:8888/#/login/oatuh/calback
+FRONTEND_URL=http://localhost:8888/
