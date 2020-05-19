@@ -24,9 +24,9 @@ public class TokenManager implements Serializable {
 
         return Jwts.builder()
                 .setClaims(Jwts.claims().setSubject(usuariApp.getEmail()))
-                .setIssuedAt(new Date(System.currentTimeMillis() + ACCES_TOKEN_EXPIRE))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setIssuer("https://esliceu.com")
-                .setExpiration(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + ACCES_TOKEN_EXPIRE))
                 .signWith(SignatureAlgorithm.HS256, Objects.requireNonNull(environment.getProperty("SIGNING_KEY_TOKEN")).getBytes())
                 .compact();
     }
