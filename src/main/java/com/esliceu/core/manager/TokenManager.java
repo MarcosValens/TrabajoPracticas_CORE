@@ -25,7 +25,7 @@ public class TokenManager implements Serializable {
                 .setClaims(Jwts.claims().setSubject(usuariApp.getEmail()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setIssuer(environment.getProperty("ISSUER"))
-                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS * 1000)
+                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(environment.getProperty("ACCES_TOKEN_EXPIRE"))))
                         .signWith(SignatureAlgorithm.HS256, Objects.requireNonNull(environment.getProperty("SIGNING_KEY_TOKEN")).getBytes())
                         .compact();
     }
@@ -36,7 +36,7 @@ public class TokenManager implements Serializable {
                 .setClaims(Jwts.claims().setSubject(usuariApp.getEmail()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setIssuer(environment.getProperty("ISSUER"))
-                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS * 1000)
+                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(environment.getProperty("REFRESH_TOKEN_EXPIRE"))))
                         .signWith(SignatureAlgorithm.HS256, Objects.requireNonNull(environment.getProperty("SIGNING_KEY_TOKEN")).getBytes())
                         .compact();
     }
