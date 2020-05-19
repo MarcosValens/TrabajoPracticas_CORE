@@ -20,7 +20,8 @@ public class GoogleUserManager extends OidcUserService {
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
 
         // Cogemos el mail de los valores que nos devuelve google
-        // Creamos un usuario con el correo siempre y cuando sea @esliceu.com
+        // TODO comprobar que sea un correo de @esliceu.com
+        // No está hecho para que todos podamos realizar pruebas por si no tenemos cuenta de @esliceu.com
 
         OidcUser oidcUser = super.loadUser(userRequest);
         Map attributes = oidcUser.getAttributes();
