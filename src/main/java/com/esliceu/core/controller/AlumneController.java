@@ -22,35 +22,35 @@ public class AlumneController {
     @Autowired
     GrupManager grupManager;
 
-    @GetMapping("/getTodosAlumnosGrupo")
+    @GetMapping("/private/getTodosAlumnosGrupo")
     public ResponseEntity<List<Alumne>> getTodosAlumnosGrupo(@RequestParam("codi") Long grup) {
         List<Alumne> alumnos = alumneManager.findByGrup(grupManager.findById(grup));
         return new ResponseEntity<>(alumnos, HttpStatus.OK);
     }
 
-    @GetMapping("/getAlumno")
+    @GetMapping("/private/getAlumno")
     public ResponseEntity<Alumne> getAlumne(@RequestParam("codi") String codi) {
         Alumne alumno = alumneManager.findById(codi);
         return new ResponseEntity<>(alumno, HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteAlumno")
+    @DeleteMapping("/private/deleteAlumno")
     public ResponseEntity<String> deleteAlumne(String codi) {
         alumneManager.delete(codi);
         return new ResponseEntity<String>("Alumno eliminado", HttpStatus.OK);
     }
 
-    @PostMapping("/foto")
+    @PostMapping("/private/foto")
     public ResponseEntity<String> subirFoto(@RequestPart(value = "file") final MultipartFile uploadfile) {
         return new ResponseEntity<>("Foto subida", HttpStatus.OK);
     }
 
-    @PutMapping("/foto")
+    @PutMapping("/private/foto")
     public ResponseEntity<String> subirFotoNueva(@RequestPart(value = "file") final MultipartFile uploadfile) {
         return new ResponseEntity<>("Foto subida", HttpStatus.OK);
     }
 
-    @DeleteMapping("/foto")
+    @DeleteMapping("/private/foto")
     public ResponseEntity<String> eliminarFoto() {
         return new ResponseEntity<>("Foto eliminada", HttpStatus.OK);
     }

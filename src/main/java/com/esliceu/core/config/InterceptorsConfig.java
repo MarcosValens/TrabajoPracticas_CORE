@@ -16,6 +16,6 @@ public class InterceptorsConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(getTokenFilter()).addPathPatterns("/**");
+        registry.addInterceptor(getTokenFilter()).addPathPatterns("/private/**");
     }
 }

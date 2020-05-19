@@ -30,19 +30,19 @@ public class ProfessorController {
     ProfessorManager professorManager;
 
 
-    @GetMapping("/cursos")
+    @GetMapping("/private/cursos")
     public ResponseEntity<List<Curs>> getCursos() {
         List<Curs> cursos = cursManager.findAll();
         return new ResponseEntity<>(cursos, HttpStatus.OK);
     }
 
-    @GetMapping("/grupos")
+    @GetMapping("/private/grupos")
     public ResponseEntity<List<Grup>> getGrupos() {
         List<Grup> grupos = grupManager.findAll();
         return new ResponseEntity<>(grupos, HttpStatus.OK);
     }
 
-    @GetMapping("/professor")
+    @GetMapping("/private/professor")
     public ResponseEntity<Professor> getProfessor(String codi) {
         Professor professor = professorManager.findById(codi);
         return new ResponseEntity<>(professor, HttpStatus.OK);

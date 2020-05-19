@@ -23,7 +23,7 @@ public class XMLController {
     @Autowired
     XmlParser xmlParser;
 
-    @PutMapping("/uploadxml")
+    @PutMapping("/private/uploadxml")
     @Transactional
     public ResponseEntity<String> uploadXML(@RequestPart(value = "file") final MultipartFile uploadfile) {
 
