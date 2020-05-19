@@ -5,6 +5,7 @@ pipeline {
       steps {
         sh  '''
             echo "Copiamos el properties dentro del proyecto"
+            cp /jenkinsProperties/application.properties src/main/resources/application.properties
             '''
       }
     }
@@ -44,6 +45,7 @@ pipeline {
                     echo "Contruimos la imagen docker"
                     docker build -t imagen-core .
                     '''
+                cleanWs()
             }
     }
 
@@ -54,7 +56,10 @@ pipeline {
         steps  {
             sh  '''
                 echo "Subimos la imagen docker creada"
+                docker tag  imagen-menjador  registry-back.esliceu.com/imagen-core
+                docker push registry-back.esliceu.com/imagen-core
                 '''
+            cleanWs()
         }
     }
 
@@ -64,8 +69,10 @@ pipeline {
         }
         steps  {
         sh  '''
-            echo "desplegamos"
+            echo "desplegamos"core_i_menjador
+            ssh deploy.esliceu.com "cd core_i_menjador; docker-compose stop; docker-compose pull; docker-compose up -d"
             '''
+        cleanWs()
         }
     }
   }

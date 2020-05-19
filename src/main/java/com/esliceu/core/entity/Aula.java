@@ -1,10 +1,14 @@
 package com.esliceu.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "aula")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "codi")
 public class Aula  implements Serializable {
 
     @Id
@@ -27,5 +31,9 @@ public class Aula  implements Serializable {
 
     public void setDescripcio(String descripcio) {
         this.descripcio = descripcio;
+    }
+
+    public String getDescripcio() {
+        return descripcio;
     }
 }

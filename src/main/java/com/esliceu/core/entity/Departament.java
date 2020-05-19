@@ -1,17 +1,21 @@
 package com.esliceu.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "departament")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "codi")
 public class Departament implements Serializable {
 
     @Id
     @Column(name = "codi")
     private Long codi;
 
-    @Column(name = "descripcio", length = 300)
+    @Column(name = "descripcio", length = 100)
     private String descripcio;
 
     public Departament() {

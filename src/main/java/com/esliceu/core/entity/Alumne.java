@@ -1,5 +1,9 @@
 package com.esliceu.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -8,11 +12,12 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "alumne")
+@Table(name = "alumno")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "codi")
 public class Alumne implements Serializable {
 
     @Id
-    @Column(name = "codi")
+    @Column(name = "codi", length = 100)
     private String codi;
 
     @Column(name = "nom", length = 100)
@@ -27,12 +32,13 @@ public class Alumne implements Serializable {
     @Column(name = "expedient")
     private Long expedient;
 
-    @JoinColumn(name = "grup")
+    @JoinColumn(name = "grup_codi")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Grup grup;
 
     @OneToMany(mappedBy = "alumne")
     @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonManagedReference
     private List<TutorAlumne> tutorsAlumnes;
 
     public Alumne() {

@@ -1,5 +1,8 @@
 package com.esliceu.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -7,13 +10,14 @@ import java.util.Date;
 
 @Entity
 @Table(name = "avaluacio")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "codi")
 public class Avaluacio implements Serializable {
 
     @Id
     @Column(name = "codi")
     private Long codi;
 
-    @Column(name = "descripcio", length = 300)
+    @Column(name = "descripcio", length = 50)
     private String descripcio;
 
     @Column(name = "data_inici", columnDefinition = "DATE")
@@ -22,7 +26,7 @@ public class Avaluacio implements Serializable {
     @Column(name = "data_fi", columnDefinition = "DATE")
     private LocalDate dataFi;
 
-    @JoinColumn(name = "grup")
+    @JoinColumn(name = "grup_codi")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Grup grup;
 
