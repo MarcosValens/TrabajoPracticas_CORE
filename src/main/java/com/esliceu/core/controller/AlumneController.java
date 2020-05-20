@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.GeneratedValue;
 import java.util.List;
 
 
@@ -20,6 +21,11 @@ public class AlumneController {
 
     @Autowired
     GrupManager grupManager;
+
+    @GetMapping("/private/alumnos")
+    public List<Alumne> getAllAlumnos() {
+        return alumneManager.findAll();
+    }
 
     @GetMapping("/private/getTodosAlumnosGrupo")
     public ResponseEntity<List<Alumne>> getTodosAlumnosGrupo(@RequestParam("codi") Long grup) {
