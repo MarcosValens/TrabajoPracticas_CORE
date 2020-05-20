@@ -40,7 +40,6 @@ public class ProfessorController {
 
     @GetMapping("/private/professor")
     public List<Professor> getAllProfessor() {
-        System.out.println(professorManager.findAll());
         return professorManager.findAll();
     }
 
