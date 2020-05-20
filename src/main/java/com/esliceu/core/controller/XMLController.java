@@ -23,13 +23,17 @@ public class XMLController {
     @Autowired
     XmlParser xmlParser;
 
+
+    /*
+     * TODO: este endpoint da un 403 - Podeis comprobarlo en el /admin del front haciendo un upload del xml
+     * */
     @PutMapping("/private/uploadxml")
     @Transactional
     public ResponseEntity<String> uploadXML(@RequestPart(value = "file") final MultipartFile uploadfile) {
 
         boolean readAndInsertXML = xmlManager.readAndInsertXML(uploadfile);
 
-        if (readAndInsertXML == false) {
+        if (!readAndInsertXML) {
             return new ResponseEntity<>("L'XML no s'ha pogut desar", HttpStatus.BAD_REQUEST);
 
         } else {
