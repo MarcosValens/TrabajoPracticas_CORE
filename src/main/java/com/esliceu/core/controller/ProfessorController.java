@@ -77,6 +77,8 @@ public class ProfessorController {
      * */
     @PostMapping("/auth/login")
     public Map<String, String> login(@RequestBody String json, HttpServletResponse response) {
+        System.out.println("Entra al controller");
+
         /*
          * PLACEHOLDER PARA PODER TRABAJAR EN FRONT
          * */
