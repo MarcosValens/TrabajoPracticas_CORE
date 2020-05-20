@@ -9,6 +9,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -31,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        String prefijoUri = environment.getProperty("PREFIJO_URI");
         http
                 .cors()
                 .and()
@@ -39,17 +41,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2Login()
                 .authorizationEndpoint()
-                .baseUri("/api/oauth2/authorize")
+                .baseUri(prefijoUri + "/oauth2/authorize")
                 .and()
                 .redirectionEndpoint()
-                .baseUri("/api/oauth2/callback/google")
+                .baseUri(prefijoUri + "/oauth2/callback/google")
                 .and()
                 .userInfoEndpoint()
                 .oidcUserService(googleUserManager)
                 .and()
                 .successHandler(authenticationSuccess)
                 .and()
-                .csrf().disable();
+                .csrf().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Bean
@@ -58,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowedOrigins(Arrays.asList(environment.getProperty("cors.allowed")));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Headers", "Access-Control-Allow-Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", "Origin", "Cache-Control", "Content-Type", "Authorization"));
-        configuration.setAllowedMethods(Arrays.asList("DELETE", "GET", "POST", "PATCH", "PUT"));
+        configuration.setAllowedMethods(Arrays.asList("DELETE", "GET", "POST", "PATCH", "OPTIONS", "PUT"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

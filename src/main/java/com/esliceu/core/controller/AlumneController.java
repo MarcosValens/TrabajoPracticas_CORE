@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.GeneratedValue;
 import java.util.List;
 
 
@@ -27,20 +26,20 @@ public class AlumneController {
         return alumneManager.findAll();
     }
 
-    @GetMapping("/private/getTodosAlumnosGrupo")
-    public ResponseEntity<List<Alumne>> getTodosAlumnosGrupo(@RequestParam("codi") Long grup) {
+    @GetMapping("/private/alumnos/grupo/{codi}")
+    public ResponseEntity<List<Alumne>> getTodosAlumnosGrupo(@PathVariable("codi") Long grup) {
         List<Alumne> alumnos = alumneManager.findByGrup(grupManager.findById(grup));
         return new ResponseEntity<>(alumnos, HttpStatus.OK);
     }
 
-    @GetMapping("/private/getAlumno")
-    public ResponseEntity<Alumne> getAlumne(@RequestParam("codi") String codi) {
+    @GetMapping("/private/alumno/{codi}")
+    public ResponseEntity<Alumne> getAlumne(@PathVariable("codi") String codi) {
         Alumne alumno = alumneManager.findById(codi);
         return new ResponseEntity<>(alumno, HttpStatus.OK);
     }
 
-    @DeleteMapping("/private/deleteAlumno")
-    public ResponseEntity<String> deleteAlumne(String codi) {
+    @DeleteMapping("/private/alumno/{codi}")
+    public ResponseEntity<String> deleteAlumne(@PathVariable("codi") String codi) {
         alumneManager.delete(codi);
         return new ResponseEntity<String>("Alumno eliminado", HttpStatus.OK);
     }
