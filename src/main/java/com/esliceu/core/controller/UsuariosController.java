@@ -30,8 +30,10 @@ public class UsuariosController {
         // List<Usuario> usuariosDelJSON = usuariomanager.getFromJSON(json)
 //        for (Usuarios userAmarcar : usuariosDelJSON){
 //            if (userAmarcar Es un profesor && personaMarcadora ES un CUINER){
+        // ANTES DE MARCAR MIRAR QUE HOY EL MISMO DIA NO HAYA SIDO MARCADO
 //                // MARCAMOS ESE USUARIO
 //            }else{
+        // ANTES DE MARCAR MIRAR QUE HOY EL MISMO DIA NO HAYA SIDO MARCADO
 //                // MARCAMOS AL USUARIO SEAMOS QUIEN SEAMOS YA QUE SERA UN ALUMNO
 //            }
 //        }
