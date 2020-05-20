@@ -3,12 +3,13 @@ import com.esliceu.core.manager.TokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Order(Ordered.HIGHEST_PRECEDENCE + 1)
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class TokenFilter implements HandlerInterceptor {
 
     @Autowired
@@ -16,11 +17,11 @@ public class TokenFilter implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
         /*
          * Detecta si la petición es un OPTIONS en tal caso devuelve true.
          * */
         if (request.getMethod().equals("OPTIONS")) return true;
+
 
         /*
          * Si no es un OPTIONS comprueba si la petición contiene el Token
