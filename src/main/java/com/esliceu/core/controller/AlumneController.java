@@ -21,6 +21,7 @@ public class AlumneController {
     @Autowired
     GrupManager grupManager;
 
+
     @GetMapping("/private/alumnos")
     public List<Alumne> getAllAlumnos() {
         return alumneManager.findAll();
