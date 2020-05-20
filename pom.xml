@@ -9,10 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.esliceu</groupId>
-    <artifactId>core</artifactId>
+    <artifactId>CORE</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>core</name>
-    <packaging>war</packaging>
+    <name>CORE</name>
     <description>Core Es Liceu.</description>
 
     <properties>
