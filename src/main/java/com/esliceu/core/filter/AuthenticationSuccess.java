@@ -1,8 +1,8 @@
 package com.esliceu.core.filter;
 
 import com.esliceu.core.entity.UsuariApp;
-import com.esliceu.core.manager.UsuariAppManager;
 import com.esliceu.core.manager.TokenManager;
+import com.esliceu.core.manager.UsuariAppManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
@@ -51,9 +51,10 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
 
          */
 
-        String redirectionURL = environment.getProperty("FRONTEND_URL") + "?access_token=" + acces_token + "&refresh_token=" + refresh_token + "#/login/oatuh/calback";
+        String redirectionURL = environment.getProperty("FRONTEND_URL") + "?access_token=" + acces_token + "&refresh_token=" + refresh_token + "#/login/oatuh/callback";
 
         getRedirectStrategy().sendRedirect(request, response, redirectionURL);
+
 
     }
 }

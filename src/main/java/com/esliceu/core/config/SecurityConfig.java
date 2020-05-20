@@ -9,7 +9,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -37,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .antMatcher("/**").authorizeRequests()
+                .antMatchers("/login", prefijoUri + "/oauth2/authorize", prefijoUri + "/oauth2/callback/google").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
@@ -51,9 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .successHandler(authenticationSuccess)
                 .and()
-                .csrf().disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .csrf().disable();
     }
 
     @Bean
