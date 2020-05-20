@@ -18,6 +18,7 @@ target/
 *.iws
 *.iml
 *.ipr
+/src/main/java/com/esliceu/core/photos
 
 ### NetBeans ###
 /nbproject/private/
@@ -29,6 +30,7 @@ build/
 
 ### Properties ###
 *.properties
+
 
 ### VS Code ###
 .vscode/
