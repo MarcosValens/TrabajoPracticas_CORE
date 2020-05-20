@@ -43,3 +43,4 @@ build/
 /src/main/java/com/esliceu/core/manager/Avaluacio.java
 /src/main/java/com/esliceu/core/manager/Submateria.java
 /src/main/java/com/esliceu/core/manager/Departament.java
+./docker-compose.yml

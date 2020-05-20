@@ -9,10 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.esliceu</groupId>
-    <artifactId>core</artifactId>
+    <artifactId>CORE</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>core</name>
-    <packaging>war</packaging>
+    <name>CORE</name>
     <description>Core Es Liceu.</description>
 
     <properties>
@@ -73,6 +72,11 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
             <exclusions>
@@ -99,7 +103,19 @@
             <version>0.9.1</version>
         </dependency>
 
+        <!-- Oauth2 -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-jose</artifactId>
+        </dependency>
+
     </dependencies>
+
 
     <build>
         <plugins>

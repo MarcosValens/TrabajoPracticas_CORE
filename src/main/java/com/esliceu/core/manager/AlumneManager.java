@@ -1,6 +1,7 @@
 package com.esliceu.core.manager;
 
 import com.esliceu.core.entity.Alumne;
+import com.esliceu.core.entity.Grup;
 import com.esliceu.core.repository.AlumneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class AlumneManager {
         return (List<Alumne>) alumneRepository.findAll();
     }
 
-    public List<Alumne> findByGrup(String codiGrup) {
-        return alumneRepository.findByGrup(codiGrup);
+    public List<Alumne> findByGrup(Grup grup) {
+        return alumneRepository.findByGrup(grup);
     }
 }

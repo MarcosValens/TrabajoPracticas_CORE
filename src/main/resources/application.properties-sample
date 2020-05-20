@@ -1,14 +1,57 @@
-spring.datasource.driver-class-name = com.mysql.cj.jdbc.Driver
-spring.datasource.url = jdbc:mysql://localhost:3306/corebd?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-spring.datasource.username =
-spring.datasource.password =
-spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
-spring.jpa.show-sql = false
-spring.jpa.properties.hibernate.format_sql = false
-spring.jpa.hibernate.ddl-auto = validate
-cors.alowed =
+## Spring DataSource Properties ##
 
-multipart.max-file-size=10MB # poner mas espacio ya que el XML es mas grande que el default 1MB
+# Driver que usará Spring, por defecto nosotros usamos "com.mysql.cj.jdbc.Driver".
+spring.datasource.driver-class-name = com.mysql.cj.jdbc.Driver
+
+# URL de la Base de Datos, por defecto nosotros usamos "localhost". Las propiedades del final se pueden cambiar.
+spring.datasource.url = jdbc:mysql://localhost:3306/core?useSSL=false&createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+
+# Nombre de Usuario para acceder a la Base de Datos.
+spring.datasource.username =
+
+# Contrasña para acceder a la Base de Datos.
+spring.datasource.password =
+
+# URL que permitirá CORS, por ejemplo "http:localhost:8888"
+cors.allowed = http://localhost:8888
+
+## Propiedades de subida de archivo
+multipart.max-file-size=10MB
 multipart.max-request-size=10MB
 spring.servlet.multipart.max-file-size=10MB
 spring.servlet.multipart.max-request-size=10MB
+
+
+## Hibernate Properties ##
+
+# Dialecto de SQL que usará Hibernate, por defecto, nosotros usamos "org.hibernate.dialect.MySQL5InnoDBDialect".
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+
+# Si se encuentra en "true" mostrará todas las queries SQL que realice Hibernate.
+spring.jpa.show-sql = false
+
+# Si se encuentra en "true" y también "show-sql", mostrará las queries SQL de una manera más bonita y facil de leer.
+spring.jpa.properties.hibernate.format_sql = false
+
+# Indica que acción realizará Hibernate al arrancar, valores posibles: create, create-drop, validate, update, none
+spring.jpa.hibernate.ddl-auto = validate
+
+
+
+## Google Oauth ##
+spring.security.oauth2.client.registration.google.client-id=
+spring.security.oauth2.client.registration.google.client-secret=
+spring.security.oauth2.client.registration.google.redirect-uri=http://localhost:8080/oauth2/callback/google
+
+
+## Other Properties ##
+
+# Directorio de upload para las fotos
+upload.directory=
+
+
+## Token JwT ##
+ACCES_TOKEN_EXPIRE=1800000
+REFRESH_TOKEN_EXPIRE=3600000
+SIGNING_KEY_TOKEN=1234
+FRONTEND_URL=http://localhost:8888/
