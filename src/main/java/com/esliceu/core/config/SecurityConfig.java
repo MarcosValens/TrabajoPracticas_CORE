@@ -36,7 +36,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .antMatcher("/**").authorizeRequests()
-                .antMatchers("/login", prefijoUri + "/oauth2/authorize", prefijoUri + "/oauth2/callback/google").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
