@@ -39,8 +39,8 @@ spring.jpa.hibernate.ddl-auto = validate
 
 
 ## Google Oauth ##
-spring.security.oauth2.client.registration.google.client-id=
-spring.security.oauth2.client.registration.google.client-secret=
+spring.security.oauth2.client.registration.google.client-id= changeme
+spring.security.oauth2.client.registration.google.client-secret=changeme
 spring.security.oauth2.client.registration.google.redirect-uri=http://localhost:8080/oauth2/callback/google
 
 
