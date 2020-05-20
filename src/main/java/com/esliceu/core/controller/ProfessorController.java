@@ -39,13 +39,18 @@ public class ProfessorController {
     }
 
     @GetMapping("/private/professor")
-    public ResponseEntity<Professor> getProfessor(String codi) {
-        Professor professor = professorManager.findById(codi);
-        return new ResponseEntity<>(professor, HttpStatus.OK);
+    public List<Professor> getAllProfessor() {
+        System.out.println(professorManager.findAll());
+        return professorManager.findAll();
+    }
+
+    @GetMapping("/private/professor/{codigo}")
+    public Professor getProfessor(@PathVariable String codigo) {
+        return professorManager.findById(codigo);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody String professorJson){
+    public ResponseEntity<String> login(@RequestBody String professorJson) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
