@@ -26,6 +26,9 @@ public class XMLController {
 
     /*
      * TODO: este endpoint da un 403 - Podeis comprobarlo en el /admin del front haciendo un upload del xml
+     *  A parte, este endpoint deberia actualizar los datos, no meter TODOS LOS DATOS SIEMPRE,
+     *  solo meter TODOS si no hay datos en la bbdd. Sino la BBDD acabara con 1 millon de inserts en SESIONES
+     *  y con datos redundantes
      * */
     @PutMapping("/private/uploadxml")
     @Transactional
