@@ -32,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        String prefijoUri = environment.getProperty("PREFIJO_URI");
         http
                 .cors()
                 .and()
@@ -40,10 +41,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2Login()
                 .authorizationEndpoint()
-                .baseUri("/oauth2/authorize")
+                .baseUri(prefijoUri + "/oauth2/authorize")
                 .and()
                 .redirectionEndpoint()
-                .baseUri("/oauth2/callback/google")
+                .baseUri(prefijoUri + "/oauth2/callback/google")
                 .and()
                 .userInfoEndpoint()
                 .oidcUserService(googleUserManager)
