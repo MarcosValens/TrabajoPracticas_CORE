@@ -30,31 +30,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        String enabled = environment.getProperty("OAUTH_ENABLED");
-        if (enabled.equals("true")) {
-            String prefijoUri = environment.getProperty("PREFIJO_URI");
-            http
-                    .cors()
-                    .and()
-                    .antMatcher("/**").authorizeRequests()
-                    .anyRequest().authenticated()
-                    .and()
-                    .oauth2Login()
-                    .authorizationEndpoint()
-                    .baseUri(prefijoUri + "/oauth2/authorize")
-                    .and()
-                    .redirectionEndpoint()
-                    .baseUri(prefijoUri + "/oauth2/callback/google")
-                    .and()
-                    .userInfoEndpoint()
-                    .oidcUserService(googleUserManager)
-                    .and()
-                    .successHandler(authenticationSuccess)
-                    .and()
-                    .csrf().disable();
-        } else {
-            http.csrf().disable();
-        }
+
+        String prefijoUri = environment.getProperty("PREFIJO_URI");
+        http
+                .cors()
+                .and()
+                .antMatcher("/**").authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .oauth2Login()
+                .authorizationEndpoint()
+                .baseUri(prefijoUri + "/oauth2/authorize")
+                .and()
+                .redirectionEndpoint()
+                .baseUri(prefijoUri + "/oauth2/callback/google")
+                .and()
+                .userInfoEndpoint()
+                .oidcUserService(googleUserManager)
+                .and()
+                .successHandler(authenticationSuccess)
+                .and()
+                .csrf().disable();
 
     }
 
