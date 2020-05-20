@@ -21,10 +21,6 @@ public class AlumneController {
     @Autowired
     GrupManager grupManager;
 
-    @GetMapping("/hola")
-    public ResponseEntity<String> hola() {
-        return new ResponseEntity<>("HOLA", HttpStatus.OK);
-    }
 
     @GetMapping("/private/alumnos")
     public List<Alumne> getAllAlumnos() {
