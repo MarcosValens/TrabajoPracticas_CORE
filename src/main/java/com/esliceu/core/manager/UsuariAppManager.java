@@ -23,6 +23,6 @@ public class UsuariAppManager {
     }
 
     public boolean validarUsuari(String email, String contrasenya){
-        return usuariAppRepository.findByEmailAndContrasenya(email, contrasenya);
+        return usuariAppRepository.findByEmailAndContrasenya(email, contrasenya) != null;
     }
 }
