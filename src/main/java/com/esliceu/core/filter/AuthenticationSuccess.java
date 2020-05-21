@@ -51,10 +51,15 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
 
          */
 
-        String redirectionURL = environment.getProperty("FRONTEND_URL") + "?access_token=" + acces_token + "&refresh_token=" + refresh_token + "#/login/oatuh/callback";
+
+        // ESTA LINEA DE AQUI, FUNCIONARÁ BIEN SI TENEMOS EL QUASAR CON EL ROUTER EN MODO HISTORY.
+        // String redirectionURL = environment.getProperty("FRONTEND_URL") + "#/login/oauth/callback" + "?access_token=" + acces_token + "&refresh_token=" + refresh_token;
+
+        // EN NUESTRO CASO, YA SEA PROD O DEV TENEMOS EL MODO HASH (ABAJO)
+
+        // ESTA LINEA DE AQUI FUNCIONA SI ESTA EL ROUTER EN MODO HASH DE QUASAR
+        String redirectionURL = environment.getProperty("FRONTEND_URL") + "?access_token=" + acces_token + "&refresh_token=" + refresh_token + "#/login/oauth/callback";
 
         getRedirectStrategy().sendRedirect(request, response, redirectionURL);
-
-
     }
 }
