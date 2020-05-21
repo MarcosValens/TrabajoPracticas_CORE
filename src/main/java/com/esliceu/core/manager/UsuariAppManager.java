@@ -21,4 +21,8 @@ public class UsuariAppManager {
 
         usuariAppRepository.save(usuariApp);
     }
+
+    public boolean validarUsuari(String email, String contrasenya){
+        return usuariAppRepository.findByEmailAndContrasenya(email, contrasenya) != null;
+    }
 }

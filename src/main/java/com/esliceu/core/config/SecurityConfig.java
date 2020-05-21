@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -34,12 +33,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         String prefijoUri = environment.getProperty("PREFIJO_URI");
+
         http
+
                 .cors()
                 .and()
                 .antMatcher("/**").authorizeRequests()
-                .antMatchers("/auth/login", prefijoUri + "/oauth2/authorize", prefijoUri + "/oauth2/callback/google", "/**").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers(prefijoUri + "/auth/login", prefijoUri + "/oauth2/callback/google", prefijoUri + "/private/**", prefijoUri + "/admin/**").permitAll()
+                .antMatchers(prefijoUri + "/oauth2/authorize").authenticated()
                 .and()
                 .oauth2Login()
                 .authorizationEndpoint()
@@ -53,7 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .successHandler(authenticationSuccess)
                 .and()
-                .csrf().disable();
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and();
 
     }
 

@@ -7,4 +7,6 @@ public interface UsuariAppRepository extends CrudRepository<UsuariApp, String> {
 
     UsuariApp findByEmail(String email);
 
+    UsuariApp findByEmailAndContrasenya(String email, String contrasenya);
+
 }

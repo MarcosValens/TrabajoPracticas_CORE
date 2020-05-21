@@ -14,6 +14,9 @@ public class UsuariApp implements Serializable {
     @OneToOne(mappedBy = "usuariApp")
     private Professor professor;
 
+    @Column(name = "contrasenya", length = 200, nullable = false)
+    private String contrasenya;
+
     public String getEmail() {
         return email;
     }
@@ -28,5 +31,13 @@ public class UsuariApp implements Serializable {
 
     public void setProfessor(Professor professor) {
         this.professor = professor;
+    }
+
+    public String getContrasenya() {
+        return contrasenya;
+    }
+
+    public void setContrasenya(String contrasenya) {
+        this.contrasenya = contrasenya;
     }
 }
