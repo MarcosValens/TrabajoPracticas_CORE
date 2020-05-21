@@ -57,19 +57,6 @@ public class ProfessorController {
     }
 
     /*
-     * TODO: Imagino que este endpoint habra que usarlo con un rol mayor que el token normal,
-     *  falta añadir dicho ROL, crear un TOKEN  NUEVO  y definir que afectará en los endpoints /admin/** por ejemplo
-     *
-     * El json recibe un email, y un codigo. El email es el que se le ha de asignar,
-     * el codi es el usuario que ha de tener ese email
-     * */
-    @PutMapping("/admin/professor/email")
-    public ResponseEntity<String> setEmailProfesor(@RequestBody String json) {
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-
-    /*
      * TODO: Falta establecer el Login de manera local, con password y email o usuario, eso falta decidirlo
      *
      * El json recibirá un email o username, lo que decidais y una password,
@@ -116,4 +103,36 @@ public class ProfessorController {
         return map;
 
     }
+
+
+    /*
+     * #######################
+     *
+     * ENDPOINTS ADMINISTRADOS
+     *
+     * #######################
+     * */
+    /*
+     * TODO: Imagino que este endpoint habra que usarlo con un rol mayor que el token normal,
+     *  falta añadir dicho ROL, crear un TOKEN  NUEVO  y definir que afectará en los endpoints /admin/** por ejemplo
+     *
+     * El json recibe un email, y un codigo. El email es el que se le ha de asignar,
+     * el codi es el usuario que ha de tener ese email
+     * */
+    @PutMapping("/admin/professor/email")
+    public ResponseEntity<String> setEmailProfesor(@RequestBody String json) {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    /*
+     * TODO: Igual que el de arriba, este endpoint necesitara otro token con ROL mayor y un filtro que proteja el prefijo /admin/
+     *
+     * Este solo recibe un `codi` el cual hace referencia al profesor que se le ha de borrar el email de la base de datos
+     * */
+    @DeleteMapping("/admin/professor/email")
+    public ResponseEntity<String> removeEmailProfesor(@RequestBody String json) {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
