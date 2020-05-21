@@ -75,15 +75,6 @@ public class ProfessorController {
         usuariApp.setEmail(email);
         usuariApp.setProfessor(professor);
         usuariAppManager.create(usuariApp);
-        System.out.println(professor.getCodi());
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
-    /*
-     * TODO: Falta establecer el Login de manera local, con password y email o usuario, eso falta decidirlo
-     *
-     * El json recibirá un email o username, lo que decidais y una password,
-     * la cual tendreis que validar correctamente y retornar access_tokens
-     * */
 }

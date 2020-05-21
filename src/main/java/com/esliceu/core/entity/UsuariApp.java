@@ -11,10 +11,10 @@ public class UsuariApp implements Serializable {
     @Column(name = "email", length = 200, nullable = false)
     private String email;
 
-    @OneToOne(mappedBy = "usuariApp")
+    @OneToOne(cascade = CascadeType.ALL)
     private Professor professor;
 
-    @Column(name = "contrasenya", length = 200, nullable = false)
+    @Column(name = "contrasenya", length = 200)
     private String contrasenya;
 
     public String getEmail() {
