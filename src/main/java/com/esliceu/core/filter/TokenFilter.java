@@ -17,6 +17,8 @@ public class TokenFilter implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+        System.out.println("Entra al filter del token");
         /*
          * Detecta si la petición es un OPTIONS en tal caso devuelve true.
          * */
