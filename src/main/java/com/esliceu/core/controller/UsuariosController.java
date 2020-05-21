@@ -29,7 +29,9 @@ public class UsuariosController {
 
         // TODO A parte de marcar el usuario, tenemos que marcar que cocinero
         //  o monitor lo ha hecho, es lo podemos sacar del usuario "personaMarcadora"
-        //  ya que viene del token del loguin
+        //  ya que viene del token del login.
+        //  A parte del cocinero o monitor, tambien necesitamos el dia que se marca.
+        //  una de dos, puede venir del cliente, o de un Date().now() (algo asi).
 
         // TODO: Esto es un placeholder de como podria ser
 
