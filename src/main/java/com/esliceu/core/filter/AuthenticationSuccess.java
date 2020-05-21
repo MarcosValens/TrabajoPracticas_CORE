@@ -51,7 +51,7 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
 
          */
 
-        String redirectionURL = environment.getProperty("FRONTEND_URL") + "?access_token=" + acces_token + "&refresh_token=" + refresh_token + "#/login/oatuh/callback";
+        String redirectionURL = environment.getProperty("FRONTEND_URL") + "#/login/oauth/callback" + "?access_token=" + acces_token + "&refresh_token=" + refresh_token;
 
         getRedirectStrategy().sendRedirect(request, response, redirectionURL);
 
