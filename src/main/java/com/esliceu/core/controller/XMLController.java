@@ -25,10 +25,10 @@ public class XMLController {
 
 
     /*
-     * TODO: este endpoint da un 403 - Podeis comprobarlo en el /admin del front haciendo un upload del xml
-     *  A parte, este endpoint deberia actualizar los datos, no meter TODOS LOS DATOS SIEMPRE,
+     * TODO: este endpoint deberia actualizar los datos, no meter TODOS LOS DATOS SIEMPRE,
      *  solo meter TODOS si no hay datos en la bbdd. Sino la BBDD acabara con 1 millon de inserts en SESIONES
-     *  y con datos redundantes
+     *  y con datos redundantes. Quizas este endpoint deberia tener el prefijo /admin en vez de /private y que solo los usuarios
+     *  logueados como ADMINISTRADORES puedan acceder a dicho endpoint ya que este actializa la bbdd
      * */
     @PutMapping("/private/uploadxml")
     @Transactional
