@@ -116,8 +116,8 @@ public class ProfessorController {
      * TODO: Imagino que este endpoint habra que usarlo con un rol mayor que el token normal,
      *  falta añadir dicho ROL, crear un TOKEN  NUEVO  y definir que afectará en los endpoints /admin/** por ejemplo
      *
-     * El json recibe un email, y un codigo. El email es el que se le ha de asignar,
-     * el codi es el usuario que ha de tener ese email
+     * El json recibe un email, y un  `codi`. El email es el que se le ha de asignar,
+     * el  `codi` es el usuario que ha de tener ese email
      * */
     @PutMapping("/admin/professor/email")
     public ResponseEntity<String> setEmailProfesor(@RequestBody String json) {
