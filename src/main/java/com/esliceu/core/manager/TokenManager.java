@@ -1,6 +1,7 @@
 package com.esliceu.core.manager;
 
 import com.esliceu.core.entity.UsuariApp;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -57,5 +58,13 @@ public class TokenManager implements Serializable {
             return "ERROR";
         }
     }
-
+    public Claims getBody(String token){
+        if (this.validateToken(token).equals("OK")){
+            return Jwts.parser()
+                    .setSigningKey(Objects.requireNonNull(environment.getProperty("SIGNING_KEY_TOKEN")).getBytes())
+                    .parseClaimsJws(token)
+                    .getBody();
+        }
+        return null;
+    }
 }
