@@ -26,14 +26,20 @@ public class UsuariosController {
         token = token.replace("Bearer ", "");
         // Usuario personaMarcadora = tokenManager.getUsuarioFromToken(token); TODO: Sacamos el usuario (profe, monitor o cuiner del token)
 
+
+        // TODO A parte de marcar el usuario, tenemos que marcar que cocinero
+        //  o monitor lo ha hecho, es lo podemos sacar del usuario "personaMarcadora"
+        //  ya que viene del token del loguin
+
         // TODO: Esto es un placeholder de como podria ser
+
         // List<Usuario> usuariosDelJSON = usuariomanager.getFromJSON(json)
 //        for (Usuarios userAmarcar : usuariosDelJSON){
 //            if (userAmarcar Es un profesor && personaMarcadora ES un CUINER){
-        // ANTES DE MARCAR MIRAR QUE HOY EL MISMO DIA NO HAYA SIDO MARCADO
+        //ANTES DE MARCAR MIRAR QUE HOY EL MISMO DIA NO HAYA SIDO MARCADO
 //                // MARCAMOS ESE USUARIO
 //            }else{
-        // ANTES DE MARCAR MIRAR QUE HOY EL MISMO DIA NO HAYA SIDO MARCADO
+        //ANTES DE MARCAR MIRAR QUE HOY EL MISMO DIA NO HAYA SIDO MARCADO
 //                // MARCAMOS AL USUARIO SEAMOS QUIEN SEAMOS YA QUE SERA UN ALUMNO
 //            }
 //        }
