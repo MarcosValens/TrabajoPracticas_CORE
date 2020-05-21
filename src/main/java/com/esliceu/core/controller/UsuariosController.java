@@ -1,6 +1,17 @@
 package com.esliceu.core.controller;
 
+import com.esliceu.core.entity.Alumne;
 import com.esliceu.core.entity.Professor;
+import com.esliceu.core.entity.UsuariApp;
+import com.esliceu.core.manager.AlumneManager;
+import com.esliceu.core.manager.ProfessorManager;
+import com.esliceu.core.manager.TokenManager;
+import com.esliceu.core.manager.UsuariAppManager;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +24,17 @@ import java.util.List;
 
 @RestController
 public class UsuariosController {
+    @Autowired
+    TokenManager tokenManager;
+
+    @Autowired
+    UsuariAppManager usuariAppManager;
+
+    @Autowired
+    ProfessorManager professorManager;
+
+    @Autowired
+    AlumneManager alumneManager;
 
 
     /*
@@ -27,7 +49,8 @@ public class UsuariosController {
     public ResponseEntity<String> marcarListadoComedor(@RequestBody String json, HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         token = token.replace("Bearer ", "");
-        // Usuario personaMarcadora = tokenManager.getUsuarioFromToken(token); TODO: Sacamos el usuario (profe, monitor o cuiner del token)
+        UsuariApp personaMarcadora = usuariAppManager.findByEmail(tokenManager.getBody(token).get("email").toString());
+        // TODO: Sacamos el usuario (profe, monitor o cuiner del token)
 
 
         // TODO A parte de marcar el usuario, tenemos que marcar que cocinero
@@ -38,16 +61,18 @@ public class UsuariosController {
 
         // TODO: Esto es un placeholder de como podria ser
 
-        // List<Usuario> usuariosDelJSON = usuariomanager.getFromJSON(json)
-//        for (Usuarios userAmarcar : usuariosDelJSON){
-//            if (userAmarcar Es un profesor && personaMarcadora ES un CUINER){
-        //ANTES DE MARCAR MIRAR QUE HOY EL MISMO DIA NO HAYA SIDO MARCADO
-//                // MARCAMOS ESE USUARIO
-//            }else{
-        //ANTES DE MARCAR MIRAR QUE HOY EL MISMO DIA NO HAYA SIDO MARCADO
-//                // MARCAMOS AL USUARIO SEAMOS QUIEN SEAMOS YA QUE SERA UN ALUMNO
-//            }
-//        }
+        JsonArray comensales = new JsonParser().parse(json).getAsJsonArray();
+        for (JsonElement comensal:comensales) {
+            JsonObject object = comensal.getAsJsonObject();
+            Professor professor = professorManager.findById(object.get("codi").toString());
+            Alumne alumne = alumneManager.findById(object.get("codi").toString());
+            if(professor!=null){//&&personaMarcadora.rol.equals("cuiner")
+                //marcar professor si no estaba marcado para hoy
+            }
+            else if(alumne!=null){
+                //marcar alumno si no estaba marcado para hoy
+            }
+        }
 
         return new ResponseEntity<>("Usuarios marcados", HttpStatus.OK); // ESTO ES UN PLACEHOLDER
     }

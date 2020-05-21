@@ -3,7 +3,6 @@ import com.esliceu.core.manager.TokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +17,6 @@ public class TokenFilter implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        System.out.println("Entra al filter del token");
         /*
          * Detecta si la petición es un OPTIONS en tal caso devuelve true.
          * */

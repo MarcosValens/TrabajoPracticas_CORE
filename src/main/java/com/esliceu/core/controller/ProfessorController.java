@@ -56,6 +56,14 @@ public class ProfessorController {
         return professorManager.findById(codigo);
     }
 
+    /*
+     * TODO: Falta establecer el Login de manera local, con password y email o usuario, eso falta decidirlo
+     *
+     * El json recibirá un email o username, lo que decidais y una password,
+     * la cual tendreis que validar correctamente y retornar access_tokens
+     * */
+
+
 
     /*
      * #######################
