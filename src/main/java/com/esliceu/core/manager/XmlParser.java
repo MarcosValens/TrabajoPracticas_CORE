@@ -3,7 +3,6 @@ package com.esliceu.core.manager;
 import com.esliceu.core.entity.*;
 import com.esliceu.core.utils.DateParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.*;
 
@@ -15,11 +14,7 @@ import javax.xml.xpath.XPathFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 @Service
