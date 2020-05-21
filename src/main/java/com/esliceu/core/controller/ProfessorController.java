@@ -56,54 +56,6 @@ public class ProfessorController {
         return professorManager.findById(codigo);
     }
 
-    /*
-     * TODO: Falta establecer el Login de manera local, con password y email o usuario, eso falta decidirlo
-     *
-     * El json recibirá un email o username, lo que decidais y una password,
-     * la cual tendreis que validar correctamente y retornar access_tokens
-     * */
-    @PostMapping("/auth/login")
-    public Map<String, String> login(@RequestBody String json, HttpServletResponse response) {
-        System.out.println("Entra al controller");
-
-        /*
-         * PLACEHOLDER PARA PODER TRABAJAR EN FRONT
-         * */
-        boolean validaLogin = true; /* TODO: esto deberia venir de un manager que valide el login*/
-        if (!validaLogin) {
-
-            /*
-             * TODO BORRAR ESTE COMENTARIO UNA VEZ ESTE ACABADO ESTE ENDPOINT
-             * ESTO FUNCIONA
-             * */
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return null;
-        }
-
-        /*
-         * TODO BORRAR ESTE COMENTARIO UNA VEZ ESTE ACABADO ESTE ENDPOINT
-         * ESTO FUNCIONA
-         * */
-        response.setStatus(HttpServletResponse.SC_OK);
-
-        /*
-         * PLACEHOLDER
-         * */
-        UsuariApp user = new UsuariApp();// TODO: Cambiar este usuariapp por que venga de la bbdd
-        user.setEmail("prueba@prueba.pru");
-
-
-        /*
-         * TODO BORRAR ESTE COMENTARIO UNA VEZ ESTE ACABADO ESTE ENDPOINT
-         * ESTO FUNCIONA
-         * */
-        Map<String, String> map = new HashMap<>();
-        map.put("access_token", tokenManager.generateAcessToken(user));
-        map.put("refresh_token", tokenManager.generateRefreshToken(user));
-        return map;
-
-    }
-
 
     /*
      * #######################
