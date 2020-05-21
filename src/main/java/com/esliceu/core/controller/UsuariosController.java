@@ -1,12 +1,15 @@
 package com.esliceu.core.controller;
 
+import com.esliceu.core.entity.Professor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 public class UsuariosController {
@@ -47,6 +50,20 @@ public class UsuariosController {
 //        }
 
         return new ResponseEntity<>("Usuarios marcados", HttpStatus.OK); // ESTO ES UN PLACEHOLDER
+    }
+
+
+    /*
+     * TODO: Necesitamos que este endpoint nos retorne una lista de todos los profesores y
+     *  alumnos para nostros mostrar en el frontend y poder marcarlos en el comedor.
+     *
+     *  Para ello, basicamente necesitamos retornar todos los USUARIOS de la bbdd que tengan el rol de `Alumne` o `Professor`.
+     * */
+    @GetMapping("/private/usuarios/comedor/listado")
+    public List<Professor> getAllProfesoresAndEstudiantes() { // Esto de List<Profesor> puede cambiar, esto es un PLACEHOLDER
+
+
+        return null;
     }
 
 }
