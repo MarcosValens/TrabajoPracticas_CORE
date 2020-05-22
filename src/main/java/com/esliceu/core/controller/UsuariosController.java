@@ -1,8 +1,6 @@
 package com.esliceu.core.controller;
 
-import com.esliceu.core.entity.Alumne;
-import com.esliceu.core.entity.Professor;
-import com.esliceu.core.entity.UsuariApp;
+import com.esliceu.core.entity.*;
 import com.esliceu.core.manager.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
