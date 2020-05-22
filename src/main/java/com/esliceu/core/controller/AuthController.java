@@ -59,16 +59,18 @@ public class AuthController {
         System.out.println(usuariApp);
 
         if (usuariApp == null) {
-
-            usuariApp.setEmail(emailJson);
-            usuariAppManager.create(usuariApp);
+            UsuariApp usuariBD = new UsuariApp();
+            usuariBD.setEmail(emailJson);
+            usuariAppManager.create(usuariBD);
         }
+
+        UsuariApp usuariGoogle = usuariAppManager.findByEmail(emailJson);
 
         response.setStatus(HttpServletResponse.SC_OK);
 
         Map<String, String> map = new HashMap<>();
-        map.put("access_token", tokenManager.generateAcessToken(usuariApp));
-        map.put("refresh_token", tokenManager.generateRefreshToken(usuariApp));
+        map.put("access_token", tokenManager.generateAcessToken(usuariGoogle));
+        map.put("refresh_token", tokenManager.generateRefreshToken(usuariGoogle));
         map.put("rol", "professor");
         return map;
     }
