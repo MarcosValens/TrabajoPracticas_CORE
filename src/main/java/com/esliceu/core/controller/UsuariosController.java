@@ -67,12 +67,10 @@ public class UsuariosController {
             JsonObject object = comensal.getAsJsonObject();
             Professor professor = professorManager.findById(object.get("codi").toString());
             Alumne alumne = alumneManager.findById(object.get("codi").toString());
-            if(professor!=null){//&&personaMarcadora.rol.equals("cuiner")
+            if (professor != null) {//&&personaMarcadora.rol.equals("cuiner")
                 //marcar professor si no estaba marcado para hoy
 
-                }
-            }
-            else if(alumne!=null){
+            } else if (alumne != null) {
                 //marcar alumno si no estaba marcado para hoy
             }
         }
