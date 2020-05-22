@@ -5,6 +5,8 @@ import com.esliceu.core.repository.UsuariAppRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UsuariAppManager {
 
@@ -17,12 +19,16 @@ public class UsuariAppManager {
         return usuariApp;
     }
 
+    public List<UsuariApp> findAll() {
+        return usuariAppRepository.findAll();
+    }
+
     public void create(UsuariApp usuariApp) {
 
         usuariAppRepository.save(usuariApp);
     }
 
-    public boolean validarUsuari(String email, String contrasenya){
+    public boolean validarUsuari(String email, String contrasenya) {
         return usuariAppRepository.findByEmailAndContrasenya(email, contrasenya) != null;
     }
 }

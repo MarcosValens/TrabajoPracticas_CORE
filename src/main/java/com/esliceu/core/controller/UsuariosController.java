@@ -1,6 +1,8 @@
 package com.esliceu.core.controller;
 
-import com.esliceu.core.entity.*;
+import com.esliceu.core.entity.Alumne;
+import com.esliceu.core.entity.Professor;
+import com.esliceu.core.entity.UsuariApp;
 import com.esliceu.core.manager.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -95,8 +97,18 @@ public class UsuariosController {
      *  No queremos ninguna entidad profesor o alumno, queremos la tabla usuariapp.
      * */
     @GetMapping("/admin/usuaris")
-    public List<UsuariApp> getAllUsuaris(){
+    public List<UsuariApp> getAllUsuaris() {
         return null;
+    }
+
+
+    /*
+     * Este endpoint solo retorna el numero de usuarios asi el cliente
+     * no tiene por que recibir todos los usuarios cuando solo necesita saber el numero
+     * */
+    @GetMapping("/admin/usuaris/counter")
+    public Integer getNumberOfUsuaris() {
+        return this.usuariAppManager.findAll().size();
     }
 
 }
