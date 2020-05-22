@@ -12,7 +12,6 @@ public class UsuariApp implements Serializable {
     private String email;
 
     @OneToOne(mappedBy = "usuariApp")
-    @JoinColumn(name = "email", referencedColumnName = "email")
     private Professor professor;
 
     @Column(name = "contrasenya", length = 200)
