@@ -1,12 +1,7 @@
 package com.esliceu.core.entity;
 
-import com.esliceu.core.entity.enums.RolEnum;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table(name = "usuariapp")
@@ -22,10 +17,17 @@ public class UsuariApp implements Serializable {
     @Column(name = "contrasenya", length = 200)
     private String contrasenya;
 
-    @ManyToMany()
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @JoinTable(name = "usuariaApp_rol", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
-    private List<Rol> rols;
+    @Column(name = "isAdmin")
+    private boolean isAdmin;
+
+    @Column(name = "isCuiner")
+    private boolean isCuiner;
+
+    @Column(name = "isProfessor")
+    private boolean isProfessor;
+
+    @Column(name = "isMonitor")
+    private boolean isMonitor;
 
     public String getEmail() {
         return email;
@@ -51,11 +53,27 @@ public class UsuariApp implements Serializable {
         this.contrasenya = contrasenya;
     }
 
-    public List<UsuariApp> getUsuariAppList() {
-        return usuariAppList;
+    public boolean isAdmin() {
+        return isAdmin;
     }
 
-    public void setUsuariAppList(List<UsuariApp> usuariAppList) {
-        this.usuariAppList = usuariAppList;
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    public boolean isCuiner() {
+        return isCuiner;
+    }
+
+    public void setCuiner(boolean cuiner) {
+        isCuiner = cuiner;
+    }
+
+    public boolean isProfessor() {
+        return isProfessor;
+    }
+
+    public void setProfessor(boolean professor) {
+        isProfessor = professor;
     }
 }
