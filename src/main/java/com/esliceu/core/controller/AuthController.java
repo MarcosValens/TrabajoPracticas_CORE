@@ -60,9 +60,8 @@ public class AuthController {
 
         if (usuariApp == null) {
 
-            UsuariApp usuariBD = new UsuariApp();
-            usuariBD.setEmail(emailJson);
-            usuariAppManager.create(usuariBD);
+            usuariApp.setEmail(emailJson);
+            usuariAppManager.create(usuariApp);
         }
 
         response.setStatus(HttpServletResponse.SC_OK);
