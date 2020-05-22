@@ -15,7 +15,6 @@ public class UsuariAppProfessor implements Serializable {
     @ManyToOne
     private Professor professor;
 
-    @Id
     @JoinColumn(name = "usuariapp_email")
     @ManyToOne
     private UsuariApp usuariApp;

@@ -1,7 +1,5 @@
 package com.esliceu.core.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -15,7 +13,6 @@ public class UsuariAppAlumne implements Serializable {
     @ManyToOne
     private Alumne alumne;
 
-    @Id
     @JoinColumn(name = "usuariapp_email")
     @ManyToOne
     private UsuariApp usuariApp;
