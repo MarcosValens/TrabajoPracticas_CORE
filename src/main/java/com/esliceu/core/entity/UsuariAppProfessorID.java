@@ -1,14 +1,15 @@
 package com.esliceu.core.entity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 public class UsuariAppProfessorID implements Serializable {
     private String professor;
-    private String usuariApp;
+    private LocalDate data;
 
-    public UsuariAppProfessorID(String professor, String usuariApp) {
+    public UsuariAppProfessorID(String professor, LocalDate data) {
         this.professor = professor;
-        this.usuariApp = usuariApp;
+        this.data = data;
     }
 
     public UsuariAppProfessorID() {
@@ -22,11 +23,11 @@ public class UsuariAppProfessorID implements Serializable {
         this.professor = professor;
     }
 
-    public String getUsuariApp() {
-        return usuariApp;
+    public LocalDate getData() {
+        return data;
     }
 
-    public void setUsuariApp(String usuariApp) {
-        this.usuariApp = usuariApp;
+    public void setData(LocalDate data) {
+        this.data = data;
     }
 }
