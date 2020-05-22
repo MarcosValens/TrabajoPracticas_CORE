@@ -31,7 +31,7 @@ public class Professor implements Serializable {
     @Column(name = "username", length = 100)
     private String username;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "professor")
     @JoinColumn(name = "email", referencedColumnName = "email")
     private UsuariApp usuariApp;
 

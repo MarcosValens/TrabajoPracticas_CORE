@@ -1,5 +1,6 @@
 package com.esliceu.core.config;
 
+import com.esliceu.core.filter.AdminFilter;
 import com.esliceu.core.filter.TokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +15,14 @@ public class AppConfiguration implements WebMvcConfigurer {
         return new TokenFilter();
     }
 
+    @Bean
+    public AdminFilter getAdminFilter() {
+        return new AdminFilter();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(getTokenFilter()).addPathPatterns("/private/**"); // Este filtro valida el token
+        registry.addInterceptor(getAdminFilter()).addPathPatterns("/admin/**"); // Este filtro comprueba si el usuario es administrador
     }
 }

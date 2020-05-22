@@ -19,6 +19,9 @@ public class TokenManager implements Serializable {
     @Autowired
     private Environment environment;
 
+    @Autowired
+    private UsuariAppManager usuariAppManager;
+
     public String generateAcessToken(UsuariApp usuariApp) {
 
         long ACCES_TOKEN_EXPIRE = Long.parseLong(Objects.requireNonNull(environment.getProperty("ACCES_TOKEN_EXPIRE")));
@@ -58,13 +61,18 @@ public class TokenManager implements Serializable {
             return "ERROR";
         }
     }
-    public Claims getBody(String token){
-        if (this.validateToken(token).equals("OK")){
+
+    public Claims getBody(String token) {
+        if (this.validateToken(token).equals("OK")) {
             return Jwts.parser()
                     .setSigningKey(Objects.requireNonNull(environment.getProperty("SIGNING_KEY_TOKEN")).getBytes())
                     .parseClaimsJws(token)
                     .getBody();
         }
         return null;
+    }
+
+    public UsuariApp getUsuariFromToken(String email) {
+        return usuariAppManager.findByEmail(email);
     }
 }
