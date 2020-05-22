@@ -1,9 +1,10 @@
-/*
 package com.esliceu.core.filter;
 
 import com.esliceu.core.entity.UsuariApp;
 import com.esliceu.core.manager.TokenManager;
 import com.esliceu.core.manager.UsuariAppManager;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -28,19 +29,15 @@ public class AdminFilter implements HandlerInterceptor {
         if (request.getMethod().equals("OPTIONS")) return true;
 
 
-        */
-/*
- * Si no es un OPTIONS comprueba si la petición contiene el Token
- * y comprueba si es válido o si ha expirado.
- * *//*
-
+        /*
+         * Si no es un OPTIONS comprueba si la petición contiene el Token
+         * y comprueba si es válido o si ha expirado.
+         * */
         String auth = request.getHeader("Authorization");
         if (auth != null && !auth.isEmpty()) {
             String token = auth.replace("Bearer ", "");
             String validate = tokenManager.validateToken(token);
-            */
-/*UsuariApp usuariApp = usuariAppManager.findByEmail(tokenManager.)*//*
-
+            /*UsuariApp usuariApp = usuariAppManager.findByEmail(tokenManager.)*/
 
             if (validate.equals("ERROR")) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token no valido");
@@ -53,6 +50,17 @@ public class AdminFilter implements HandlerInterceptor {
                 return false;
             }
 
+            Claims claims = null;
+            try {
+                claims = Jwts.parser()
+                        .setSigningKey("1234")
+                        .parseClaimsJws(token)
+                        .getBody();
+            } catch (Exception ignored) {
+
+            }
+            System.out.println(claims.get("email"));
+
             response.setStatus(HttpServletResponse.SC_OK);
             return true;
 
@@ -63,4 +71,3 @@ public class AdminFilter implements HandlerInterceptor {
         }
     }
 }
-*/

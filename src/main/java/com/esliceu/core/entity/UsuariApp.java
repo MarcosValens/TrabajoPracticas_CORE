@@ -73,7 +73,15 @@ public class UsuariApp implements Serializable {
         return isProfessor;
     }
 
-    public void setProfessor(boolean professor) {
+    public void setIsProfessor(boolean professor) {
         isProfessor = professor;
+    }
+
+    public boolean isMonitor() {
+        return isMonitor;
+    }
+
+    public void setMonitor(boolean monitor) {
+        isMonitor = monitor;
     }
 }
