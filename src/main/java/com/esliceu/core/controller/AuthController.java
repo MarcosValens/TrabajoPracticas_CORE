@@ -47,4 +47,31 @@ public class AuthController {
         map.put("rol", "professor");
         return map;
     }
+
+    @PostMapping("/auth/login/flutter")
+    public Map<String, String> loginFlutter(@RequestBody String json, HttpServletResponse response) {
+
+        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+        String emailJson = jsonObject.get("email").getAsString();
+
+        UsuariApp usuariApp = usuariAppManager.findByEmail(emailJson);
+
+        System.out.println(usuariApp);
+
+        if (usuariApp == null) {
+            UsuariApp usuariBD = new UsuariApp();
+            usuariBD.setEmail(emailJson);
+            usuariAppManager.create(usuariBD);
+        }
+
+        UsuariApp usuariGoogle = usuariAppManager.findByEmail(emailJson);
+
+        response.setStatus(HttpServletResponse.SC_OK);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("access_token", tokenManager.generateAcessToken(usuariGoogle));
+        map.put("refresh_token", tokenManager.generateRefreshToken(usuariGoogle));
+        map.put("rol", "professor");
+        return map;
+    }
 }

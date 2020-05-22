@@ -11,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gson.Gson;
 
@@ -51,6 +48,14 @@ public class ProfessorController {
     @GetMapping("/private/professor")
     public List<Professor> getAllProfessor() {
         return professorManager.findAll();
+    }
+
+    /*
+     * Este endpoint solamente retorna el numero de profesores que tenemos dentro de nuestra app
+     * */
+    @GetMapping("/private/professor/counter")
+    public Integer getNumberOfProfessor() {
+        return professorManager.findAll().size();
     }
 
     @GetMapping("/private/professor/{codigo}")
