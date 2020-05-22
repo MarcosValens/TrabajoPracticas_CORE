@@ -71,7 +71,6 @@ public class ProfessorController {
      * */
     @PutMapping("/admin/professor/email")
     public ResponseEntity<String> setEmailProfesor(@RequestBody String json) {
-        System.out.println(json);
         JsonObject convertedObject = new Gson().fromJson(json, JsonObject.class);
         String email = convertedObject.get("email").getAsString();
         String codi = convertedObject.get("codi").getAsString();
