@@ -70,7 +70,7 @@ public class ProfessorController {
      * El json recibe un email, y un codigo. El email es el que se le ha de asignar,
      * el codi es el usuario que ha de tener ese email
      * */
-    @PutMapping("/admin/professor/email")
+    @PostMapping("/admin/professor/email")
     public ResponseEntity<String> setEmailProfesor(@RequestBody String json) {
         JsonObject convertedObject = new Gson().fromJson(json, JsonObject.class);
         String email = convertedObject.get("email").getAsString();
