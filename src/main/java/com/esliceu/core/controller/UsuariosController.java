@@ -37,7 +37,7 @@ public class UsuariosController {
 
     @Autowired
     UsuariAppProfessorManager usuariAppProfessorManager;
-    
+
     @PostMapping("/private/usuarios/comedor/listado")
     public ResponseEntity<String> marcarListadoComedor(@RequestBody String json, HttpServletRequest request) {
         String token = request.getHeader("Authorization");
