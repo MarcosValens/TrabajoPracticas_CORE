@@ -88,9 +88,26 @@ public class UsuariosController {
      * */
     @GetMapping("/private/usuarios/comedor/listado")
     public List<Professor> getAllProfesoresAndEstudiantes() { // Esto de List<Profesor> puede cambiar, esto es un PLACEHOLDER
-
-
         return null;
+    }
+
+    /*
+     * TODO: Este endpoint tiene que devolver todos los usuarios que se hayan registrado en nuestra aplicacion.
+     *  No queremos ninguna entidad profesor o alumno, queremos la tabla usuariapp.
+     * */
+    @GetMapping("/admin/usuaris")
+    public List<UsuariApp> getAllUsuaris() {
+        return null;
+    }
+
+
+    /*
+     * Este endpoint solo retorna el numero de usuarios asi el cliente
+     * no tiene por que recibir todos los usuarios cuando solo necesita saber el numero
+     * */
+    @GetMapping("/admin/usuaris/counter")
+    public Integer getNumberOfUsuaris() {
+        return this.usuariAppManager.findAll().size();
     }
 
 }
