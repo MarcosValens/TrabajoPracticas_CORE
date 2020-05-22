@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class AuthController {
@@ -44,7 +43,17 @@ public class AuthController {
         Map<String, String> map = new HashMap<>();
         map.put("access_token", tokenManager.generateAcessToken(user));
         map.put("refresh_token", tokenManager.generateRefreshToken(user));
-        map.put("rol", "professor");
+        List<String> roles = new LinkedList<>();
+
+
+        /*
+         * Se envia estas dobles comillas para que javascript
+         * lo pueda tratar como un array de strings y hacer un JSON.parse
+         * */
+        if (user.isCuiner()) roles.add("\"cuiner\"");
+        if (user.isAdmin()) roles.add("\"admin\"");
+        if (user.isMonitor()) roles.add("\"monitor\"");
+        map.put("rol", Arrays.toString(roles.toArray()));
         return map;
     }
 

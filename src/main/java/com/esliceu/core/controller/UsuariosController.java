@@ -1,8 +1,6 @@
 package com.esliceu.core.controller;
 
-import com.esliceu.core.entity.Alumne;
-import com.esliceu.core.entity.Professor;
-import com.esliceu.core.entity.UsuariApp;
+import com.esliceu.core.entity.*;
 import com.esliceu.core.manager.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -38,45 +37,45 @@ public class UsuariosController {
 
     @Autowired
     UsuariAppProfessorManager usuariAppProfessorManager;
-
-
-    /*
-     * TODO: necesitamos un endpoint el cual, recibe un JSON con un listado de usuarios, este
-     *  ha de marcar a todos los usuarios que recibe como que han venido a comer.
-     *  Necesitamos tambien asegurarnos de quien es el que está haciendo la accion
-     *  si un cocinero o un monitor.
-     *  Si es un monitor, de todos los usuarios que recibimos, solo podrá marcar los que son alumnos
-     *  Si es un cocinero, podrá marcar a todos
-     * */
+    
     @PostMapping("/private/usuarios/comedor/listado")
     public ResponseEntity<String> marcarListadoComedor(@RequestBody String json, HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         token = token.replace("Bearer ", "");
-        UsuariApp personaMarcadora = usuariAppManager.findByEmail(tokenManager.getBody(token).get("email").toString());
-        // TODO: Sacamos el usuario (profe, monitor o cuiner del token)
-
-
-        // TODO A parte de marcar el usuario, tenemos que marcar que cocinero
-        //  o monitor lo ha hecho, es lo podemos sacar del usuario "personaMarcadora"
-        //  ya que viene del token del login.
-        //  A parte del cocinero o monitor, tambien necesitamos el dia que se marca.
-        //  una de dos, puede venir del cliente, o de un Date().now() (algo asi).
-
-        // TODO: Esto es un placeholder de como podria ser
+        UsuariApp personaMarcadora = usuariAppManager.findByEmail(tokenManager.getBody(token).get("sub").toString());
 
         JsonArray comensales = new JsonParser().parse(json).getAsJsonArray();
         for (JsonElement comensal:comensales) {
             JsonObject object = comensal.getAsJsonObject();
-            Professor professor = professorManager.findById(object.get("codi").toString());
-            Alumne alumne = alumneManager.findById(object.get("codi").toString());
-            if (professor != null) {//&&personaMarcadora.rol.equals("cuiner")
-                //marcar professor si no estaba marcado para hoy
-
-            } else if (alumne != null) {
-                //marcar alumno si no estaba marcado para hoy
+            String codi = object.get("codi").toString().replace("\"", "");
+            Professor professor = professorManager.findById(codi);
+            Alumne alumne = alumneManager.findById(codi);
+            if (professor != null && personaMarcadora.isCuiner()) {
+                if(usuariAppProfessorManager.findById(new UsuariAppProfessorID(codi, LocalDate.now()))==null){
+                    UsuariAppProfessor usuariAppProfessor = new UsuariAppProfessor();
+                    usuariAppProfessor.setData(LocalDate.now());
+                    usuariAppProfessor.setProfessor(professor);
+                    usuariAppProfessor.setUsuariApp(personaMarcadora);
+                    usuariAppProfessorManager.createOrUpdate(usuariAppProfessor);
+                    System.out.println("NO estaba marcado");
+                }
+                else{
+                    System.out.println("estaba marcado");
+                }
+            } else if (alumne != null && (personaMarcadora.isCuiner()||personaMarcadora.isMonitor()) ) {
+                if(usuariAppAlumneManager.findById(new UsuariAppAlumneID(codi, LocalDate.now()))==null){
+                    UsuariAppAlumne usuariAppAlumne = new UsuariAppAlumne();
+                    usuariAppAlumne.setData(LocalDate.now());
+                    usuariAppAlumne.setAlumne(alumne);
+                    usuariAppAlumne.setUsuariApp(personaMarcadora);
+                    usuariAppAlumneManager.createOrUpdate(usuariAppAlumne);
+                    System.out.println("NO estaba marcado");
+                }
+                else {
+                    System.out.println("estaba marcado");
+                }
             }
         }
-
         return new ResponseEntity<>("Usuarios marcados", HttpStatus.OK); // ESTO ES UN PLACEHOLDER
     }
 
