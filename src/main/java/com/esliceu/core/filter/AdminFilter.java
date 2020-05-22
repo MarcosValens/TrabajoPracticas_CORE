@@ -6,13 +6,14 @@ import com.esliceu.core.manager.UsuariAppManager;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
+
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Objects;
 
 @Component
 public class AdminFilter implements HandlerInterceptor {
@@ -23,50 +24,28 @@ public class AdminFilter implements HandlerInterceptor {
     @Autowired
     UsuariAppManager usuariAppManager;
 
+    @Autowired
+    private Environment environment;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         if (request.getMethod().equals("OPTIONS")) return true;
-
-
-        /*
-         * Si no es un OPTIONS comprueba si la petición contiene el Token
-         * y comprueba si es válido o si ha expirado.
-         * */
         String auth = request.getHeader("Authorization");
-        if (auth != null && !auth.isEmpty()) {
-            String token = auth.replace("Bearer ", "");
-            String validate = tokenManager.validateToken(token);
-            /*UsuariApp usuariApp = usuariAppManager.findByEmail(tokenManager.)*/
+        String token = auth.replace("Bearer ", "");
+        Claims claims = Jwts.parser()
+                .setSigningKey(Objects.requireNonNull(environment.getProperty("SIGNING_KEY_TOKEN")).getBytes())
+                .parseClaimsJws(token)
+                .getBody();
 
-            if (validate.equals("ERROR")) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token no valido");
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return false;
+        String email = (String) claims.get("sub");
+        UsuariApp usuariApp = tokenManager.getUsuariFromToken(email);
 
-            } else if (validate.equals("EXPIRED")) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token caducado");
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return false;
-            }
-
-            Claims claims = null;
-            try {
-                claims = Jwts.parser()
-                        .setSigningKey("1234")
-                        .parseClaimsJws(token)
-                        .getBody();
-            } catch (Exception ignored) {
-
-            }
-            System.out.println(claims.get("email"));
-
+        if (usuariApp.isAdmin()) {
             response.setStatus(HttpServletResponse.SC_OK);
             return true;
-
         } else {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token no recibido");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return false;
         }
     }

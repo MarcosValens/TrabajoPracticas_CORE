@@ -23,6 +23,6 @@ public class AppConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(getTokenFilter()).addPathPatterns("/private/**"); // Este filtro valida el token
-        registry.addInterceptor(getAdminFilter()).addPathPatterns("/private/**");
+        registry.addInterceptor(getAdminFilter()).addPathPatterns("/admin/**"); // Este filtro comprueba si el usuario es administrador
     }
 }
