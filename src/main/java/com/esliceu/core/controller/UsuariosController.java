@@ -1,12 +1,7 @@
 package com.esliceu.core.controller;
 
-import com.esliceu.core.entity.Alumne;
-import com.esliceu.core.entity.Professor;
-import com.esliceu.core.entity.UsuariApp;
-import com.esliceu.core.manager.AlumneManager;
-import com.esliceu.core.manager.ProfessorManager;
-import com.esliceu.core.manager.TokenManager;
-import com.esliceu.core.manager.UsuariAppManager;
+import com.esliceu.core.entity.*;
+import com.esliceu.core.manager.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -35,6 +30,12 @@ public class UsuariosController {
 
     @Autowired
     AlumneManager alumneManager;
+
+    @Autowired
+    UsuariAppAlumneManager usuariAppAlumneManager;
+
+    @Autowired
+    UsuariAppProfessorManager usuariAppProfessorManager;
 
 
     /*
@@ -68,6 +69,8 @@ public class UsuariosController {
             Alumne alumne = alumneManager.findById(object.get("codi").toString());
             if(professor!=null){//&&personaMarcadora.rol.equals("cuiner")
                 //marcar professor si no estaba marcado para hoy
+
+                }
             }
             else if(alumne!=null){
                 //marcar alumno si no estaba marcado para hoy
