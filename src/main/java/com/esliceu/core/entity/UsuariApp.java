@@ -11,7 +11,8 @@ public class UsuariApp implements Serializable {
     @Column(name = "email", length = 200, nullable = false)
     private String email;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "usuariApp")
+    @JoinColumn(name = "email", referencedColumnName = "email")
     private Professor professor;
 
     @Column(name = "contrasenya", length = 200)
