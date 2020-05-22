@@ -5,6 +5,7 @@ import com.esliceu.core.entity.Grup;
 import com.esliceu.core.entity.Professor;
 import com.esliceu.core.entity.UsuariApp;
 import com.esliceu.core.manager.*;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import com.google.gson.Gson;
 
 @RestController
 public class ProfessorController {
@@ -72,14 +71,21 @@ public class ProfessorController {
      * */
     @PutMapping("/admin/professor/email")
     public ResponseEntity<String> setEmailProfesor(@RequestBody String json) {
+        System.out.println(json);
         JsonObject convertedObject = new Gson().fromJson(json, JsonObject.class);
         String email = convertedObject.get("email").getAsString();
         String codi = convertedObject.get("codi").getAsString();
         Professor professor = professorManager.findById(codi);
+        if (professor == null) {
+            return new ResponseEntity<>("No existe profesor con ese codi", HttpStatus.BAD_REQUEST);
+        }
+
         UsuariApp usuariApp = new UsuariApp();
         usuariApp.setEmail(email);
         usuariApp.setProfessor(professor);
-        usuariAppManager.create(usuariApp);
+        usuariApp.setIsProfessor(true);
+        professor.setUsuariApp(usuariApp);
+        professorManager.createOrUpdate(professor);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
