@@ -29,6 +29,15 @@ public class UsuariApp implements Serializable {
     @Column(name = "isMonitor")
     private boolean isMonitor;
 
+    @Column(name = "nombre")
+    private String nombre;
+
+    @Column(name = "apellido1")
+    private String apellido1;
+
+    @Column(name = "apellido2")
+    private String apellido2;
+
     public String getEmail() {
         return email;
     }
