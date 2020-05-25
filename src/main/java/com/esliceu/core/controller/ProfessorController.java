@@ -93,7 +93,6 @@ public class ProfessorController {
 
     @DeleteMapping("/admin/professor/email")
     public ResponseEntity<String> setEmailProfessor(@RequestBody String json) {
-        System.out.println(json);
         JsonObject convertedObject = new Gson().fromJson(json, JsonObject.class);
         String codi = convertedObject.get("codi").getAsString();
         Professor professor = professorManager.findById(codi);
@@ -103,13 +102,14 @@ public class ProfessorController {
 
             UsuariApp usuariApp = professor.getUsuariApp();
             professor.setUsuariApp(null);
-            usuariAppManager.delete(usuariApp);
             professorManager.createOrUpdate(professor);
-            return new ResponseEntity<>("Alerta!! El correu electronic a estat eliminat i en/na "
+            usuariApp.setProfessor(null);
+            usuariAppManager.delete(usuariApp);
+            return new ResponseEntity<>("L'usuari de en/na "
                     + professor.getNom()
                     + " " + professor.getAp1()
                     + " " + professor.getAp2()
-                    + " no te cap correu electronic assignat", HttpStatus.OK);
+                    + " a estat eliminat", HttpStatus.OK);
         }
     }
 
