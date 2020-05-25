@@ -1,5 +1,7 @@
 package com.esliceu.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -14,6 +16,7 @@ public class UsuariApp implements Serializable {
     @OneToOne(mappedBy = "usuariApp")
     private Professor professor;
 
+    @JsonIgnore
     @Column(name = "contrasenya", length = 200)
     private String contrasenya;
 
