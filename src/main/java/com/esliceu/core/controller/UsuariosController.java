@@ -107,7 +107,7 @@ public class UsuariosController {
         return this.usuariAppManager.findAll().size();
     }
 
-    @GetMapping("/roles")
+    @GetMapping("/admin/auth/roles")
     public List<String> getRols() {
         UsuariApp usuariApp = new UsuariApp();
         return usuariApp.getRols();
