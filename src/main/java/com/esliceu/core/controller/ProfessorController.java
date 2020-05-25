@@ -120,6 +120,11 @@ public class ProfessorController {
     @GetMapping("/private/professor/{codi}/comedor/marcaje")
     public ResponseEntity<List<UsuariAppProfessor>> getMarcajesSpecificProfesor(@PathVariable String codi) {
         List<UsuariAppProfessor> usuariAppProfessor = usuariAppProfessorManager.findAllByProfessor(professorManager.findById(codi));
-        return new ResponseEntity<>(usuariAppProfessor,HttpStatus.OK);
+        return new ResponseEntity<>(usuariAppProfessor, HttpStatus.OK);
+    }
+
+    @GetMapping("/private/professor/comedor/listado")
+    public List<Professor> getAllProfesorsListadoComedor() {
+        return this.professorManager.findAllLowCharge();
     }
 }

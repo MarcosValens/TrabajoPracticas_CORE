@@ -78,4 +78,9 @@ public class AlumneController {
         }
         return new ResponseEntity<>(marcatgeAlumne, HttpStatus.OK);
     }
+
+    @GetMapping("/private/alumne/comedor/listado")
+    public List<Alumne> getAllAlumnesForListado() {
+        return this.alumneManager.findAllLowCharge();
+    }
 }
