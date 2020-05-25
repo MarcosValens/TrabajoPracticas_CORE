@@ -91,13 +91,10 @@ public class UsuariosController {
         return null;
     }
 
-    /*
-     * TODO: Este endpoint tiene que devolver todos los usuarios que se hayan registrado en nuestra aplicacion.
-     *  No queremos ninguna entidad profesor o alumno, queremos la tabla usuariapp.
-     * */
+
     @GetMapping("/admin/usuaris")
     public List<UsuariApp> getAllUsuaris() {
-        return null;
+        return this.usuariAppManager.findAll();
     }
 
 
@@ -110,4 +107,9 @@ public class UsuariosController {
         return this.usuariAppManager.findAll().size();
     }
 
+    @GetMapping("/roles")
+    public List<String> getRols() {
+        UsuariApp usuariApp = new UsuariApp();
+        return usuariApp.getRols();
+    }
 }
