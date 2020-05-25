@@ -87,4 +87,13 @@ public class ProfessorController {
         professorManager.createOrUpdate(professor);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /*
+     * TODO dado un codi de un profesor, queremos recibir todos sus marcages en
+     *  el comedor con toda la info. Fecha y quien ha sido el cuiner que ha marcado a dicho profesor
+     * */
+    @GetMapping("/private/professor/{codi}/comedor/marcaje")
+    public void getMarcajesSpecificProfesor(@PathVariable String codi) {
+
+    }
 }
