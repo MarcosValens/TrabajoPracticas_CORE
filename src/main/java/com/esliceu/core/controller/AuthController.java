@@ -114,14 +114,12 @@ public class AuthController {
 
         for (int i = 0; i < roles.size(); i++) {
             if (roles.get(i).toString().equals("\"Cuiner\"")) {
-                System.out.println("cuiner");
                 usuariApp.setCuiner(true);
             }
             if (roles.get(i).toString().equals("\"Admin\"")) {
                 usuariApp.setAdmin(true);
             }
             if (roles.get(i).toString().equals("\"Monitor\"")) {
-                System.out.println("monitor");
                 usuariApp.setMonitor(true);
             }
         }
