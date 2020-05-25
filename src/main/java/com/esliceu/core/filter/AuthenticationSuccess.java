@@ -52,13 +52,27 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
          */
 
 
+        /*
+         * Sacamos los roles
+         * */
+
+
+        boolean admin = usuariApp.isAdmin();
+        boolean cuiner = usuariApp.isCuiner();
+        boolean monitor = usuariApp.isMonitor();
+
         // ESTA LINEA DE AQUI, FUNCIONARÁ BIEN SI TENEMOS EL QUASAR CON EL ROUTER EN MODO HISTORY.
-        // String redirectionURL = environment.getProperty("FRONTEND_URL") + "#/login/oauth/callback" + "?access_token=" + acces_token + "&refresh_token=" + refresh_token;
+//        String redirectionURL = environment.getProperty("FRONTEND_URL")
+//                 + "#/login/oauth/callback" + "?access_token=" + acces_token + "&refresh_token=" + refresh_token
+//                 + "&isAdmin="+admin+"&isCuiner="+cuiner+"&isMonitor="+monitor;
 
         // EN NUESTRO CASO, YA SEA PROD O DEV TENEMOS EL MODO HASH (ABAJO)
 
         // ESTA LINEA DE AQUI FUNCIONA SI ESTA EL ROUTER EN MODO HASH DE QUASAR
-        String redirectionURL = environment.getProperty("FRONTEND_URL") + "?access_token=" + acces_token + "&refresh_token=" + refresh_token + "#/login/oauth/callback";
+        String redirectionURL = environment.getProperty("FRONTEND_URL") + "?access_token=" + acces_token
+                + "&refresh_token=" + refresh_token
+                + "&isAdmin=" + admin + "&isCuiner=" + cuiner + "&isMonitor=" + monitor +
+                "#/login/oauth/callback";
 
         getRedirectStrategy().sendRedirect(request, response, redirectionURL);
     }

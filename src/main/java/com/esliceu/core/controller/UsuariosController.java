@@ -9,13 +9,11 @@ import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -37,7 +35,7 @@ public class UsuariosController {
 
     @Autowired
     UsuariAppProfessorManager usuariAppProfessorManager;
-    
+
     @PostMapping("/private/usuarios/comedor/listado")
     public ResponseEntity<String> marcarListadoComedor(@RequestBody String json, HttpServletRequest request) {
         String token = request.getHeader("Authorization");
@@ -70,8 +68,7 @@ public class UsuariosController {
                     usuariAppAlumne.setUsuariApp(personaMarcadora);
                     usuariAppAlumneManager.createOrUpdate(usuariAppAlumne);
                     System.out.println("NO estaba marcado");
-                }
-                else {
+                } else {
                     System.out.println("estaba marcado");
                 }
             }
@@ -81,14 +78,22 @@ public class UsuariosController {
 
 
     /*
-     * TODO: Necesitamos que este endpoint nos retorne una lista de todos los profesores y
-     *  alumnos para nostros mostrar en el frontend y poder marcarlos en el comedor.
-     *
-     *  Para ello, basicamente necesitamos retornar todos los USUARIOS de la bbdd que tengan el rol de `Alumne` o `Professor`.
+     * TODO endpoint el cual pasado un dia (YA NOS DIREIS QUE FORMATO QUEREIS),
+     *  retornar un listado de usuarios que han sido marcados dicho dia en el comedor
      * */
+    @GetMapping("/private/comedor/marcajes/{dia}")
+    public void getAllMarcajesDia(@PathVariable(name = "dia") LocalDate dia) {
+
+
+        return;
+    }
+
     @GetMapping("/private/usuarios/comedor/listado")
-    public List<Professor> getAllProfesoresAndEstudiantes() { // Esto de List<Profesor> puede cambiar, esto es un PLACEHOLDER
-        return null;
+    public List<Object> getAllProfesoresAndEstudiantes() {
+        List<Object> listAlumne = new java.util.ArrayList<>(Collections.singletonList(alumneManager.findAll()));
+        List<Object> listProfessor = Collections.singletonList(professorManager.findAll());
+        listAlumne.addAll(listProfessor);
+        return listAlumne;
     }
 
 
