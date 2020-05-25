@@ -34,7 +34,4 @@ public class AlumneManager {
         return alumneRepository.findByGrup(grup);
     }
 
-    public List<Alumne> findAllLowCharge() {
-        return alumneRepository.findAllLowCharge();
-    }
 }
