@@ -89,7 +89,7 @@ public class UsuariosController {
     }
 
     @GetMapping("/private/usuarios/comedor/listado")
-    public List<Object> getAllProfesoresAndEstudiantes() { 
+    public List<Object> getAllProfesoresAndEstudiantes() {
         List<Object> listAlumne = new java.util.ArrayList<>(Collections.singletonList(alumneManager.findAll()));
         List<Object> listProfessor = Collections.singletonList(professorManager.findAll());
         listAlumne.addAll(listProfessor);
