@@ -22,9 +22,6 @@ public class AdminFilter implements HandlerInterceptor {
     TokenManager tokenManager;
 
     @Autowired
-    UsuariAppManager usuariAppManager;
-
-    @Autowired
     private Environment environment;
 
     @Override

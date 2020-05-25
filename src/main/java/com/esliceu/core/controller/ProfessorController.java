@@ -73,19 +73,40 @@ public class ProfessorController {
     public ResponseEntity<String> setEmailProfesor(@RequestBody String json) {
         JsonObject convertedObject = new Gson().fromJson(json, JsonObject.class);
         String email = convertedObject.get("email").getAsString();
-        String codi = convertedObject.get("codi").getAsString();
+        String codi = convertedObject.get("codigo").getAsString();
         Professor professor = professorManager.findById(codi);
         if (professor == null) {
-            return new ResponseEntity<>("No existe profesor con ese codi", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("No existeix cap professor/a amb aquest codi", HttpStatus.BAD_REQUEST);
         }
-
         UsuariApp usuariApp = new UsuariApp();
         usuariApp.setEmail(email);
         usuariApp.setProfessor(professor);
         usuariApp.setIsProfessor(true);
         professor.setUsuariApp(usuariApp);
         professorManager.createOrUpdate(professor);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("El/la professor/a " + professor.getNom()
+                + " " + professor.getAp1()
+                + " " + professor.getAp2()
+                + " te assignat el correu "
+                + email, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/admin/professor/email")
+    public ResponseEntity<String> setEmailProfessor(@RequestBody String json) {
+        JsonObject convertedObject = new Gson().fromJson(json, JsonObject.class);
+        String codi = convertedObject.get("codi").getAsString();
+        Professor professor = professorManager.findById(codi);
+        if (professor.getUsuariApp() == null) {
+            return new ResponseEntity<>("Aquest professor/a no te usuari", HttpStatus.BAD_REQUEST);
+        } else {
+            professor.getUsuariApp().setEmail("");
+            professorManager.createOrUpdate(professor);
+            return new ResponseEntity<>("Alerta!! El correu electronic a estat eliminat i en/na "
+                    + professor.getNom()
+                    + " " + professor.getAp1()
+                    + " " + professor.getAp2()
+                    + " no te cap correu electronic assignat", HttpStatus.OK);
+        }
     }
 
     /*

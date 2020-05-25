@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Entity
 @Table(name = "usuariapp")
@@ -40,6 +44,18 @@ public class UsuariApp implements Serializable {
 
     @Column(name = "apellido2")
     private String apellido2;
+
+    public List<String> getRols() {
+        List<String> rols = new ArrayList<>();
+        Field[] attributes = UsuariApp.class.getDeclaredFields();
+        for (Field attribute : attributes) {
+            if (attribute.toString().contains("is")) {
+                String rol[] = attribute.toString().split("is");
+                rols.add(rol[1]);
+            }
+        }
+        return rols;
+    }
 
     public String getEmail() {
         return email;
