@@ -95,6 +95,20 @@ public class ProfessorController {
     @GetMapping("/private/professor/{codi}/comedor/marcaje")
     public ResponseEntity<List<UsuariAppProfessor>> getMarcajesSpecificProfesor(@PathVariable String codi) {
         List<UsuariAppProfessor> usuariAppProfessor = usuariAppProfessorManager.findAllByProfessor(professorManager.findById(codi));
-        return new ResponseEntity<>(usuariAppProfessor,HttpStatus.OK);
+        return new ResponseEntity<>(usuariAppProfessor, HttpStatus.OK);
     }
+
+    @DeleteMapping("/admin/professor/email")
+    public ResponseEntity<String> setEmailProfessor(@RequestBody String json) {
+        JsonObject convertedObject = new Gson().fromJson(json, JsonObject.class);
+        String email = convertedObject.get("email").getAsString();
+        UsuariApp usuariApp = usuariAppManager.findByEmail(email);
+        if (usuariApp == null) {
+            return new ResponseEntity<>("No existeix cap usuari amb aquest correu", HttpStatus.BAD_REQUEST);
+        }
+        usuariApp.setEmail("");
+        usuariApp.setIsProfessor(true);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
