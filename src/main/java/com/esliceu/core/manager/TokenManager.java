@@ -72,7 +72,13 @@ public class TokenManager implements Serializable {
         return null;
     }
 
-    public UsuariApp getUsuariFromToken(String email) {
-        return usuariAppManager.findByEmail(email);
+    public UsuariApp getUsuariFromToken(String token) {
+        try {
+            Claims claims = getBody(token);
+            String email = claims.getSubject();
+            return usuariAppManager.findByEmail(email);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

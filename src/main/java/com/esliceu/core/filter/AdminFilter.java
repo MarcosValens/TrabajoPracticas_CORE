@@ -2,11 +2,9 @@ package com.esliceu.core.filter;
 
 import com.esliceu.core.entity.UsuariApp;
 import com.esliceu.core.manager.TokenManager;
-import com.esliceu.core.manager.UsuariAppManager;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -35,8 +33,7 @@ public class AdminFilter implements HandlerInterceptor {
                 .parseClaimsJws(token)
                 .getBody();
 
-        String email = (String) claims.get("sub");
-        UsuariApp usuariApp = tokenManager.getUsuariFromToken(email);
+        UsuariApp usuariApp = tokenManager.getUsuariFromToken(token);
 
         if (usuariApp.isAdmin()) {
             response.setStatus(HttpServletResponse.SC_OK);
