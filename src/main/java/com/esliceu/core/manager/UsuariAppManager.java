@@ -29,6 +29,10 @@ public class UsuariAppManager {
         usuariAppRepository.save(usuariApp);
     }
 
+    public void delete(UsuariApp usuariApp) {
+        usuariAppRepository.delete(usuariApp);
+    }
+
     public boolean validarUsuari(String email, String contrasenya) {
         UsuariApp usuariApp = usuariAppRepository.findByEmail(email);
         return BCrypt.checkpw(contrasenya, usuariApp.getContrasenya());
