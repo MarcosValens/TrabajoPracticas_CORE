@@ -72,14 +72,12 @@ public class ProfessorController {
     @PutMapping("/admin/professor/email")
     public ResponseEntity<String> setEmailProfesor(@RequestBody String json) {
         JsonObject convertedObject = new Gson().fromJson(json, JsonObject.class);
-        System.out.println(json);
         String email = convertedObject.get("email").getAsString();
         String codi = convertedObject.get("codigo").getAsString();
         Professor professor = professorManager.findById(codi);
         if (professor == null) {
-            return new ResponseEntity<>("No existeix cap professor amb aquest codi", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("No existeix cap professor/a amb aquest codi", HttpStatus.BAD_REQUEST);
         }
-
         UsuariApp usuariApp = new UsuariApp();
         usuariApp.setEmail(email);
         usuariApp.setProfessor(professor);
@@ -95,16 +93,19 @@ public class ProfessorController {
 
     @DeleteMapping("/admin/professor/email")
     public ResponseEntity<String> setEmailProfessor(@RequestBody String json) {
-        System.out.println(json);
         JsonObject convertedObject = new Gson().fromJson(json, JsonObject.class);
         String codi = convertedObject.get("codi").getAsString();
         Professor professor = professorManager.findById(codi);
         if (professor.getUsuariApp() == null) {
-            return new ResponseEntity<>("Aquest professor no te usuari", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Aquest professor/a no te usuari", HttpStatus.BAD_REQUEST);
         } else {
             professor.getUsuariApp().setEmail("");
             professorManager.createOrUpdate(professor);
-            return new ResponseEntity<>("Alerta!! El professor no te cap correu electronic assignat", HttpStatus.OK);
+            return new ResponseEntity<>("Alerta!! El correu electronic a estat eliminat i en/na "
+                    + professor.getNom()
+                    + " " + professor.getAp1()
+                    + " " + professor.getAp2()
+                    + " no te cap correu electronic assignat", HttpStatus.OK);
         }
     }
 }
