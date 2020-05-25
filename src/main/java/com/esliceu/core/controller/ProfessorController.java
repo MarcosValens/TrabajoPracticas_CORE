@@ -1,9 +1,6 @@
 package com.esliceu.core.controller;
 
-import com.esliceu.core.entity.Curs;
-import com.esliceu.core.entity.Grup;
-import com.esliceu.core.entity.Professor;
-import com.esliceu.core.entity.UsuariApp;
+import com.esliceu.core.entity.*;
 import com.esliceu.core.manager.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -31,6 +28,9 @@ public class ProfessorController {
 
     @Autowired
     UsuariAppManager usuariAppManager;
+
+    @Autowired
+    UsuariAppProfessorManager usuariAppProfessorManager;
 
     @GetMapping("/private/cursos")
     public ResponseEntity<List<Curs>> getCursos() {
@@ -107,5 +107,15 @@ public class ProfessorController {
                     + " " + professor.getAp2()
                     + " no te cap correu electronic assignat", HttpStatus.OK);
         }
+    }
+
+    /*
+     * TODO dado un codi de un profesor, queremos recibir todos sus marcages en
+     *  el comedor con toda la info. Fecha y quien ha sido el cuiner que ha marcado a dicho profesor
+     * */
+    @GetMapping("/private/professor/{codi}/comedor/marcaje")
+    public ResponseEntity<List<UsuariAppProfessor>> getMarcajesSpecificProfesor(@PathVariable String codi) {
+        List<UsuariAppProfessor> usuariAppProfessor = usuariAppProfessorManager.findAllByProfessor(professorManager.findById(codi));
+        return new ResponseEntity<>(usuariAppProfessor,HttpStatus.OK);
     }
 }

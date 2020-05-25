@@ -59,4 +59,14 @@ public class AlumneController {
     public ResponseEntity<String> eliminarFoto() {
         return new ResponseEntity<>("Foto eliminada", HttpStatus.OK);
     }
+
+
+    /*
+     * TODO dado un codigo de un alumno, queremos recibir todos sus marcages en
+     *  el comedor con toda la info. Fecha y quien ha sido el monitor/cuiner que ha marcado a dicho alumno
+     * */
+    @GetMapping("/private/alumno/{codi}/comedor/marcaje")
+    public void getMarcajesSpecificAlumno(@PathVariable String codi) {
+
+    }
 }
