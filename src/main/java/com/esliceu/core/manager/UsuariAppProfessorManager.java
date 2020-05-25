@@ -1,10 +1,13 @@
 package com.esliceu.core.manager;
 
+import com.esliceu.core.entity.Professor;
 import com.esliceu.core.entity.UsuariAppProfessor;
 import com.esliceu.core.entity.UsuariAppProfessorID;
 import com.esliceu.core.repository.UsuariAppProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UsuariAppProfessorManager {
@@ -13,6 +16,9 @@ public class UsuariAppProfessorManager {
 
     public void createOrUpdate(UsuariAppProfessor usuariAppProfessor){
         usuariAppProfessorRepository.save(usuariAppProfessor);
+    }
+    public List<UsuariAppProfessor> findAllByProfessor(Professor professor){
+        return usuariAppProfessorRepository.findAllByProfessor(professor);
     }
 
     public UsuariAppProfessor findById(UsuariAppProfessorID usuariAppProfessorID){
