@@ -9,10 +9,7 @@ import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
@@ -70,8 +67,7 @@ public class UsuariosController {
                     usuariAppAlumne.setUsuariApp(personaMarcadora);
                     usuariAppAlumneManager.createOrUpdate(usuariAppAlumne);
                     System.out.println("NO estaba marcado");
-                }
-                else {
+                } else {
                     System.out.println("estaba marcado");
                 }
             }
@@ -79,6 +75,17 @@ public class UsuariosController {
         return new ResponseEntity<>("Usuarios marcados", HttpStatus.OK); // ESTO ES UN PLACEHOLDER
     }
 
+
+    /*
+     * TODO endpoint el cual pasado un dia (YA NOS DIREIS QUE FORMATO QUEREIS),
+     *  retornar un listado de usuarios que han sido marcados dicho dia en el comedor
+     * */
+    @GetMapping("/private/comedor/marcajes/{dia}")
+    public void getAllMarcajesDia(@PathVariable(name = "dia") LocalDate dia) {
+
+
+        return;
+    }
 
     /*
      * TODO: Necesitamos que este endpoint nos retorne una lista de todos los profesores y
