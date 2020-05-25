@@ -76,7 +76,7 @@ public class ProfessorController {
         String codi = convertedObject.get("codi").getAsString();
         Professor professor = professorManager.findById(codi);
         if (professor == null) {
-            return new ResponseEntity<>("No existe profesor con ese codi", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("No existeix cap professor amb aquest codi", HttpStatus.BAD_REQUEST);
         }
 
         UsuariApp usuariApp = new UsuariApp();
@@ -85,6 +85,19 @@ public class ProfessorController {
         usuariApp.setIsProfessor(true);
         professor.setUsuariApp(usuariApp);
         professorManager.createOrUpdate(professor);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/admin/professor/email")
+    public ResponseEntity<String> setEmailProfessor(@RequestBody String json) {
+        JsonObject convertedObject = new Gson().fromJson(json, JsonObject.class);
+        String email = convertedObject.get("email").getAsString();
+        UsuariApp usuariApp = usuariAppManager.findByEmail(email);
+        if (usuariApp == null) {
+            return new ResponseEntity<>("No existeix cap usuari amb aquest correu", HttpStatus.BAD_REQUEST);
+        }
+        usuariApp.setEmail("");
+        usuariApp.setIsProfessor(true);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
