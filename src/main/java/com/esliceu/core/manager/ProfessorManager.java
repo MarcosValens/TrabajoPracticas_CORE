@@ -29,4 +29,8 @@ public class ProfessorManager {
         }
         return toReturn;
     }
+
+    public List<Professor> findAllLowCharge() {
+        return this.professorRepository.findAllLowCharge();
+    }
 }

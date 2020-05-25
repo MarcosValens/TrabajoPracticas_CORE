@@ -33,4 +33,8 @@ public class AlumneManager {
     public List<Alumne> findByGrup(Grup grup) {
         return alumneRepository.findByGrup(grup);
     }
+
+    public List<Alumne> findAllLowCharge() {
+        return alumneRepository.findAllLowCharge();
+    }
 }
