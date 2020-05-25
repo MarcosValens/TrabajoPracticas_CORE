@@ -3,6 +3,7 @@ package com.esliceu.core.manager;
 import com.esliceu.core.entity.UsuariApp;
 import com.esliceu.core.repository.UsuariAppRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class UsuariAppManager {
     }
 
     public boolean validarUsuari(String email, String contrasenya) {
-        return usuariAppRepository.findByEmailAndContrasenya(email, contrasenya) != null;
+        UsuariApp usuariApp = usuariAppRepository.findByEmail(email);
+        return BCrypt.checkpw(contrasenya, usuariApp.getContrasenya());
     }
 }
