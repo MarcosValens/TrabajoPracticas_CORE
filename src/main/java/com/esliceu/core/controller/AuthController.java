@@ -4,8 +4,10 @@ import com.esliceu.core.entity.UsuariApp;
 import com.esliceu.core.manager.TokenManager;
 import com.esliceu.core.manager.UsuariAppManager;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -82,5 +84,50 @@ public class AuthController {
         map.put("refresh_token", tokenManager.generateRefreshToken(usuariGoogle));
         map.put("rol", "professor");
         return map;
+    }
+
+    @PostMapping("/admin/auth/register")
+    public String register(@RequestBody String json, HttpServletResponse response) {
+        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+        String nombre = jsonObject.get("nombre").getAsString();
+        String apellido1 = jsonObject.get("apellido1").getAsString();
+        String apellido2 = jsonObject.get("apellido2").getAsString();
+        String email = jsonObject.get("email").getAsString();
+        String contrasenya = jsonObject.get("contrasenya").getAsString();
+        JsonArray roles = jsonObject.get("roles").getAsJsonArray();
+
+        if (usuariAppManager.findByEmail(email) != null){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return null;
+        }
+        String contrasenyaHashed = BCrypt.hashpw(contrasenya, BCrypt.gensalt());
+
+        UsuariApp usuariApp = new UsuariApp();
+        usuariApp.setEmail(email);
+        usuariApp.setNombre(nombre);
+        usuariApp.setApellido1(apellido1);
+        usuariApp.setApellido2(apellido2);
+        usuariApp.setContrasenya(contrasenyaHashed);
+        usuariApp.setCuiner(false);
+        usuariApp.setAdmin(false);
+        usuariApp.setMonitor(false);
+
+        for (int i = 0; i < roles.size(); i++) {
+            if (roles.get(i).toString().equals("\"Cuiner\"")) {
+                System.out.println("cuiner");
+                usuariApp.setCuiner(true);
+            }
+            if (roles.get(i).toString().equals("\"Admin\"")) {
+                usuariApp.setAdmin(true);
+            }
+            if (roles.get(i).toString().equals("\"Monitor\"")) {
+                System.out.println("monitor");
+                usuariApp.setMonitor(true);
+            }
+        }
+
+        usuariAppManager.create(usuariApp);
+        response.setStatus(HttpServletResponse.SC_OK);
+        return null;
     }
 }
