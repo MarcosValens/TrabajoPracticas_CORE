@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -87,16 +88,14 @@ public class UsuariosController {
         return;
     }
 
-    /*
-     * TODO: Necesitamos que este endpoint nos retorne una lista de todos los profesores y
-     *  alumnos para nostros mostrar en el frontend y poder marcarlos en el comedor.
-     *
-     *  Para ello, basicamente necesitamos retornar todos los USUARIOS de la bbdd que tengan el rol de `Alumne` o `Professor`.
-     * */
     @GetMapping("/private/usuarios/comedor/listado")
-    public List<Professor> getAllProfesoresAndEstudiantes() { // Esto de List<Profesor> puede cambiar, esto es un PLACEHOLDER
-        return null;
+    public List<Object> getAllProfesoresAndEstudiantes() { 
+        List<Object> listAlumne = new java.util.ArrayList<>(Collections.singletonList(alumneManager.findAll()));
+        List<Object> listProfessor = Collections.singletonList(professorManager.findAll());
+        listAlumne.addAll(listProfessor);
+        return listAlumne;
     }
+
 
     /*
      * TODO: Este endpoint tiene que devolver todos los usuarios que se hayan registrado en nuestra aplicacion.
