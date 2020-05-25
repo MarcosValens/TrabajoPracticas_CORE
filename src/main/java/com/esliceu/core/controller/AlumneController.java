@@ -1,8 +1,10 @@
 package com.esliceu.core.controller;
 
 import com.esliceu.core.entity.Alumne;
+import com.esliceu.core.entity.UsuariAppAlumne;
 import com.esliceu.core.manager.AlumneManager;
 import com.esliceu.core.manager.GrupManager;
+import com.esliceu.core.manager.UsuariAppAlumneManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,9 @@ public class AlumneController {
 
     @Autowired
     GrupManager grupManager;
+
+    @Autowired
+    UsuariAppAlumneManager usuariAppAlumneManager;
 
 
     @GetMapping("/private/alumnos")
@@ -66,7 +71,11 @@ public class AlumneController {
      *  el comedor con toda la info. Fecha y quien ha sido el monitor/cuiner que ha marcado a dicho alumno
      * */
     @GetMapping("/private/alumno/{codi}/comedor/marcaje")
-    public void getMarcajesSpecificAlumno(@PathVariable String codi) {
-
+    public ResponseEntity<List<UsuariAppAlumne>> getMarcajesSpecificAlumno(@PathVariable String codi) {
+        List<UsuariAppAlumne> marcatgeAlumne = usuariAppAlumneManager.findByAlumne_Codi(codi);
+        for (int i = 0; i < marcatgeAlumne.size(); i++) {
+            marcatgeAlumne.get(i).setAlumne(null);
+        }
+        return new ResponseEntity<>(marcatgeAlumne, HttpStatus.OK);
     }
 }
