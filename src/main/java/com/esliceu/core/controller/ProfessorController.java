@@ -69,11 +69,12 @@ public class ProfessorController {
      * El json recibe un email, y un codigo. El email es el que se le ha de asignar,
      * el codi es el usuario que ha de tener ese email
      * */
-    @PostMapping("/admin/professor/email")
+    @PutMapping("/admin/professor/email")
     public ResponseEntity<String> setEmailProfesor(@RequestBody String json) {
         JsonObject convertedObject = new Gson().fromJson(json, JsonObject.class);
+        System.out.println(json);
         String email = convertedObject.get("email").getAsString();
-        String codi = convertedObject.get("codi").getAsString();
+        String codi = convertedObject.get("codigo").getAsString();
         Professor professor = professorManager.findById(codi);
         if (professor == null) {
             return new ResponseEntity<>("No existeix cap professor amb aquest codi", HttpStatus.BAD_REQUEST);
@@ -85,19 +86,25 @@ public class ProfessorController {
         usuariApp.setIsProfessor(true);
         professor.setUsuariApp(usuariApp);
         professorManager.createOrUpdate(professor);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("El/la professor/a " + professor.getNom()
+                + " " + professor.getAp1()
+                + " " + professor.getAp2()
+                + " te assignat el correu "
+                + email, HttpStatus.OK);
     }
 
     @DeleteMapping("/admin/professor/email")
     public ResponseEntity<String> setEmailProfessor(@RequestBody String json) {
+        System.out.println(json);
         JsonObject convertedObject = new Gson().fromJson(json, JsonObject.class);
-        String email = convertedObject.get("email").getAsString();
-        UsuariApp usuariApp = usuariAppManager.findByEmail(email);
-        if (usuariApp == null) {
-            return new ResponseEntity<>("No existeix cap usuari amb aquest correu", HttpStatus.BAD_REQUEST);
+        String codi = convertedObject.get("codi").getAsString();
+        Professor professor = professorManager.findById(codi);
+        if (professor.getUsuariApp() == null) {
+            return new ResponseEntity<>("Aquest professor no te usuari", HttpStatus.BAD_REQUEST);
+        } else {
+            professor.getUsuariApp().setEmail("");
+            professorManager.createOrUpdate(professor);
+            return new ResponseEntity<>("Alerta!! El professor no te cap correu electronic assignat", HttpStatus.OK);
         }
-        usuariApp.setEmail("");
-        usuariApp.setIsProfessor(true);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
