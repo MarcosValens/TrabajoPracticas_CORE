@@ -5,13 +5,20 @@ import com.esliceu.core.entity.UsuariAppAlumne;
 import com.esliceu.core.manager.AlumneManager;
 import com.esliceu.core.manager.GrupManager;
 import com.esliceu.core.manager.UsuariAppAlumneManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.Tuple;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 
@@ -26,6 +33,9 @@ public class AlumneController {
 
     @Autowired
     UsuariAppAlumneManager usuariAppAlumneManager;
+
+    @Autowired
+    EntityManager em;
 
 
     @GetMapping("/private/alumnos")
@@ -80,14 +90,13 @@ public class AlumneController {
         return new ResponseEntity<>(marcatgeAlumne, HttpStatus.OK);
     }
 
-    @GetMapping("/private/alumne/comedor/listado")
-    public List<Alumne> getAllAlumnesForListado1() {
-        List<Alumne> alumnes = alumneManager.findAll();
-        for (Alumne alumne : alumnes) {
-            alumne.setExpedient(null);
-            alumne.setGrup(null);
-            alumne.setTutorsAlumnes(null);
-        }
-        return alumnes;
+    @GetMapping("/listado")
+    public List<Alumne> getAllAlumnesForListado() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Alumne> cq = cb.createQuery(Alumne.class);
+        Root<Alumne> alumne = cq.from(Alumne.class);
+        cq.select(cb.construct(Alumne.class, alumne.get("codi"), alumne.get("nom"), alumne.get("ap1"), alumne.get("ap2")));
+        TypedQuery<Alumne> query = em.createQuery(cq);
+        return query.getResultList();
     }
 }
