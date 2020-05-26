@@ -1,5 +1,7 @@
 
-def COMMITTER_EMAIL = "TEST"
+def COMMITTER_EMAIL = sh(
+    script: 'git --no-pager show -s --format=\'%ae\'',
+    returnStdout: true).trim()
 
 pipeline {
   agent any
