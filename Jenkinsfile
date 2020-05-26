@@ -1,15 +1,16 @@
 pipeline {
   agent any
   stages {
-    stage('Prepare enviroment') {
-      steps {
-        sh  '''
+    try{
+      stage('Prepare enviroment') {
+        steps {
+            sh  '''
             echo "Copiamos el properties dentro del proyecto"
             mv src/main/resources/application.properties-sample src/main/resources/application.properties
             '''
+        }
       }
-    }
-    stage('Testing') {
+      stage('Testing') {
         when {
             not {
                 branch 'produccion'
@@ -17,12 +18,12 @@ pipeline {
         }
         steps {
             sh  '''
-                echo "Hacemos testing"
-                mvn test
-                '''
+            echo "Hacemos testing"
+            mvn test
+            '''
         }
-    }
-    stage('Compile') {
+      }
+      stage('Compile') {
         when {
             anyOf {
                 branch 'desarrollo';
@@ -31,58 +32,60 @@ pipeline {
         }
         steps {
             sh  '''
-                echo "Hacemos el package"
-                mvn package
-                '''
+            echo "Hacemos el package"
+            mvn package
+            '''
         }
-    }
-    stage("Informando via Slack"){
+      }
+      stage("Informando via Slack"){
         when{
             branch 'desarrollo'
         }
         steps{
-                slackSend channel: '#builds', message: 'hello world'
-                cleanWs()
+            slackSend channel: '#builds', message: 'La compilación ha tenido exito'
+            cleanWs()
         }
-    }
-    stage('Build docker image') {
-            when{
-                branch 'produccion'
-            }
-            steps {
-                sh  '''
-                    echo "Contruimos la imagen docker"
-                    docker build -t imagen-core .
-                    '''
-                cleanWs()
-            }
-    }
-
-    stage('Upload image to registry'){
+      }
+      stage('Build docker image') {
+        when{
+            branch 'produccion'
+        }
+        steps {
+            sh  '''
+            echo "Contruimos la imagen docker"
+            docker build -t imagen-core .
+            '''
+            cleanWs()
+        }
+      }
+      stage('Upload image to registry'){
         when{
             branch 'produccion'
         }
         steps  {
             sh  '''
-                echo "Subimos la imagen docker creada"
-                docker tag  imagen-core  registry-back.esliceu.com/imagen-core
-                docker push registry-back.esliceu.com/imagen-core
-                '''
+            echo "Subimos la imagen docker creada"
+            docker tag  imagen-core  registry-back.esliceu.com/imagen-core
+            docker push registry-back.esliceu.com/imagen-core
+            '''
             cleanWs()
         }
-    }
-
-    stage('Deploying on produccion'){
+      }
+      stage('Deploying on produccion'){
         when{
             branch 'produccion'
         }
         steps  {
-        sh  '''
+            sh  '''
             echo "desplegamos"core_i_menjador
             ssh deploy.esliceu.com "cd core_i_menjador; docker-compose stop; docker-compose pull; docker-compose up -d"
             '''
-        cleanWs()
+            cleanWs()
         }
+      }
+    } catch (e) {
+        slackSend channel: '#builds', message: 'Algo a salido mal, habla con el administrador: '+e
+        cleanWs()
     }
   }
 }
