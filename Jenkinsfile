@@ -1,6 +1,6 @@
 
 
-
+def COMMITTER_EMAIL
 pipeline {
   agent any
   stages {
