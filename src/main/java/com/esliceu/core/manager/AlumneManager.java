@@ -42,13 +42,4 @@ public class AlumneManager {
         return alumneRepository.findByGrup(grup);
     }
 
-    public List<Alumne> findAllLowCharge() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Alumne> cq = cb.createQuery(Alumne.class);
-        Root<Alumne> alumne = cq.from(Alumne.class);
-        cq.select(cb.construct(Alumne.class, alumne.get("codi"), alumne.get("nom"), alumne.get("ap1"), alumne.get("ap2")));
-        TypedQuery<Alumne> query = em.createQuery(cq);
-        return query.getResultList();
-    }
-
 }

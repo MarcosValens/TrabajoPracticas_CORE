@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -86,6 +87,11 @@ public class AlumneController {
 
     @GetMapping("/private/alumne/comedor/listado")
     public List<Alumne> getAllAlumnesForListado() {
-        return alumneManager.findAllLowCharge();
+        List<Alumne> alumnes = alumneManager.findAll();
+        for (Alumne alumne : alumnes) {
+            alumne.setTutorsAlumnes(null);
+            alumne.setExpedient(null);
+        }
+        return alumnes;
     }
 }

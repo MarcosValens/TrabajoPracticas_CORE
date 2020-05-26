@@ -44,13 +44,6 @@ public class Alumne implements Serializable {
     public Alumne() {
     }
 
-    public Alumne(String codi, String nom, String ap1, String ap2) {
-        this.codi = codi;
-        this.nom = nom;
-        this.ap1 = ap1;
-        this.ap2 = ap2;
-    }
-
     public String getCodi() {
         return codi;
     }
