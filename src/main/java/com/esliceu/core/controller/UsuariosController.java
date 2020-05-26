@@ -2,10 +2,7 @@ package com.esliceu.core.controller;
 
 import com.esliceu.core.entity.*;
 import com.esliceu.core.manager.*;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +15,9 @@ import java.util.List;
 
 @RestController
 public class UsuariosController {
+    @Autowired
+    Gson gson;
+
     @Autowired
     TokenManager tokenManager;
 
@@ -41,8 +41,8 @@ public class UsuariosController {
         String token = request.getHeader("Authorization");
         token = token.replace("Bearer ", "");
         UsuariApp personaMarcadora = usuariAppManager.findByEmail(tokenManager.getBody(token).get("sub").toString());
-
-        JsonArray comensales = new JsonParser().parse(json).getAsJsonArray();
+        //JsonArray comensales = new JsonParser().parse(json).getAsJsonArray();
+        JsonArray comensales = gson.fromJson(json, JsonArray.class);
         for (JsonElement comensal:comensales) {
             JsonObject object = comensal.getAsJsonObject();
             String codi = object.get("codi").toString().replace("\"", "");
@@ -71,6 +71,9 @@ public class UsuariosController {
                 } else {
                     System.out.println("estaba marcado");
                 }
+            }
+            else {
+                return new ResponseEntity<>("Error marcant els alumnes i professors.", HttpStatus.BAD_REQUEST);
             }
         }
         return new ResponseEntity<>("Usuarios marcados", HttpStatus.OK); // ESTO ES UN PLACEHOLDER
