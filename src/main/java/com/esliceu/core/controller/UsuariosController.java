@@ -4,6 +4,7 @@ import com.esliceu.core.entity.*;
 import com.esliceu.core.manager.*;
 import com.google.gson.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UsuariosController {
@@ -119,5 +122,14 @@ public class UsuariosController {
     public List<String> getRols() {
         UsuariApp usuariApp = new UsuariApp();
         return usuariApp.getRols();
+    }
+
+    @GetMapping("/private/usuario/me")
+    public ResponseEntity<UsuariApp> getInfo(@RequestBody String json){
+        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+        String access_token = jsonObject.get("access_token").getAsString();
+        UsuariApp usuariApp = tokenManager.getUsuariFromToken(access_token);
+
+        return new ResponseEntity<>(usuariApp, HttpStatus.OK);
     }
 }
