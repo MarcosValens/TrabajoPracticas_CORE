@@ -5,12 +5,14 @@ import com.esliceu.core.entity.UsuariAppAlumne;
 import com.esliceu.core.manager.AlumneManager;
 import com.esliceu.core.manager.GrupManager;
 import com.esliceu.core.manager.UsuariAppAlumneManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 
@@ -25,6 +27,9 @@ public class AlumneController {
 
     @Autowired
     UsuariAppAlumneManager usuariAppAlumneManager;
+
+    @Autowired
+    EntityManager em;
 
 
     @GetMapping("/private/alumnos")
@@ -80,12 +85,7 @@ public class AlumneController {
     }
 
     @GetMapping("/private/alumne/comedor/listado")
-    public List<Alumne> getAllAlumnesForListado1() {
-        List<Alumne> alumnes = alumneManager.findAll();
-        for (Alumne alumne : alumnes) {
-            alumne.setExpedient(null);
-            alumne.setTutorsAlumnes(null);
-        }
-        return alumnes;
+    public List<Alumne> getAllAlumnesForListado() {
+        return alumneManager.findAllLowCharge();
     }
 }

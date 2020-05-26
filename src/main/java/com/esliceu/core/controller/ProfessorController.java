@@ -132,6 +132,6 @@ public class ProfessorController {
 
     @GetMapping("/private/professor/comedor/listado")
     public List<Professor> getAllProfesorsListadoComedor() {
-        return this.professorManager.findAllLowCharge();
+        return professorManager.findAllLowCharge();
     }
 }
