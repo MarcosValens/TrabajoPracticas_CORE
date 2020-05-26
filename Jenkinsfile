@@ -75,5 +75,13 @@ pipeline {
         cleanWs()
         }
     }
+    stage("Informando via Slack"){
+        when{
+            branch 'produccion'
+        }
+        steps{
+            slackSend channel: '#builds', message: 'hello world'
+        }
+    }
   }
 }
