@@ -49,6 +49,13 @@ public class Professor implements Serializable {
     public Professor() {
     }
 
+    public Professor(String codi, String nom, String ap1, String ap2) {
+        this.codi = codi;
+        this.nom = nom;
+        this.ap1 = ap1;
+        this.ap2 = ap2;
+    }
+
     public String getCodi() {
         return codi;
     }
