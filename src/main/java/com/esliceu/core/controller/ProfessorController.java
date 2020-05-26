@@ -123,7 +123,7 @@ public class ProfessorController {
         return new ResponseEntity<>(usuariAppProfessor, HttpStatus.OK);
     }
 
-    @GetMapping("/private/professor/comedor/listado1")
+    @GetMapping("/private/professor/comedor/listado")
     public List<Professor> getAllProfesorsListadoComedor() {
         return professorManager.findAllLowCharge();
     }
