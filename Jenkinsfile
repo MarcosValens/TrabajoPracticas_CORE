@@ -1,11 +1,5 @@
 pipeline {
   agent any
-  script{
-              def COMMITTER_EMAIL = bat (
-              script: "git --no-pager show -s --format=%%ae",
-              returnStdout: true
-              ).split('\r\n')[2].trim()
-              }
   stages {
     stage('Prepare enviroment') {
       steps {
@@ -74,9 +68,14 @@ pipeline {
             branch 'produccion'
         }
         steps  {
+
         sh  '''
             echo "desplegamos"core_i_menjador
             ssh deploy.esliceu.com "cd core_i_menjador; docker-compose stop; docker-compose pull; docker-compose up -d"
+            def COMMITTER_EMAIL = bat (
+                                  script: "git --no-pager show -s --format=%%ae",
+                                  returnStdout: true
+                                  ).split('\r\n')[2].trim()
             '''
         cleanWs()
         }
