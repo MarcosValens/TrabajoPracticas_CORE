@@ -1,15 +1,15 @@
 pipeline {
   agent any
   stages {
-      stage('Prepare enviroment') {
-        steps {
-            sh  '''
+    stage('Prepare enviroment') {
+      steps {
+        sh  '''
             echo "Copiamos el properties dentro del proyecto"
             mv src/main/resources/application.properties-sample src/main/resources/application.properties
             '''
-        }
       }
-      stage('Testing') {
+    }
+    stage('Testing') {
         when {
             not {
                 branch 'produccion'
@@ -17,12 +17,12 @@ pipeline {
         }
         steps {
             sh  '''
-            echo "Hacemos testing"
-            mvn test
-            '''
+                echo "Hacemos testing"
+                mvn test
+                '''
         }
-      }
-      stage('Compile') {
+    }
+    stage('Compile') {
         when {
             anyOf {
                 branch 'desarrollo';
@@ -31,58 +31,56 @@ pipeline {
         }
         steps {
             sh  '''
-            echo "Hacemos el package"
-            mvn package
-            '''
+                echo "Hacemos el package"
+                mvn package
+                '''
         }
-      }
-      stage('Build docker image') {
-        when{
-            branch 'produccion'
-        }
-        steps {
-            sh  '''
-            echo "Contruimos la imagen docker"
-            docker build -t imagen-core .
-            '''
-            cleanWs()
-        }
-      }
-      stage('Upload image to registry'){
-        when{
-            branch 'produccion'
-        }
-        steps  {
-            sh  '''
-            echo "Subimos la imagen docker creada"
-            docker tag  imagen-core  registry-back.esliceu.com/imagen-core
-            docker push registry-back.esliceu.com/imagen-core
-            '''
-            cleanWs()
-        }
-      }
-      stage('Deploying on produccion'){
+    }
+    stage('Build docker image') {
+            when{
+                branch 'produccion'
+            }
+            steps {
+                sh  '''
+                    echo "Contruimos la imagen docker"
+                    docker build -t imagen-core .
+                    '''
+                cleanWs()
+            }
+    }
+
+    stage('Upload image to registry'){
         when{
             branch 'produccion'
         }
         steps  {
             sh  '''
-            echo "desplegamos"core_i_menjador
-            ssh deploy.esliceu.com "cd core_i_menjador; docker-compose stop; docker-compose pull; docker-compose up -d"
-            '''
-            cleanWs()
-        }
-      }
-  } post {
-    success {
-        steps{
-            slackSend channel: '#builds', message: 'La compilación ha tenido exito'
+                echo "Subimos la imagen docker creada"
+                docker tag  imagen-core  registry-back.esliceu.com/imagen-core
+                docker push registry-back.esliceu.com/imagen-core
+                '''
             cleanWs()
         }
     }
-    failure {
+
+    stage('Deploying on produccion'){
+        when{
+            branch 'produccion'
+        }
+        steps  {
+        sh  '''
+            echo "desplegamos"core_i_menjador
+            ssh deploy.esliceu.com "cd core_i_menjador; docker-compose stop; docker-compose pull; docker-compose up -d"
+            '''
+        cleanWs()
+        }
+    }
+    stage("Informando via Slack"){
+        when{
+            branch 'produccion'
+        }
         steps{
-            slackSend channel: '#builds', message: 'Algo a salido mal, por favor revisa el log'
+            slackSend channel: '#builds', message: 'hello world'
             cleanWs()
         }
     }
