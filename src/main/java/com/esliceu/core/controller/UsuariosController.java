@@ -54,7 +54,7 @@ public class UsuariosController {
             if (professor != null && personaMarcadora.isCuiner()) {
                 if(usuariAppProfessorManager.findById(new UsuariAppProfessorID(codi, LocalDate.now()))==null){
                     UsuariAppProfessor usuariAppProfessor = new UsuariAppProfessor();
-                    usuariAppProfessor.setData(LocalDate.now());
+                    usuariAppProfessor.setData(LocalDate.now().plusDays(1));
                     usuariAppProfessor.setProfessor(professor);
                     usuariAppProfessor.setUsuariApp(personaMarcadora);
                     usuariAppProfessorManager.createOrUpdate(usuariAppProfessor);
@@ -66,7 +66,7 @@ public class UsuariosController {
             } else if (alumne != null && (personaMarcadora.isCuiner()||personaMarcadora.isMonitor()) ) {
                 if(usuariAppAlumneManager.findById(new UsuariAppAlumneID(codi, LocalDate.now()))==null){
                     UsuariAppAlumne usuariAppAlumne = new UsuariAppAlumne();
-                    usuariAppAlumne.setData(LocalDate.now());
+                    usuariAppAlumne.setData(LocalDate.now().plusDays(1));
                     usuariAppAlumne.setAlumne(alumne);
                     usuariAppAlumne.setUsuariApp(personaMarcadora);
                     usuariAppAlumneManager.createOrUpdate(usuariAppAlumne);
