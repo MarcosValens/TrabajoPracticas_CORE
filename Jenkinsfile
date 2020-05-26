@@ -1,9 +1,6 @@
-script{
-def COMMITTER_EMAIL = bat (
-                script: "git --no-pager show -s --format=%%ae",
-                  returnStdout: true
-              ).split('\r\n')[2].trim()
-}
+
+def COMMITTER_EMAIL = "TEST"
+
 pipeline {
   agent any
   stages {
