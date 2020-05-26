@@ -78,10 +78,10 @@ pipeline {
   }
   post{
     success{
-        slackSend channel: '#builds', message: 'El deploy a funcionado!!'
+        slackSend channel: '#core-builds', message: 'El deploy a funcionado!!'
     }
     failure{
-        slackSend channel: '#builds', message: 'El deploy a fallado!!'
+        slackSend channel: '#core-builds', message: 'El deploy a fallado!!'
     }
   }
 }
