@@ -77,21 +77,19 @@ pipeline {
     }
   }
   post{
-    success{
-        steps{
-            script{
-                def COMMITTER_EMAIL = bat (
-                script: "git --no-pager show -s --format=%%ae",
-                returnStdout: true
-                ).split('\r\n')[2].trim()
+    steps{
+        script{
+            def COMMITTER_EMAIL = bat (
+            script: "git --no-pager show -s --format=%%ae",
+            returnStdout: true
+            ).split('\r\n')[2].trim()
             }
+        success{
             slackSend channel: '#jenkins-builds',  color: 'good', message: "The pipeline ${currentBuild.fullDisplayName} completed successfully from ${COMMITTER_EMAIL}."
-
         }
-
-    }
-    failure{
+        failure{
         slackSend channel: '#jenkins-builds', color: '#ff0000', message: "The pipeline ${currentBuild.fullDisplayName} from ${committerEmail}."
+        }
     }
   }
 }
