@@ -1,6 +1,6 @@
 
 pipeline {
-enviroment{
+environment{
 COMMITTER_EMAIL = sh (
     script: 'git --no-pager show -s --format=\'%ae\'',
     returnStdout: true
