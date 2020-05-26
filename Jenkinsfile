@@ -36,6 +36,15 @@ pipeline {
                 '''
         }
     }
+    stage("Informando via Slack"){
+        when{
+            branch 'desarrollo'
+        }
+        steps{
+                slackSend channel: '#builds', message: 'hello world'
+                cleanWs()
+        }
+    }
     stage('Build docker image') {
             when{
                 branch 'produccion'
@@ -73,15 +82,6 @@ pipeline {
             ssh deploy.esliceu.com "cd core_i_menjador; docker-compose stop; docker-compose pull; docker-compose up -d"
             '''
         cleanWs()
-        }
-    }
-    stage("Informando via Slack"){
-        when{
-            branch 'produccion'
-        }
-        steps{
-            slackSend channel: '#builds', message: 'hello world'
-            cleanWs()
         }
     }
   }
