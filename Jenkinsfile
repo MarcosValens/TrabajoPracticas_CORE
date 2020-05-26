@@ -75,19 +75,13 @@ pipeline {
         cleanWs()
         }
     }
-    stage("Informando via Slack"){
-        when{
-            branch 'desarrollo'
-        }
-        steps{
-            slackSend channel: '#builds', message: 'hello world'
-            cleanWs()
-        }
-    }
   }
   post{
     success{
-            slackSend channel: '#builds', message: 'hello world'
+        slackSend channel: '#builds', message: 'El deploy a funcionado!!'
+    }
+    failure{
+        slackSend channel: '#builds', message: 'El deploy a fallado!!'
     }
   }
 }
