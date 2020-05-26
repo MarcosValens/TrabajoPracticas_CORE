@@ -78,10 +78,10 @@ pipeline {
   }
   post{
     success{
-        slackSend channel: '#core-builds',  color: 'good', message: "The pipeline ${currentBuild.fullDisplayName} completed successfully."
+        slackSend channel: '#jenkins-builds',  color: 'good', message: "The pipeline ${currentBuild.fullDisplayName} completed successfully."
     }
     failure{
-        slackSend channel: '#core-builds', message: 'El deploy a fallado!!'
+        slackSend channel: '#jenkins-builds', color: 'bad', message: 'The pipeline ${currentBuild.fullDisplayName} failed.'
     }
   }
 }
