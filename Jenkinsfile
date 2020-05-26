@@ -75,17 +75,21 @@ pipeline {
         cleanWs()
         }
     }
-  } post {
-     success {
-         steps{
-             slackSend channel: '#builds', message: 'La compilación ha tenido exito'
-             cleanWs()
-         }
-     }
-     failure {
-         steps{
-             slackSend channel: '#builds', message: 'Algo a salido mal, por favor revisa el log'
-             cleanWs()
-         }
-     }
-}}
+    stage("Informando via Slack"){
+        when{
+            branch 'produccion'
+        }
+        steps{
+            slackSend channel: '#builds', message: 'hello world'
+            cleanWs()
+        }
+    }
+  }
+  post{
+    success{
+        steps{
+            slackSend channel: '#builds', message: 'hello world'
+        }
+    }
+  }
+}
