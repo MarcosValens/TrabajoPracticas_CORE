@@ -26,8 +26,8 @@ import java.util.zip.ZipOutputStream;
 public class FotoController {
 
     @PostMapping("/private/uploadPhoto")
-    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) {
-
+    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @RequestParam("codiGrup") String codiGrup) {
+        System.out.println(codiGrup);
         try {
 
             byte[] bytes = file.getBytes();
@@ -43,7 +43,7 @@ public class FotoController {
 
     }
 
-    @GetMapping("/download/{fileName:.+}")
+    @GetMapping("/private/download/{fileName:.+}")
     public ResponseEntity downloadFileName(@PathVariable String fileName) throws IOException {
 
         Path path = Paths.get("./src/main/resources/photos/" + fileName);
@@ -58,7 +58,7 @@ public class FotoController {
                 .body(resource);
     }
 
-    @GetMapping(value = "/zip-download/{codiGroup}", produces = "application/zip")
+    @GetMapping(value = "/private/zip-download/{codiGroup}", produces = "application/zip")
     public ResponseEntity zipDownload(@PathVariable long codiGroup) throws IOException {
 
         final String directorioZip = "./src/main/resources/zip/";
@@ -70,14 +70,16 @@ public class FotoController {
 
         String[] nameZip = ZIPFiles.list();
 
-        for (String name : nameZip) {
+        if(nameZip != null){
+            for (String name : nameZip) {
 
-            File file = new File(directorioZip + name);
+                File file = new File(directorioZip + name);
 
-            if (file.delete()) {
-                System.out.println("Se ha borrado el archivo");
-            } else {
-                System.out.println("No se ha podido borrar");
+                if (file.delete()) {
+                    System.out.println("Se ha borrado el archivo");
+                } else {
+                    System.out.println("No se ha podido borrar");
+                }
             }
         }
 
@@ -91,7 +93,8 @@ public class FotoController {
         ZipOutputStream zipOut = new ZipOutputStream(fileOutput);
 
         for (String nombre : nombreFotos) {
-            if (nombre.contains(Long.toString(codiGroup))) {
+            String codigoNombre = nombre.split("-")[0];
+            if (codigoNombre.equals(Long.toString(codiGroup))) {
                 File fileToZip = new File(directorioFotos + nombre);
                 FileInputStream fis = new FileInputStream(fileToZip);
                 ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
