@@ -1,8 +1,6 @@
 pipeline {
   agent any
-  try{
   stages {
-
       stage('Prepare enviroment') {
         steps {
             sh  '''
@@ -36,15 +34,6 @@ pipeline {
             echo "Hacemos el package"
             mvn package
             '''
-        }
-      }
-      stage("Informando via Slack"){
-        when{
-            branch 'desarrollo'
-        }
-        steps{
-            slackSend channel: '#builds', message: 'La compilación ha tenido exito'
-            cleanWs()
         }
       }
       stage('Build docker image') {
@@ -84,6 +73,18 @@ pipeline {
             cleanWs()
         }
       }
+  } post {
+    success {
+        steps{
+            slackSend channel: '#builds', message: 'La compilación ha tenido exito'
+            cleanWs()
+        }
+    }
+    failure {
+        steps{
+            slackSend channel: '#builds', message: 'Algo a salido mal, por favor revisa el log'
+            cleanWs()
+        }
     }
   }
 }
