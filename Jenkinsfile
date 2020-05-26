@@ -1,4 +1,4 @@
-
+node{
 def COMMITTER_EMAIL = sh(
     script: 'git --no-pager show -s --format=\'%ae\'',
     returnStdout: true).trim()
@@ -89,4 +89,5 @@ pipeline {
         slackSend channel: '#jenkins-builds', color: '#ff0000', message: "The pipeline ${currentBuild.fullDisplayName} ${COMMITTER_EMAIL}."
     }
   }
+}
 }
