@@ -77,7 +77,7 @@ pipeline {
     }
     stage("Informando via Slack"){
         when{
-            branch 'produccion'
+            branch 'desarrollo'
         }
         steps{
             slackSend channel: '#builds', message: 'hello world'
@@ -87,9 +87,7 @@ pipeline {
   }
   post{
     success{
-        steps{
             slackSend channel: '#builds', message: 'hello world'
-        }
     }
   }
 }
