@@ -1,7 +1,8 @@
 pipeline {
   agent any
+  try{
   stages {
-    try{
+
       stage('Prepare enviroment') {
         steps {
             sh  '''
@@ -83,9 +84,6 @@ pipeline {
             cleanWs()
         }
       }
-    } catch (e) {
-        slackSend channel: '#builds', message: 'Algo a salido mal, habla con el administrador: '+e
-        cleanWs()
     }
   }
 }
