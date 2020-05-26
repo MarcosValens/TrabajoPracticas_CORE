@@ -100,6 +100,7 @@ public class AuthController {
         response.setStatus(HttpServletResponse.SC_OK);
 
         Map<String, String> map = new HashMap<>();
+        map.put("id", usuariGoogle.getProfessor().getCodi());
         map.put("access_token", tokenManager.generateAcessToken(usuariGoogle));
         map.put("refresh_token", tokenManager.generateRefreshToken(usuariGoogle));
         map.put("rol", "professor");
