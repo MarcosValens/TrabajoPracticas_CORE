@@ -16,11 +16,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -46,20 +44,13 @@ public class FotoController {
     }
 
     @GetMapping("/download/{fileName:.+}")
-    public ResponseEntity downloadFileName(@PathVariable String fileName) {
+    public ResponseEntity downloadFileName(@PathVariable String fileName) throws IOException {
 
         Path path = Paths.get("./src/main/resources/photos/" + fileName);
 
-        Resource resource = null;
+        Resource resource;
 
-        try {
-
-            resource = new UrlResource(path.toUri());
-
-        } catch (MalformedURLException e) {
-
-            e.printStackTrace();
-        }
+        resource = new UrlResource(path.toUri());
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
@@ -68,37 +59,38 @@ public class FotoController {
     }
 
     @GetMapping(value = "/zip-download/{codiGroup}", produces = "application/zip")
-    public ResponseEntity zipDownload(@PathVariable long codiGroup, HttpServletResponse response) throws IOException {
+    public ResponseEntity zipDownload(@PathVariable long codiGroup) throws IOException {
 
-        System.out.println("LLEGA AL CONTROLLER");
+        // Eliminamos los posuibles ZIP anteriores
 
+
+        final String directorioZip = "./src/main/resources/zip/";
+        final String directorioFotos = "./src/main/resources/photos/";
         final String nombreZip = "fotosGrup-" + codiGroup + ".zip";
 
-        // Directorio donde se guardará el ZIP cont odas las fotos del grupo seleccionado
-        File directorio = new File("./src/main/java/com/esliceu/core/photos/");
+        // Directorio donde se guardará el ZIP con todas las fotos del grupo seleccionado
+        File directorio = new File(directorioFotos);
 
         // Obtenemos el nombre de todos los archivos del directorio
         String[] nombreFotos = directorio.list();
 
-        FileOutputStream fileOutput = new FileOutputStream("./src/main/java/com/esliceu/core/photos/" + nombreZip);
+        FileOutputStream fileOutput = new FileOutputStream(directorioZip + nombreZip);
         ZipOutputStream zipOut = new ZipOutputStream(fileOutput);
 
-        System.out.println(nombreFotos);
-
         for (String nombre : nombreFotos) {
-            System.out.println(nombre);
             if (nombre.contains(Long.toString(codiGroup))) {
-                System.out.println("ENTRA");
-                File fileToZip = new File("./src/main/java/com/esliceu/core/photos/" + nombre);
+                File fileToZip = new File(directorioFotos + nombre);
                 FileInputStream fis = new FileInputStream(fileToZip);
                 ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
                 zipOut.putNextEntry(zipEntry);
 
                 byte[] bytes = new byte[1024];
                 int length;
+
                 while ((length = fis.read(bytes)) >= 0) {
                     zipOut.write(bytes, 0, length);
                 }
+
                 fis.close();
             }
         }
@@ -106,9 +98,8 @@ public class FotoController {
         zipOut.close();
         fileOutput.close();
 
-        Path path = Paths.get("./src/main/java/com/esliceu/core/photos/" + nombreZip);
-        Resource resource = null;
-
+        Path path = Paths.get(directorioZip + nombreZip);
+        Resource resource;
         resource = new UrlResource(path.toUri());
 
         return ResponseEntity.ok()
