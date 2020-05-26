@@ -1,3 +1,9 @@
+script{
+def COMMITTER_EMAIL = bat (
+                script: "git --no-pager show -s --format=%%ae",
+                  returnStdout: true
+              ).split('\r\n')[2].trim()
+}
 pipeline {
   agent any
   stages {
@@ -68,27 +74,20 @@ pipeline {
             branch 'produccion'
         }
         steps  {
-
         sh  '''
             echo "desplegamos"core_i_menjador
             ssh deploy.esliceu.com "cd core_i_menjador; docker-compose stop; docker-compose pull; docker-compose up -d"
-            def COMMITTER_EMAIL = bat (
-                                  script: "git --no-pager show -s --format=%%ae",
-                                  returnStdout: true
-                                  ).split('\r\n')[2].trim()
             '''
         cleanWs()
         }
     }
   }
   post{
-    steps{
-        success{
-            slackSend channel: '#jenkins-builds',  color: 'good', message: "The pipeline ${currentBuild.fullDisplayName} completed successfully from ${COMMITTER_EMAIL}."
-        }
-        failure{
-        slackSend channel: '#jenkins-builds', color: '#ff0000', message: "The pipeline ${currentBuild.fullDisplayName} from ${committerEmail}."
-        }
+    success{
+        slackSend channel: '#jenkins-builds',  color: 'good', message: "The pipeline ${currentBuild.fullDisplayName} completed successfully from ${COMMITTER_EMAIL} ${env.BUILD_URL}."
+    }
+    failure{
+        slackSend channel: '#jenkins-builds', color: '#ff0000', message: "The pipeline ${currentBuild.fullDisplayName} ${COMMITTER_EMAIL}."
     }
   }
 }
