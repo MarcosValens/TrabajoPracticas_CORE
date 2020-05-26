@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class ProfessorController {
@@ -117,10 +118,16 @@ public class ProfessorController {
      * TODO dado un codi de un profesor, queremos recibir todos sus marcages en
      *  el comedor con toda la info. Fecha y quien ha sido el cuiner que ha marcado a dicho profesor
      * */
-    @GetMapping("/private/professor/{codi}/comedor/marcaje")
+    @GetMapping("/professor/{codi}/comedor/marcaje")
     public ResponseEntity<List<UsuariAppProfessor>> getMarcajesSpecificProfesor(@PathVariable String codi) {
-        List<UsuariAppProfessor> usuariAppProfessor = usuariAppProfessorManager.findAllByProfessor(professorManager.findById(codi));
-        return new ResponseEntity<>(usuariAppProfessor, HttpStatus.OK);
+        List<UsuariAppProfessor> usuariAppProfessorList = usuariAppProfessorManager.findAllByProfessor(professorManager.findById(codi));
+        for (UsuariAppProfessor usuariAppProfessor:usuariAppProfessorList) {
+            usuariAppProfessor.getProfessor().setGrups(null);
+            usuariAppProfessor.getProfessor().setUsername(null);
+            usuariAppProfessor.getProfessor().setUsuariApp(null);
+            usuariAppProfessor.getProfessor().setDepartament(null);
+        }
+        return new ResponseEntity<>(usuariAppProfessorList, HttpStatus.OK);
     }
 
     @GetMapping("/private/professor/comedor/listado1")
