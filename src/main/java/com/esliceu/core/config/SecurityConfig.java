@@ -20,8 +20,8 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    /*@Autowired
-    private GoogleUserManager googleUserManager;*/
+    @Autowired
+    private GoogleUserManager googleUserManager;
 
     @Autowired
     private AuthenticationSuccess authenticationSuccess;
