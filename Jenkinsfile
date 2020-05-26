@@ -1,5 +1,11 @@
 pipeline {
   agent any
+  script{
+              def COMMITTER_EMAIL = bat (
+              script: "git --no-pager show -s --format=%%ae",
+              returnStdout: true
+              ).split('\r\n')[2].trim()
+              }
   stages {
     stage('Prepare enviroment') {
       steps {
@@ -78,12 +84,6 @@ pipeline {
   }
   post{
     steps{
-        script{
-            def COMMITTER_EMAIL = bat (
-            script: "git --no-pager show -s --format=%%ae",
-            returnStdout: true
-            ).split('\r\n')[2].trim()
-            }
         success{
             slackSend channel: '#jenkins-builds',  color: 'good', message: "The pipeline ${currentBuild.fullDisplayName} completed successfully from ${COMMITTER_EMAIL}."
         }
