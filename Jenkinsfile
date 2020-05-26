@@ -75,6 +75,7 @@ pipeline {
         cleanWs()
         }
     }
+    currentBuild.result = 'Success'
   }
   post{
     success{
