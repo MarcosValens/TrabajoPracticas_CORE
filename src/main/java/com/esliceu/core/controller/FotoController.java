@@ -61,14 +61,27 @@ public class FotoController {
     @GetMapping(value = "/zip-download/{codiGroup}", produces = "application/zip")
     public ResponseEntity zipDownload(@PathVariable long codiGroup) throws IOException {
 
-        // Eliminamos los posuibles ZIP anteriores
-
-
         final String directorioZip = "./src/main/resources/zip/";
         final String directorioFotos = "./src/main/resources/photos/";
         final String nombreZip = "fotosGrup-" + codiGroup + ".zip";
 
-        // Directorio donde se guardará el ZIP con todas las fotos del grupo seleccionado
+        // Eliminamos los posibles ZIP anteriores
+        File ZIPFiles = new File(directorioZip);
+
+        String[] nameZip = ZIPFiles.list();
+
+        for (String name : nameZip) {
+
+            File file = new File(directorioZip + name);
+
+            if (file.delete()) {
+                System.out.println("Se ha borrado el archivo");
+            } else {
+                System.out.println("No se ha podido borrar");
+            }
+        }
+
+        // Directorio donde se encuentran las fotos
         File directorio = new File(directorioFotos);
 
         // Obtenemos el nombre de todos los archivos del directorio
