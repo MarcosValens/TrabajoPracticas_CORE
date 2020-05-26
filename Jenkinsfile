@@ -81,6 +81,7 @@ pipeline {
         }
         steps{
             slackSend channel: '#builds', message: 'hello world'
+            cleanWs()
         }
     }
   }
