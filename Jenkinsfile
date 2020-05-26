@@ -1,9 +1,5 @@
 pipeline {
   agent any
-  committerEmail = sh (
-        script: 'git --no-pager show -s --format=\'%ae\'',
-        returnStdout: true
-  ).trim()
   stages {
     stage('Prepare enviroment') {
       steps {
@@ -82,7 +78,7 @@ pipeline {
   }
   post{
     success{
-        slackSend channel: '#jenkins-builds',  color: 'good', message: "The pipeline ${currentBuild.fullDisplayName} completed successfully from ${committerEmail}."
+        slackSend channel: '#jenkins-builds',  color: 'good', message: "The pipeline ${currentBuild.fullDisplayName} completed successfully from ${env.BUILD_URL}."
     }
     failure{
         slackSend channel: '#jenkins-builds', color: '#ff0000', message: "The pipeline ${currentBuild.fullDisplayName} from ${committerEmail}."
