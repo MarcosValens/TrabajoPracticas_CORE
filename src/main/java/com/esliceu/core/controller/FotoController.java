@@ -47,13 +47,20 @@ public class FotoController {
 
     @GetMapping("/download/{fileName:.+}")
     public ResponseEntity downloadFileName(@PathVariable String fileName) {
+
         Path path = Paths.get("./src/main/resources/photos/" + fileName);
+
         Resource resource = null;
+
         try {
+
             resource = new UrlResource(path.toUri());
+
         } catch (MalformedURLException e) {
+
             e.printStackTrace();
         }
+
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
@@ -63,17 +70,26 @@ public class FotoController {
     @GetMapping(value = "/zip-download/{codiGroup}", produces = "application/zip")
     public ResponseEntity zipDownload(@PathVariable long codiGroup, HttpServletResponse response) throws IOException {
 
-        String zipFile = "./src/main/java/com/esliceu/core/photos";
+        System.out.println("LLEGA AL CONTROLLER");
 
-        try {
+        final String nombreZip = "fotosGrup-" + codiGroup + ".zip";
 
-            File dir = new File("./src/main/java/com/esliceu/core/photos");
+        // Directorio donde se guardará el ZIP cont odas las fotos del grupo seleccionado
+        File directorio = new File("./src/main/java/com/esliceu/core/photos/");
 
-            String[] srcFiles = dir.list();
-            FileOutputStream fosas = new FileOutputStream("./src/main/java/com/esliceu/core/photos/multiCompressed.zip");
-            ZipOutputStream zipOut = new ZipOutputStream(fosas);
-            for (String srcFile : srcFiles) {
-                File fileToZip = new File("./src/main/java/com/esliceu/core/photos/"+srcFile);
+        // Obtenemos el nombre de todos los archivos del directorio
+        String[] nombreFotos = directorio.list();
+
+        FileOutputStream fileOutput = new FileOutputStream("./src/main/java/com/esliceu/core/photos/" + nombreZip);
+        ZipOutputStream zipOut = new ZipOutputStream(fileOutput);
+
+        System.out.println(nombreFotos);
+
+        for (String nombre : nombreFotos) {
+            System.out.println(nombre);
+            if (nombre.contains(Long.toString(codiGroup))) {
+                System.out.println("ENTRA");
+                File fileToZip = new File("./src/main/java/com/esliceu/core/photos/" + nombre);
                 FileInputStream fis = new FileInputStream(fileToZip);
                 ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
                 zipOut.putNextEntry(zipEntry);
@@ -85,48 +101,20 @@ public class FotoController {
                 }
                 fis.close();
             }
-            zipOut.close();
-            fosas.close();
-
-            Path path = Paths.get("./src/main/resources/photos/" + fileName);
-            Resource resource = null;
-
-            resource = new UrlResource(path.toUri());
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+
+        zipOut.close();
+        fileOutput.close();
+
+        Path path = Paths.get("./src/main/java/com/esliceu/core/photos/" + nombreZip);
+        Resource resource = null;
+
+        resource = new UrlResource(path.toUri());
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
-
-
-/*        String[] paths = fasd.list();
-
-        ZipOutputStream zipOut = new ZipOutputStream(response.getOutputStream());
-
-        for (String file : paths) {
-            System.out.println(file);
-            if (file.contains(Long.toString(codiGroup))) {
-                System.out.println("ALGUNO COINCIDE");
-                FileSystemResource resource = new FileSystemResource("./src/main/java/com/esliceu/core/photos/" + file);
-                System.out.println(resource.getFilename());
-                ZipEntry zipEntry = new ZipEntry(resource.getFilename());
-                zipEntry.setSize(resource.contentLength());
-                zipOut.putNextEntry(zipEntry);
-                StreamUtils.copy(resource.getInputStream(), zipOut);
-                zipOut.closeEntry();
-
-            }
-        }
-
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "probandoZIP");
-        responseHeaders.add(HttpHeaders.CONTENT_TYPE,MediaType.)*/
-
 
     }
 }
