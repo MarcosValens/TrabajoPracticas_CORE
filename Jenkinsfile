@@ -1,10 +1,11 @@
 
 pipeline {
-environment{
-COMMITTER_EMAIL = sh (
+  environment{
+    COMMITTER_EMAIL = sh (
     script: 'git --no-pager show -s --format=\'%ae\'',
     returnStdout: true
-).trim()}
+    ).trim()
+  }
   agent any
   stages {
     stage('Prepare enviroment') {
@@ -84,10 +85,10 @@ COMMITTER_EMAIL = sh (
   }
   post{
     success{
-        slackSend channel: '#jenkins-builds',  color: 'good', message: "The pipeline ${currentBuild.fullDisplayName} completed successfully from ${env.COMMITTER_EMAIL} ${env.BUILD_URL}."
+        slackSend channel: '#jenkins-builds',  color: 'good', message: "The pipeline ${currentBuild.fullDisplayName} completed successfully from ${env.COMMITTER_EMAIL}. Check it on ${env.BUILD_URL}."
     }
     failure{
-        slackSend channel: '#jenkins-builds', color: '#ff0000', message: "The pipeline ${currentBuild.fullDisplayName} ${env.COMMITTER_EMAIL}."
+        slackSend channel: '#jenkins-builds', color: '#ff0000', message: "The pipeline ${currentBuild.fullDisplayName} failed from ${env.COMMITTER_EMAIL}. Check it on ${env.BUILD_URL}"
     }
   }
 }
