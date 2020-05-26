@@ -79,7 +79,7 @@ pipeline {
   }
   post{
     success{
-        slackSend channel: '#core-builds', message: "${currentBuild.result}"
+        slackSend channel: '#core-builds',  color: 'good', message: "The pipeline ${currentBuild.fullDisplayName} completed successfully."
     }
     failure{
         slackSend channel: '#core-builds', message: 'El deploy a fallado!!'
