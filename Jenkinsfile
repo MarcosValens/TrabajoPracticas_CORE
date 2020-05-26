@@ -1,7 +1,9 @@
 
-
-def COMMITTER_EMAIL
 pipeline {
+COMMITTER_EMAIL = sh (
+    script: 'git --no-pager show -s --format=\'%ae\'',
+    returnStdout: true
+).trim()
   agent any
   stages {
     stage('Prepare enviroment') {
@@ -23,9 +25,6 @@ pipeline {
                 echo "Hacemos testing"
                 mvn test
                 '''
-            COMMITTER_EMAIL = sh(
-                script: 'git --no-pager show -s --format=\'%ae\'',
-                returnStdout: true).trim()
         }
     }
     stage('Compile') {
