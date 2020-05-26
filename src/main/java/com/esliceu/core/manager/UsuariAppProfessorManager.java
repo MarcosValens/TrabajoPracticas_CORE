@@ -7,6 +7,7 @@ import com.esliceu.core.repository.UsuariAppProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -23,5 +24,9 @@ public class UsuariAppProfessorManager {
 
     public UsuariAppProfessor findById(UsuariAppProfessorID usuariAppProfessorID){
         return usuariAppProfessorRepository.findById(usuariAppProfessorID).orElse(null);
+    }
+
+    public List<UsuariAppProfessor> findByDia(LocalDate dia) {
+        return usuariAppProfessorRepository.findByData(dia);
     }
 }
