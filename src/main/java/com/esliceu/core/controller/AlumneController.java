@@ -90,7 +90,7 @@ public class AlumneController {
         return new ResponseEntity<>(marcatgeAlumne, HttpStatus.OK);
     }
 
-    @GetMapping("/listado")
+    @GetMapping("/private/alumne/comedor/listado")
     public List<Alumne> getAllAlumnesForListado() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Alumne> cq = cb.createQuery(Alumne.class);
