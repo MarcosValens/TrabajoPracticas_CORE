@@ -125,10 +125,10 @@ public class UsuariosController {
     }
 
     @GetMapping("/private/usuario/me")
-    public ResponseEntity<UsuariApp> getInfo(@RequestBody String json){
-        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
-        String access_token = jsonObject.get("access_token").getAsString();
-        UsuariApp usuariApp = tokenManager.getUsuariFromToken(access_token);
+    public ResponseEntity<UsuariApp> getInfo(HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        token = token.replace("Bearer ", "");
+        UsuariApp usuariApp = tokenManager.getUsuariFromToken(token);
 
         return new ResponseEntity<>(usuariApp, HttpStatus.OK);
     }
