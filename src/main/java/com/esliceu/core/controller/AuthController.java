@@ -59,6 +59,26 @@ public class AuthController {
         return map;
     }
 
+    @PostMapping("/auth/refresh")
+    public Map<String, String> refresh(@RequestBody String json, HttpServletResponse response) {
+        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+        String refresh_token = jsonObject.get("refresh_token").getAsString();
+
+        String validate = tokenManager.validateToken(refresh_token);
+
+        if (!validate.equals("OK")) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return null;
+        }
+        UsuariApp user = tokenManager.getUsuariFromToken(refresh_token);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("access_token", tokenManager.generateAcessToken(user));
+        map.put("refresh_token", tokenManager.generateRefreshToken(user));
+
+        return map;
+    }
+
     @PostMapping("/auth/login/flutter")
     public Map<String, String> loginFlutter(@RequestBody String json, HttpServletResponse response) {
 
