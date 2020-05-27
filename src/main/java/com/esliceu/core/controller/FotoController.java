@@ -1,5 +1,8 @@
 package com.esliceu.core.controller;
 
+import org.omg.CORBA.Environment;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -19,22 +22,27 @@ import java.util.zip.ZipOutputStream;
 @RestController
 public class FotoController {
 
+    @Value("${UPLOAD.DIRECTORY.ZIP}")
+    String directorioZip;
+
+    @Value("${UPLOAD.DIRECTORY.FOTOS}")
+    String direcotrioFotos;
+
     @PostMapping("/private/uploadPhoto")
     public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @RequestParam("codiGrup") String codiGrup) {
 
-        String directorioFotos = "./src/main/resources/photos/" + codiGrup;
+        String directorioFotosGrup = this.direcotrioFotos + codiGrup;
 
         try {
 
             byte[] bytes = file.getBytes();
-
-            File directory = new File(directorioFotos);
+            File directory = new File(directorioFotosGrup);
 
             if (!directory.exists()) {
                 directory.mkdir();
             }
 
-            File fileFoto = new File(directorioFotos + "/" + file.getOriginalFilename());
+            File fileFoto = new File(directorioFotosGrup + "/" + file.getOriginalFilename());
 
             FileOutputStream out = new FileOutputStream(fileFoto);
             out.write(bytes);
@@ -52,7 +60,7 @@ public class FotoController {
     @GetMapping("/private/download/{fileName:.+}/{codiGroup}")
     public ResponseEntity downloadFileName(@PathVariable String fileName, @PathVariable long codiGroup) throws IOException {
 
-        Path path = Paths.get("./src/main/resources/photos/" + codiGroup + "/" + fileName);
+        Path path = Paths.get(this.direcotrioFotos + codiGroup + "/" + fileName);
 
         if (!Files.exists(path)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -73,8 +81,8 @@ public class FotoController {
 
         try {
 
-            final String directorioZip = "./src/main/resources/zip/";
-            final String directorioFotos = "./src/main/resources/photos/" + codiGrup + "/";
+            final String directorioZip = this.directorioZip;
+            final String directorioFotos = this.direcotrioFotos + codiGrup + "/";
             final String nombreZip = "fotosGrup-" + codiGrup + ".zip";
 
             // Directorio donde se encuentran las fotos
@@ -113,13 +121,11 @@ public class FotoController {
         }
     }
 
+    @GetMapping(value = "/private/download-zip/{nombreZip}", produces = "application/zip")
+    public ResponseEntity zipDownload(@PathVariable String nombreZip) throws IOException {
 
-    @GetMapping(value = "/private/download-zip/{codiGroup}", produces = "application/zip")
-    public ResponseEntity zipDownload(@PathVariable long codiGroup) throws IOException {
+        final String directorioZip = this.directorioZip + nombreZip;
 
-        final String directorioZip = "./src/main/resources/zip/" + codiGroup;
-
-        // Eliminamos los posibles ZIP anteriores
         Path path = Paths.get(directorioZip);
 
         if (!Files.exists(path)) {
@@ -134,5 +140,21 @@ public class FotoController {
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
+    }
+
+    @GetMapping(value = "/private/list-zip", produces = "application/zip")
+    public ResponseEntity listZipDownload() {
+
+        final String directorioZip = this.directorioZip;
+        File file = new File(directorioZip);
+
+        String[] zipFiles = file.list();
+
+        if (zipFiles.length == 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        }
+
+        return new ResponseEntity<>(zipFiles, HttpStatus.OK);
+
     }
 }

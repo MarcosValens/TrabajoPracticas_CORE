@@ -46,8 +46,9 @@ spring.security.oauth2.client.registration.google.redirect-uri=http://localhost:
 
 ## Other Properties ##
 
-# Directorio de upload para las fotos
-upload.directory=changeme
+# FOTOS ##
+UPLOAD.DIRECTORY.FOTOS=./src/main/resources/photos/
+UPLOAD.DIRECTORY.ZIP=./src/main/resources/zip/
 
 
 ## Token JwT ##
