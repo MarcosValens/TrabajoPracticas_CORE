@@ -88,10 +88,16 @@ public class UsuariosController {
      *  retornar un listado de usuarios que han sido marcados dicho dia en el comedor
      * */
     @GetMapping("/private/comedor/marcajes/{dia}")
-    public void getAllMarcajesDia(@PathVariable(name = "dia") LocalDate dia) {
+    public ResponseEntity<Map<String, Object>> getAllMarcajesDia(@PathVariable(name = "dia") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dia) {
 
+        List<UsuariAppAlumne> alumnes = usuariAppAlumneManager.findByDia(dia);
+        List<UsuariAppProfessor> professors = usuariAppProfessorManager.findByDia(dia);
 
-        return;
+        Map<String, Object> map = new HashMap();
+        map.put("alumnes", alumnes);
+        map.put("professors", professors);
+
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
     @GetMapping("/private/usuarios/comedor/listado")
