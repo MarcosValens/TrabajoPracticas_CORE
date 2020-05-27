@@ -22,7 +22,6 @@ public class TokenFilter implements HandlerInterceptor {
          * */
         if (request.getMethod().equals("OPTIONS")) return true;
 
-
         /*
          * Si no es un OPTIONS comprueba si la petición contiene el Token
          * y comprueba si es válido o si ha expirado.

@@ -46,8 +46,9 @@ spring.security.oauth2.client.registration.google.redirect-uri=http://localhost:
 
 ## Other Properties ##
 
-# Directorio de upload para las fotos
-upload.directory=changeme
+# FOTOS ##
+UPLOAD.DIRECTORY.FOTOS=./src/main/resources/photos/
+UPLOAD.DIRECTORY.ZIP=./src/main/resources/zip/
 
 
 ## Token JwT ##
@@ -57,4 +58,3 @@ SIGNING_KEY_TOKEN=1234
 FRONTEND_URL=http://localhost:8888/
 
 PREFIJO_URI= changeme # EN DEV VAICO EN PROD /API
-OAUTH_ENABLED = true
