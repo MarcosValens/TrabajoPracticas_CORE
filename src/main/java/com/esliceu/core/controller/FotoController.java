@@ -33,11 +33,17 @@ public class FotoController {
 
         try {
 
+            /*File photosDirectory = new File(this.direcotrioFotos);
+
+            if (!photosDirectory.exists()){
+                photosDirectory.mkdir();
+            }*/
+
             byte[] bytes = file.getBytes();
             File directory = new File(directorioFotosGrup);
 
             if (!directory.exists()) {
-                directory.mkdir();
+                directory.mkdirs();
             }
 
             File fileFoto = new File(directorioFotosGrup + "/" + file.getOriginalFilename());
@@ -82,6 +88,12 @@ public class FotoController {
             final String directorioZip = this.directorioZip;
             final String directorioFotos = this.direcotrioFotos + codiGrup + "/";
             final String nombreZip = "fotosGrup-" + codiGrup + ".zip";
+
+            File zipDirectory = new File(this.directorioZip);
+
+            if (!zipDirectory.exists()){
+                zipDirectory.mkdirs();
+            }
 
             // Directorio donde se encuentran las fotos
             File directorio = new File(directorioFotos);
