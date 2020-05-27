@@ -88,7 +88,19 @@ pipeline {
             slackSend channel: '#jenkins-builds',  color: 'good', message: "The pipeline ${currentBuild.fullDisplayName} completed successfully from ${env.COMMITTER_EMAIL}. You can check it on ${env.BUILD_URL}."
         }
         failure {
-            slackSend channel: '#jenkins-builds', color: '#ff0000', message: "The pipeline ${currentBuild.fullDisplayName} failed from ${env.COMMITTER_EMAIL}. You can check it on ${env.BUILD_URL}."
+            steps{
+                try{
+                    slackSend channel: '#jenkins-builds', color: '#ff0000', message: "The pipeline ${currentBuild.fullDisplayName} failed from ${env.COMMITTER_EMAIL}. You can check it on ${env.BUILD_URL}."
+                }
+                catch (e){
+                    catchError {
+                                        sh './gradlew compileJava --stacktrace'
+                                    }
+                                    slackSend channel: '#jenkins-builds', color: '#ff0000', message: "The pipeline ${currentBuild.fullDisplayName} failed from ${env.COMMITTER_EMAIL}. You can check it on ${env.BUILD_URL}."
+                }
+
+            }
+
         }
     }
 }
