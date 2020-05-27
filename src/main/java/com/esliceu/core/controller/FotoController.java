@@ -22,13 +22,7 @@ public class FotoController {
     @PostMapping("/private/uploadPhoto")
     public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @RequestParam("codiGrup") String codiGrup) {
 
-        System.out.println("Llega al controller");
-
-        System.out.println(codiGrup);
-
         String directorioFotos = "./src/main/resources/photos/" + codiGrup;
-
-        System.out.println(directorioFotos);
 
         try {
 
@@ -60,8 +54,6 @@ public class FotoController {
 
         Path path = Paths.get("./src/main/resources/photos/" + codiGroup + "/" + fileName);
 
-        System.out.println(path);
-
         if (!Files.exists(path)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -76,21 +68,14 @@ public class FotoController {
                 .body(resource);
     }
 
-    @GetMapping(value = "/private/generate-zip/{codiGroup}", produces = "application/zip")
-    public ResponseEntity zipGenerate(@PathVariable long codiGroup) {
+    @GetMapping(value = "/private/generate-zip/{codiGrup}", produces = "application/zip")
+    public ResponseEntity zipGenerate(@PathVariable long codiGrup) {
 
         try {
 
             final String directorioZip = "./src/main/resources/zip/";
-            final String directorioFotos = "./src/main/resources/photos/" + codiGroup;
-            final String nombreZip = "fotosGrup-" + codiGroup + ".zip";
-
-            // Eliminamos los posibles ZIP anteriores
-            File ZIPFiles = new File(directorioZip);
-
-        /*
-        Comprobar que si el zip ya existe sobreescriba con el zip nuevo
-         */
+            final String directorioFotos = "./src/main/resources/photos/" + codiGrup + "/";
+            final String nombreZip = "fotosGrup-" + codiGrup + ".zip";
 
             // Directorio donde se encuentran las fotos
             File directorio = new File(directorioFotos);
@@ -102,22 +87,20 @@ public class FotoController {
             ZipOutputStream zipOut = new ZipOutputStream(fileOutput);
 
             for (String nombre : nombreFotos) {
-                String codigoNombre = nombre.split("-")[0];
-                if (codigoNombre.equals(Long.toString(codiGroup))) {
-                    File fileToZip = new File(directorioFotos + nombre);
-                    FileInputStream fis = new FileInputStream(fileToZip);
-                    ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
-                    zipOut.putNextEntry(zipEntry);
 
-                    byte[] bytes = new byte[1024];
-                    int length;
+                File fileToZip = new File(directorioFotos + nombre);
+                FileInputStream fis = new FileInputStream(fileToZip);
+                ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
+                zipOut.putNextEntry(zipEntry);
 
-                    while ((length = fis.read(bytes)) >= 0) {
-                        zipOut.write(bytes, 0, length);
-                    }
+                byte[] bytes = new byte[1024];
+                int length;
 
-                    fis.close();
+                while ((length = fis.read(bytes)) >= 0) {
+                    zipOut.write(bytes, 0, length);
                 }
+
+                fis.close();
             }
 
             zipOut.close();
@@ -127,10 +110,7 @@ public class FotoController {
 
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-
         }
-
-
     }
 
 
@@ -161,6 +141,8 @@ public class FotoController {
             String codigoNombre = nombre.split("-")[0];
             if (codigoNombre.equals(Long.toString(codiGroup))) {
                 File fileToZip = new File(directorioFotos + nombre);
+
+
                 FileInputStream fis = new FileInputStream(fileToZip);
                 ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
                 zipOut.putNextEntry(zipEntry);
