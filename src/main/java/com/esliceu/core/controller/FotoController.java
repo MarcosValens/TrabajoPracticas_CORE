@@ -1,22 +1,15 @@
 package com.esliceu.core.controller;
 
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.zip.ZipEntry;
@@ -27,26 +20,50 @@ public class FotoController {
 
     @PostMapping("/private/uploadPhoto")
     public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @RequestParam("codiGrup") String codiGrup) {
+
+        System.out.println("Llega al controller");
+
         System.out.println(codiGrup);
+
+        String directorioFotos = "./src/main/resources/photos/" + codiGrup;
+
+        System.out.println(directorioFotos);
+
         try {
 
             byte[] bytes = file.getBytes();
-            Path path = Paths.get("./src/main/resources/photos/" + file.getOriginalFilename());
-            Files.write(path, bytes);
+
+            File directory = new File(directorioFotos);
+
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+
+            File fileFoto = new File(directorioFotos + "/" + file.getOriginalFilename());
+
+            FileOutputStream out = new FileOutputStream(fileFoto);
+            out.write(bytes);
+            out.close();
 
         } catch (Exception e) {
 
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 
     @GetMapping("/private/download/{fileName:.+}")
-    public ResponseEntity downloadFileName(@PathVariable String fileName) throws IOException {
+    public ResponseEntity downloadFileName(@PathVariable String fileName, @PathVariable long codiGroup) throws IOException {
 
-        Path path = Paths.get("./src/main/resources/photos/" + fileName);
+        Path path = Paths.get("./src/main/resources/photos/" + codiGroup + "/" + fileName);
+
+        System.out.println(path);
+
+        if (path == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         Resource resource;
 
@@ -58,30 +75,77 @@ public class FotoController {
                 .body(resource);
     }
 
-    @GetMapping(value = "/private/zip-download/{codiGroup}", produces = "application/zip")
+    @GetMapping(value = "/private/generate-zip/{codiGroup}", produces = "application/zip")
+    public ResponseEntity zipGenerate(@PathVariable long codiGroup) {
+
+        try {
+
+            final String directorioZip = "./src/main/resources/zip/";
+            final String directorioFotos = "./src/main/resources/photos/" + codiGroup;
+            final String nombreZip = "fotosGrup-" + codiGroup + ".zip";
+
+            // Eliminamos los posibles ZIP anteriores
+            File ZIPFiles = new File(directorioZip);
+
+        /*
+        Comprobar que si el zip ya existe sobreescriba con el zip nuevo
+         */
+
+            // Directorio donde se encuentran las fotos
+            File directorio = new File(directorioFotos);
+
+            // Obtenemos el nombre de todos los archivos del directorio
+            String[] nombreFotos = directorio.list();
+
+            FileOutputStream fileOutput = new FileOutputStream(directorioZip + nombreZip);
+            ZipOutputStream zipOut = new ZipOutputStream(fileOutput);
+
+            for (String nombre : nombreFotos) {
+                String codigoNombre = nombre.split("-")[0];
+                if (codigoNombre.equals(Long.toString(codiGroup))) {
+                    File fileToZip = new File(directorioFotos + nombre);
+                    FileInputStream fis = new FileInputStream(fileToZip);
+                    ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
+                    zipOut.putNextEntry(zipEntry);
+
+                    byte[] bytes = new byte[1024];
+                    int length;
+
+                    while ((length = fis.read(bytes)) >= 0) {
+                        zipOut.write(bytes, 0, length);
+                    }
+
+                    fis.close();
+                }
+            }
+
+            zipOut.close();
+            fileOutput.close();
+
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+
+
+    }
+
+
+    @GetMapping(value = "/private/download-zip/{codiGroup}", produces = "application/zip")
     public ResponseEntity zipDownload(@PathVariable long codiGroup) throws IOException {
 
         final String directorioZip = "./src/main/resources/zip/";
-        final String directorioFotos = "./src/main/resources/photos/";
+        final String directorioFotos = "./src/main/resources/photos/" + codiGroup;
         final String nombreZip = "fotosGrup-" + codiGroup + ".zip";
 
         // Eliminamos los posibles ZIP anteriores
         File ZIPFiles = new File(directorioZip);
 
-        String[] nameZip = ZIPFiles.list();
-
-        if(nameZip != null){
-            for (String name : nameZip) {
-
-                File file = new File(directorioZip + name);
-
-                if (file.delete()) {
-                    System.out.println("Se ha borrado el archivo");
-                } else {
-                    System.out.println("No se ha podido borrar");
-                }
-            }
-        }
+        /*
+        Comprobar que si el zip ya existe sobreescriba con el zip nuevo
+         */
 
         // Directorio donde se encuentran las fotos
         File directorio = new File(directorioFotos);
@@ -124,4 +188,5 @@ public class FotoController {
                 .body(resource);
 
     }
+
 }
