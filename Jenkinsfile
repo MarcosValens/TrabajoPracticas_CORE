@@ -5,7 +5,6 @@ pipeline {
             script: 'git --no-pager show -s --format=\'%ae\'',
             returnStdout: true
         ).trim()
-        FULL_ERROR = sh(curl -s -k -X GET $url/job/$job_name/lastBuild/consoleText 2> /dev/null | tac | grep Error | head -n 2 | tr -d '\n')
     }
     agent any
     stages {
@@ -89,7 +88,7 @@ pipeline {
             slackSend channel: '#jenkins-builds',  color: 'good', message: "The pipeline ${currentBuild.fullDisplayName} completed successfully from ${env.COMMITTER_EMAIL}. You can check it on ${env.BUILD_URL}."
         }
         failure {
-            slackSend channel: '#jenkins-builds', color: '#ff0000', message: "The pipeline ${currentBuild.fullDisplayName} failed from ${env.COMMITTER_EMAIL}. You can check it on ${env.FULL_ERROR}."
+            slackSend channel: '#jenkins-builds', color: '#ff0000', message: "The pipeline ${currentBuild.fullDisplayName} failed from ${env.COMMITTER_EMAIL}. You can check it on ${env.BUILD_URL}."
         }
     }
 }

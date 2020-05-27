@@ -10,10 +10,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class AppConfiguration implements WebMvcConfigurer {
 
-    /*@Bean
+    @Bean
     public TokenFilter getTokenFilter() {
         return new TokenFilter();
-    }*/
+    }
 
     @Bean
     public AdminFilter getAdminFilter() {
