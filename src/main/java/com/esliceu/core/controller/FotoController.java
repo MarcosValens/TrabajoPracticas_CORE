@@ -117,59 +117,22 @@ public class FotoController {
     @GetMapping(value = "/private/download-zip/{codiGroup}", produces = "application/zip")
     public ResponseEntity zipDownload(@PathVariable long codiGroup) throws IOException {
 
-        final String directorioZip = "./src/main/resources/zip/";
-        final String directorioFotos = "./src/main/resources/photos/" + codiGroup;
-        final String nombreZip = "fotosGrup-" + codiGroup + ".zip";
+        final String directorioZip = "./src/main/resources/zip/" + codiGroup;
 
         // Eliminamos los posibles ZIP anteriores
-        File ZIPFiles = new File(directorioZip);
+        Path path = Paths.get(directorioZip);
 
-        /*
-        Comprobar que si el zip ya existe sobreescriba con el zip nuevo
-         */
-
-        // Directorio donde se encuentran las fotos
-        File directorio = new File(directorioFotos);
-
-        // Obtenemos el nombre de todos los archivos del directorio
-        String[] nombreFotos = directorio.list();
-
-        FileOutputStream fileOutput = new FileOutputStream(directorioZip + nombreZip);
-        ZipOutputStream zipOut = new ZipOutputStream(fileOutput);
-
-        for (String nombre : nombreFotos) {
-            String codigoNombre = nombre.split("-")[0];
-            if (codigoNombre.equals(Long.toString(codiGroup))) {
-                File fileToZip = new File(directorioFotos + nombre);
-
-
-                FileInputStream fis = new FileInputStream(fileToZip);
-                ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
-                zipOut.putNextEntry(zipEntry);
-
-                byte[] bytes = new byte[1024];
-                int length;
-
-                while ((length = fis.read(bytes)) >= 0) {
-                    zipOut.write(bytes, 0, length);
-                }
-
-                fis.close();
-            }
+        if (!Files.exists(path)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        zipOut.close();
-        fileOutput.close();
-
-        Path path = Paths.get(directorioZip + nombreZip);
         Resource resource;
+
         resource = new UrlResource(path.toUri());
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
-
     }
-
 }
