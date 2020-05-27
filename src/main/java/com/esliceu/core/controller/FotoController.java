@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.zip.ZipEntry;
@@ -54,14 +55,14 @@ public class FotoController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/private/download/{fileName:.+}")
+    @GetMapping("/private/download/{fileName:.+}/{codiGroup}")
     public ResponseEntity downloadFileName(@PathVariable String fileName, @PathVariable long codiGroup) throws IOException {
 
         Path path = Paths.get("./src/main/resources/photos/" + codiGroup + "/" + fileName);
 
         System.out.println(path);
 
-        if (path == null) {
+        if (!Files.exists(path)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
