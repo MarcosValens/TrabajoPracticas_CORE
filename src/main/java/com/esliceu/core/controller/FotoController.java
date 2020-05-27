@@ -1,7 +1,5 @@
 package com.esliceu.core.controller;
 
-import org.omg.CORBA.Environment;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -23,10 +21,10 @@ import java.util.zip.ZipOutputStream;
 public class FotoController {
 
     @Value("${UPLOAD.DIRECTORY.ZIP}")
-    String directorioZip;
+    private String directorioZip;
 
     @Value("${UPLOAD.DIRECTORY.FOTOS}")
-    String direcotrioFotos;
+    private String direcotrioFotos;
 
     @PostMapping("/private/uploadPhoto")
     public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @RequestParam("codiGrup") String codiGrup) {
@@ -142,8 +140,8 @@ public class FotoController {
                 .body(resource);
     }
 
-    @GetMapping(value = "/private/list-zip", produces = "application/zip")
-    public ResponseEntity listZipDownload() {
+    @GetMapping(value = "/private/list-zip")
+    public ResponseEntity<String[]> listZipDownload() {
 
         final String directorioZip = this.directorioZip;
         File file = new File(directorioZip);
@@ -151,7 +149,7 @@ public class FotoController {
         String[] zipFiles = file.list();
 
         if (zipFiles.length == 0) {
-            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(zipFiles, HttpStatus.OK);

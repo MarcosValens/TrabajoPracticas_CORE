@@ -22,9 +22,6 @@ public class TokenFilter implements HandlerInterceptor {
          * */
         if (request.getMethod().equals("OPTIONS")) return true;
 
-        System.out.println("Llega al filter");
-
-
         /*
          * Si no es un OPTIONS comprueba si la petición contiene el Token
          * y comprueba si es válido o si ha expirado.
@@ -36,8 +33,6 @@ public class TokenFilter implements HandlerInterceptor {
             String validate = tokenManager.validateToken(token);
 
             if (validate.equals("ERROR")) {
-
-                System.out.println("error del token");
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token no valido");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return false;
@@ -47,7 +42,6 @@ public class TokenFilter implements HandlerInterceptor {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return false;
             }
-
 
             response.setStatus(HttpServletResponse.SC_OK);
             return true;
