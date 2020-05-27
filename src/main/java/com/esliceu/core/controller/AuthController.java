@@ -7,11 +7,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
@@ -148,5 +152,27 @@ public class AuthController {
         usuariAppManager.create(usuariApp);
         response.setStatus(HttpServletResponse.SC_OK);
         return null;
+    }
+
+    @PutMapping("/private/auth/password")
+    public ResponseEntity<String> cambiarPassword(@RequestBody String json, HttpServletRequest request){
+        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+        String oldpasswd = jsonObject.get("oldpasswd").getAsString();
+        String newpasswd = jsonObject.get("newpasswd").getAsString();
+        String newpasswd2 = jsonObject.get("newpasswd2").getAsString();
+
+        String token = request.getHeader("Authorization");
+        token = token.replace("Bearer ", "");
+        UsuariApp usuariApp = tokenManager.getUsuariFromToken(token);
+
+        if (usuariAppManager.validarUsuari(usuariApp.getEmail(), oldpasswd)){
+            if (newpasswd.equals(newpasswd2)){
+                usuariApp.setContrasenya(BCrypt.hashpw(newpasswd, BCrypt.gensalt()));
+                usuariAppManager.create(usuariApp);
+                return new ResponseEntity<>("Contrasenya canviada correctament.", HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Les noves contrasenyes no coincideixen.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("La contrasenya antiga no es correcte.", HttpStatus.BAD_REQUEST);
     }
 }
