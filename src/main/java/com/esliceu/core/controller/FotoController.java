@@ -1,6 +1,7 @@
 package com.esliceu.core.controller;
 
 import com.esliceu.core.manager.FileManager;
+import com.sun.xml.bind.v2.TODO;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -99,6 +100,7 @@ public class FotoController {
     @GetMapping(value = "/private/download-zip/{nombreZip}", produces = "application/zip")
     public ResponseEntity zipDownload(@PathVariable String nombreZip) throws IOException {
 
+        // Este endpoint funciona al hacer una petición directa con un href
         final String directorioZip = this.directorioZip + nombreZip;
 
         Path path = Paths.get(directorioZip);
