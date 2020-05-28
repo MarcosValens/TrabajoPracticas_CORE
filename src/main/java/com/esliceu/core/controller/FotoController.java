@@ -1,5 +1,7 @@
 package com.esliceu.core.controller;
 
+import com.esliceu.core.manager.FileManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -10,12 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 @RestController
 public class FotoController {
@@ -26,18 +28,15 @@ public class FotoController {
     @Value("${UPLOAD.DIRECTORY.FOTOS}")
     private String direcotrioFotos;
 
+    @Autowired
+    private FileManager fileManager;
+
     @PostMapping("/private/uploadPhoto")
     public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @RequestParam("codiGrup") String codiGrup) {
 
         String directorioFotosGrup = this.direcotrioFotos + codiGrup;
 
         try {
-
-            /*File photosDirectory = new File(this.direcotrioFotos);
-
-            if (!photosDirectory.exists()){
-                photosDirectory.mkdir();
-            }*/
 
             byte[] bytes = file.getBytes();
             File directory = new File(directorioFotosGrup);
@@ -47,13 +46,17 @@ public class FotoController {
             }
 
             File fileFoto = new File(directorioFotosGrup + "/" + file.getOriginalFilename());
-
             FileOutputStream out = new FileOutputStream(fileFoto);
             out.write(bytes);
             out.close();
 
-        } catch (Exception e) {
+            BufferedImage image = ImageIO.read(fileFoto);
+            BufferedImage resized = fileManager.resize(image, 80, 80);
 
+            File output = new File(directorioFotosGrup + "/" + file.getOriginalFilename());
+            ImageIO.write(resized, "png", output);
+
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -61,17 +64,16 @@ public class FotoController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/private/download/{fileName:.+}/{codiGroup}")
-    public ResponseEntity downloadFileName(@PathVariable String fileName, @PathVariable long codiGroup) throws IOException {
+    @GetMapping("/private/download/{numeroExpedient}/{codiGroup}")
+    public ResponseEntity downloadFileName(@PathVariable String numeroExpedient, @PathVariable long codiGroup) throws IOException {
 
-        Path path = Paths.get(this.direcotrioFotos + codiGroup + "/" + fileName);
+        Path path = Paths.get(this.direcotrioFotos + codiGroup + "/" + numeroExpedient + ".png");
 
         if (!Files.exists(path)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         Resource resource;
-
         resource = new UrlResource(path.toUri());
 
         return ResponseEntity.ok()
@@ -89,40 +91,7 @@ public class FotoController {
             final String directorioFotos = this.direcotrioFotos + codiGrup + "/";
             final String nombreZip = "fotosGrup-" + codiGrup + ".zip";
 
-            File zipDirectory = new File(this.directorioZip);
-
-            if (!zipDirectory.exists()){
-                zipDirectory.mkdirs();
-            }
-
-            // Directorio donde se encuentran las fotos
-            File directorio = new File(directorioFotos);
-
-            // Obtenemos el nombre de todos los archivos del directorio
-            String[] nombreFotos = directorio.list();
-
-            FileOutputStream fileOutput = new FileOutputStream(directorioZip + nombreZip);
-            ZipOutputStream zipOut = new ZipOutputStream(fileOutput);
-
-            for (String nombre : nombreFotos) {
-
-                File fileToZip = new File(directorioFotos + nombre);
-                FileInputStream fis = new FileInputStream(fileToZip);
-                ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
-                zipOut.putNextEntry(zipEntry);
-
-                byte[] bytes = new byte[1024];
-                int length;
-
-                while ((length = fis.read(bytes)) >= 0) {
-                    zipOut.write(bytes, 0, length);
-                }
-
-                fis.close();
-            }
-
-            zipOut.close();
-            fileOutput.close();
+            fileManager.generateZip(directorioZip, directorioFotos, nombreZip);
 
             return new ResponseEntity<>(HttpStatus.OK);
 
@@ -143,7 +112,6 @@ public class FotoController {
         }
 
         Resource resource;
-
         resource = new UrlResource(path.toUri());
 
         return ResponseEntity.ok()
