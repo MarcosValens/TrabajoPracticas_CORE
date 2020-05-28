@@ -60,4 +60,28 @@ public class MenjadorController {
         return map;
     }
 
+    @GetMapping("/private/comedor/comun/ultima/semana")
+    public Map<String, Object> getCommonSelectionLastWeek() {
+        List<Alumne> alumnes = new LinkedList<>();
+        List<Professor> professors = new LinkedList<>();
+
+        List<UsuariAppAlumne> alumnosComedor = this.usuariAppAlumneManager.findByDia(LocalDate.now().minusDays(7));
+
+        for (UsuariAppAlumne usuari : alumnosComedor) {
+            alumnes.add(usuari.getAlumne());
+        }
+
+        List<UsuariAppProfessor> professorsComedor = this.usuariAppProfessorManager.findByDia(LocalDate.now().minusDays(7));
+
+        for (UsuariAppProfessor usuari : professorsComedor) {
+            professors.add(usuari.getProfessor());
+        }
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("alumnes", alumnes);
+        map.put("professors", professors);
+
+        return map;
+    }
+
 }
