@@ -2,7 +2,10 @@ package com.esliceu.core.controller;
 
 import com.esliceu.core.entity.*;
 import com.esliceu.core.manager.*;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -93,7 +96,7 @@ public class UsuariosController {
         List<UsuariAppAlumne> alumnes = usuariAppAlumneManager.findByDia(dia);
         List<UsuariAppProfessor> professors = usuariAppProfessorManager.findByDia(dia);
 
-        Map<String, Object> map = new HashMap();
+        Map<String, Object> map = new HashMap<>();
         map.put("alumnes", alumnes);
         map.put("professors", professors);
 
