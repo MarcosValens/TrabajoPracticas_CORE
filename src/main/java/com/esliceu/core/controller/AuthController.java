@@ -1,6 +1,7 @@
 package com.esliceu.core.controller;
 
 import com.esliceu.core.entity.UsuariApp;
+import com.esliceu.core.manager.MailingManager;
 import com.esliceu.core.manager.TokenManager;
 import com.esliceu.core.manager.UsuariAppManager;
 import com.google.gson.Gson;
@@ -30,6 +31,9 @@ public class AuthController {
 
     @Autowired
     private UsuariAppManager usuariAppManager;
+
+    @Autowired
+    private MailingManager mailingManager;
 
     @PostMapping("/auth/login")
     public Map<String, String> login(@RequestBody String json, HttpServletResponse response) {
@@ -175,4 +179,44 @@ public class AuthController {
         }
         return new ResponseEntity<>("La contrasenya antiga no es correcte.", HttpStatus.BAD_REQUEST);
     }
+
+    @PostMapping("/auth/recovery")
+    public ResponseEntity<String> revocerPassword(@RequestBody String json, HttpServletRequest request){
+        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+        String email = jsonObject.get("email").getAsString();
+
+
+        /*
+        * Validamos que el correo exista
+        *
+        * No posam que el correo no exista para no dar info de nuestra bbdd
+        * */
+        /*
+        * TODO QUITAR ESTOS DOS COMMENTS
+        * */
+        //if (usuariAppManager.findByEmail(email)==null) return new ResponseEntity<>("MEEEC ERROR", HttpStatus.BAD_REQUEST);
+
+
+        /*
+        * Ya que tenemos mas de un frontend
+        * recogemos la url de que frontend ha hecho la peticion
+        * */
+
+        final String FRONT_URL = request.getHeader("Origin");
+        UsuariApp user = new UsuariApp();
+        user.setEmail(email);
+        final String token = this.tokenManager.generateGenericToken(user,(long)3600*1000);
+        final String RECOVERY_RUL = FRONT_URL+"?recovery_token="+token+"#/login/recovery ";
+
+        try {
+            this.mailingManager.sendEmailRecoveryPasswd(email, RECOVERY_RUL);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("Ha habido un error a la hora de enviar el correo electronico", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
+
 }
