@@ -100,7 +100,9 @@ public class FotoController {
     @GetMapping(value = "/private/download-zip/{nombreZip}", produces = "application/zip")
     public ResponseEntity zipDownload(@PathVariable String nombreZip) throws IOException {
 
-        // Este endpoint funciona al hacer una petición directa con un href
+        // TODO este endpoint funcionaba sin los tokens hay que hacer
+        // ciertas modificaciones para que funcione con los tokens
+        // ya que el resource solo funcionaría con un href y no puede llevar tokens.
         final String directorioZip = this.directorioZip + nombreZip;
 
         Path path = Paths.get(directorioZip);
