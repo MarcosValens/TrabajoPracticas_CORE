@@ -10,6 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,11 +37,7 @@ public class FotoController {
 
         try {
 
-            /*File photosDirectory = new File(this.direcotrioFotos);
-
-            if (!photosDirectory.exists()){
-                photosDirectory.mkdir();
-            }*/
+            System.out.println("Entra en el controller");
 
             byte[] bytes = file.getBytes();
             File directory = new File(directorioFotosGrup);
@@ -46,11 +46,19 @@ public class FotoController {
                 directory.mkdirs();
             }
 
+
             File fileFoto = new File(directorioFotosGrup + "/" + file.getOriginalFilename());
+            BufferedImage image = ImageIO.read(fileFoto);
 
             FileOutputStream out = new FileOutputStream(fileFoto);
             out.write(bytes);
             out.close();
+
+            BufferedImage resized = resize(image, 80, 80);
+
+            File output = new File("./src/main/resources/nuevaaa4.png");
+            ImageIO.write(resized, "png", output);
+
 
         } catch (Exception e) {
 
@@ -61,10 +69,19 @@ public class FotoController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/private/download/{fileName:.+}/{codiGroup}")
-    public ResponseEntity downloadFileName(@PathVariable String fileName, @PathVariable long codiGroup) throws IOException {
+    private static BufferedImage resize(BufferedImage img, int height, int width) {
+        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = resized.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+        return resized;
+    }
 
-        Path path = Paths.get(this.direcotrioFotos + codiGroup + "/" + fileName);
+    @GetMapping("/private/download/{numeroExpedient}/{codiGroup}")
+    public ResponseEntity downloadFileName(@PathVariable String numeroExpedient, @PathVariable long codiGroup) throws IOException {
+
+        Path path = Paths.get(this.direcotrioFotos + codiGroup + "/" + numeroExpedient + ".png");
 
         if (!Files.exists(path)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
