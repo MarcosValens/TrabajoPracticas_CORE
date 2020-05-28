@@ -46,17 +46,15 @@ public class FotoController {
                 directory.mkdirs();
             }
 
-
             File fileFoto = new File(directorioFotosGrup + "/" + file.getOriginalFilename());
-            BufferedImage image = ImageIO.read(fileFoto);
-
             FileOutputStream out = new FileOutputStream(fileFoto);
             out.write(bytes);
             out.close();
 
+            BufferedImage image = ImageIO.read(fileFoto);
             BufferedImage resized = resize(image, 80, 80);
 
-            File output = new File("./src/main/resources/nuevaaa4.png");
+            File output = new File(directorioFotosGrup + "/" + file.getOriginalFilename());
             ImageIO.write(resized, "png", output);
 
 
