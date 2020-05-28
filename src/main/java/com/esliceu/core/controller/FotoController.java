@@ -1,6 +1,7 @@
 package com.esliceu.core.controller;
 
 import com.esliceu.core.manager.FileManager;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -18,6 +19,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 
 @RestController
 public class FotoController {
@@ -64,22 +66,16 @@ public class FotoController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/private/download/{numeroExpedient}/{codiGroup}")
-    public ResponseEntity downloadFileName(@PathVariable String numeroExpedient, @PathVariable long codiGroup) throws IOException {
+    @GetMapping(value = "/private/download/{numeroExpedient}/{codiGrup}", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<String> downloadFileName(@PathVariable String numeroExpedient, @PathVariable String codiGrup) throws IOException {
 
-        Path path = Paths.get(this.direcotrioFotos + codiGroup + "/" + numeroExpedient + ".png");
+        String directoriFotosGrup = this.direcotrioFotos + codiGrup + "/" + numeroExpedient + ".png";
 
-        if (!Files.exists(path)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        InputStream iSteamReader = new FileInputStream(directoriFotosGrup);
+        byte[] imageBytes = IOUtils.toByteArray(iSteamReader);
+        String base64 = Base64.getEncoder().encodeToString(imageBytes);
 
-        Resource resource;
-        resource = new UrlResource(path.toUri());
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
+        return ResponseEntity.ok().body(base64);
     }
 
     @GetMapping(value = "/private/generate-zip/{codiGrup}", produces = "application/zip")
