@@ -1,5 +1,7 @@
 package com.esliceu.core.controller;
 
+import com.esliceu.core.manager.FileManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -30,14 +32,15 @@ public class FotoController {
     @Value("${UPLOAD.DIRECTORY.FOTOS}")
     private String direcotrioFotos;
 
+    @Autowired
+    private FileManager fileManager;
+
     @PostMapping("/private/uploadPhoto")
     public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @RequestParam("codiGrup") String codiGrup) {
 
         String directorioFotosGrup = this.direcotrioFotos + codiGrup;
 
         try {
-
-            System.out.println("Entra en el controller");
 
             byte[] bytes = file.getBytes();
             File directory = new File(directorioFotosGrup);
@@ -52,28 +55,17 @@ public class FotoController {
             out.close();
 
             BufferedImage image = ImageIO.read(fileFoto);
-            BufferedImage resized = resize(image, 80, 80);
+            BufferedImage resized = fileManager.resize(image, 80, 80);
 
             File output = new File(directorioFotosGrup + "/" + file.getOriginalFilename());
             ImageIO.write(resized, "png", output);
 
-
         } catch (Exception e) {
-
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    private static BufferedImage resize(BufferedImage img, int height, int width) {
-        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = resized.createGraphics();
-        g2d.drawImage(tmp, 0, 0, null);
-        g2d.dispose();
-        return resized;
     }
 
     @GetMapping("/private/download/{numeroExpedient}/{codiGroup}")
@@ -86,7 +78,6 @@ public class FotoController {
         }
 
         Resource resource;
-
         resource = new UrlResource(path.toUri());
 
         return ResponseEntity.ok()
@@ -104,40 +95,7 @@ public class FotoController {
             final String directorioFotos = this.direcotrioFotos + codiGrup + "/";
             final String nombreZip = "fotosGrup-" + codiGrup + ".zip";
 
-            File zipDirectory = new File(this.directorioZip);
-
-            if (!zipDirectory.exists()){
-                zipDirectory.mkdirs();
-            }
-
-            // Directorio donde se encuentran las fotos
-            File directorio = new File(directorioFotos);
-
-            // Obtenemos el nombre de todos los archivos del directorio
-            String[] nombreFotos = directorio.list();
-
-            FileOutputStream fileOutput = new FileOutputStream(directorioZip + nombreZip);
-            ZipOutputStream zipOut = new ZipOutputStream(fileOutput);
-
-            for (String nombre : nombreFotos) {
-
-                File fileToZip = new File(directorioFotos + nombre);
-                FileInputStream fis = new FileInputStream(fileToZip);
-                ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
-                zipOut.putNextEntry(zipEntry);
-
-                byte[] bytes = new byte[1024];
-                int length;
-
-                while ((length = fis.read(bytes)) >= 0) {
-                    zipOut.write(bytes, 0, length);
-                }
-
-                fis.close();
-            }
-
-            zipOut.close();
-            fileOutput.close();
+            fileManager.generateZip(directorioZip, directorioFotos, nombreZip);
 
             return new ResponseEntity<>(HttpStatus.OK);
 
@@ -158,7 +116,6 @@ public class FotoController {
         }
 
         Resource resource;
-
         resource = new UrlResource(path.toUri());
 
         return ResponseEntity.ok()
