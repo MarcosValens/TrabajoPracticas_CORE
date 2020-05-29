@@ -240,7 +240,7 @@ public class AuthController {
         if (user == null) return new ResponseEntity<>("Token no correcte", HttpStatus.UNAUTHORIZED);
 
         user.setContrasenya(BCrypt.hashpw(newPasswd, BCrypt.gensalt()));
-
+        usuariAppManager.create(user);
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
