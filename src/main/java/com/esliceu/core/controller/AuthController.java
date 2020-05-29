@@ -185,16 +185,13 @@ public class AuthController {
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
         String email = jsonObject.get("email").getAsString();
 
-
         /*
         * Validamos que el correo exista
         *
         * No posam que el correo no exista para no dar info de nuestra bbdd
         * */
-        /*
-        * TODO QUITAR ESTOS DOS COMMENTS
-        * */
-        //if (usuariAppManager.findByEmail(email)==null) return new ResponseEntity<>("MEEEC ERROR", HttpStatus.BAD_REQUEST);
+        if (usuariAppManager.findByEmail(email) == null)
+            return new ResponseEntity<>("MEEEC ERROR", HttpStatus.BAD_REQUEST);
 
 
         /*
@@ -211,12 +208,12 @@ public class AuthController {
         /*
          * Esta es la URL si usamos el modo HISTORY en el front-end
          * */
-        //final String RECOVERY_RUL = FRONT_URL+"/login/recovery"+"?recovery_token="+token;
+        //final String RECOVERY_RUL = FRONT_URL+"/change/password?recovery_token="+token;
 
         /*
          * Esta es la URL si usamos el modo HASH en el front-end
          * */
-        final String RECOVERY_RUL = FRONT_URL + "?recovery_token=" + token + "#/login/recovery";
+        final String RECOVERY_RUL = FRONT_URL + "?recovery_token=" + token + "#/change/password";
 
         try {
             this.mailingManager.sendEmailRecoveryPasswd(email, RECOVERY_RUL);
@@ -228,5 +225,23 @@ public class AuthController {
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
+    @PutMapping("/auth/recovery")
+    public ResponseEntity<String> revocerPassword(@RequestBody String json) {
+        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+
+        String newPasswd = jsonObject.get("newPasswd").getAsString();
+        String newPasswd2 = jsonObject.get("newPasswd2").getAsString();
+        String recoveryToken = jsonObject.get("recoveryToken").getAsString();
+
+        if (!newPasswd.equals(newPasswd2))
+            return new ResponseEntity<>("Las contrasenyas no coincideixen", HttpStatus.BAD_REQUEST);
+
+        UsuariApp user = tokenManager.getUsuariFromToken(recoveryToken);
+        if (user == null) return new ResponseEntity<>("Token no correcte", HttpStatus.UNAUTHORIZED);
+
+        user.setContrasenya(BCrypt.hashpw(newPasswd, BCrypt.gensalt()));
+
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
 
 }
