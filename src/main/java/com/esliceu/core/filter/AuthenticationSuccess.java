@@ -68,10 +68,8 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
 
         // EN NUESTRO CASO, YA SEA PROD O DEV TENEMOS EL MODO HASH (ABAJO)
 
-        final String FRONT_URL = request.getHeader("Origin");
-
         // ESTA LINEA DE AQUI FUNCIONA SI ESTA EL ROUTER EN MODO HASH DE QUASAR
-        String redirectionURL = FRONT_URL + "?access_token=" + acces_token
+        String redirectionURL = environment.getProperty("FRONTEND_URL") + "?access_token=" + acces_token
                 + "&refresh_token=" + refresh_token
                 + "&isAdmin=" + admin + "&isCuiner=" + cuiner + "&isMonitor=" + monitor +
                 "#/login/oauth/callback";
