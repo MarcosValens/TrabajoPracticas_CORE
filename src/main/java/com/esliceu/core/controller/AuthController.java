@@ -198,19 +198,29 @@ public class AuthController {
 
 
         /*
-        * Ya que tenemos mas de un frontend
-        * recogemos la url de que frontend ha hecho la peticion
-        * */
+         * Ya que tenemos mas de un frontend
+         * recogemos la url de que frontend ha hecho la peticion
+         * */
 
         final String FRONT_URL = request.getHeader("Origin");
         UsuariApp user = new UsuariApp();
         user.setEmail(email);
-        final String token = this.tokenManager.generateGenericToken(user,(long)3600*1000);
-        final String RECOVERY_RUL = FRONT_URL+"?recovery_token="+token+"#/login/recovery ";
+        final String token = this.tokenManager.generateGenericToken(user, (long) 3600 * 1000);
+
+
+        /*
+         * Esta es la URL si usamos el modo HISTORY en el front-end
+         * */
+        //final String RECOVERY_RUL = FRONT_URL+"/login/recovery"+"?recovery_token="+token;
+
+        /*
+         * Esta es la URL si usamos el modo HASH en el front-end
+         * */
+        final String RECOVERY_RUL = FRONT_URL + "?recovery_token=" + token + "#/login/recovery";
 
         try {
             this.mailingManager.sendEmailRecoveryPasswd(email, RECOVERY_RUL);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("Ha habido un error a la hora de enviar el correo electronico", HttpStatus.BAD_REQUEST);
         }
