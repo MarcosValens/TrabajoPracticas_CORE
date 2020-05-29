@@ -48,6 +48,17 @@ public class TokenManager implements Serializable {
                 .compact();
     }
 
+    public String generateGenericToken(UsuariApp usuariApp, Long TOKEN_EXPIRE) {
+
+        return Jwts.builder()
+                .setClaims(Jwts.claims().setSubject(usuariApp.getEmail()))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setIssuer("https://esliceu.com")
+                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRE))
+                .signWith(SignatureAlgorithm.HS256, Objects.requireNonNull(environment.getProperty("SIGNING_KEY_TOKEN")).getBytes())
+                .compact();
+    }
+
     public String validateToken(String token) {
         try {
             Jwts.parser()

@@ -1,6 +1,7 @@
 package com.esliceu.core.controller;
 
 import com.esliceu.core.entity.UsuariApp;
+import com.esliceu.core.manager.MailingManager;
 import com.esliceu.core.manager.TokenManager;
 import com.esliceu.core.manager.UsuariAppManager;
 import com.google.gson.Gson;
@@ -30,6 +31,9 @@ public class AuthController {
 
     @Autowired
     private UsuariAppManager usuariAppManager;
+
+    @Autowired
+    private MailingManager mailingManager;
 
     @PostMapping("/auth/login")
     public Map<String, String> login(@RequestBody String json, HttpServletResponse response) {
@@ -175,4 +179,69 @@ public class AuthController {
         }
         return new ResponseEntity<>("La contrasenya antiga no es correcte.", HttpStatus.BAD_REQUEST);
     }
+
+    @PostMapping("/auth/recovery")
+    public ResponseEntity<String> revocerPassword(@RequestBody String json, HttpServletRequest request){
+        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+        String email = jsonObject.get("email").getAsString();
+
+        /*
+        * Validamos que el correo exista
+        *
+        * No posam que el correo no exista para no dar info de nuestra bbdd
+        * */
+        if (usuariAppManager.findByEmail(email) == null)
+            return new ResponseEntity<>("MEEEC ERROR", HttpStatus.BAD_REQUEST);
+
+
+        /*
+         * Ya que tenemos mas de un frontend
+         * recogemos la url de que frontend ha hecho la peticion
+         * */
+
+        final String FRONT_URL = request.getHeader("Origin");
+        UsuariApp user = new UsuariApp();
+        user.setEmail(email);
+        final String token = this.tokenManager.generateGenericToken(user, (long) 3600 * 1000);
+
+
+        /*
+         * Esta es la URL si usamos el modo HISTORY en el front-end
+         * */
+        //final String RECOVERY_RUL = FRONT_URL+"/change/password?recovery_token="+token;
+
+        /*
+         * Esta es la URL si usamos el modo HASH en el front-end
+         * */
+        final String RECOVERY_RUL = FRONT_URL + "?recovery_token=" + token + "#/change/password";
+
+        try {
+            this.mailingManager.sendEmailRecoveryPasswd(email, RECOVERY_RUL);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Ha habido un error a la hora de enviar el correo electronico", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
+    @PutMapping("/auth/recovery")
+    public ResponseEntity<String> revocerPassword(@RequestBody String json) {
+        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+
+        String newPasswd = jsonObject.get("newPasswd").getAsString();
+        String newPasswd2 = jsonObject.get("newPasswd2").getAsString();
+        String recoveryToken = jsonObject.get("recoveryToken").getAsString();
+
+        if (!newPasswd.equals(newPasswd2))
+            return new ResponseEntity<>("Las contrasenyas no coincideixen", HttpStatus.BAD_REQUEST);
+
+        UsuariApp user = tokenManager.getUsuariFromToken(recoveryToken);
+        if (user == null) return new ResponseEntity<>("Token no correcte", HttpStatus.UNAUTHORIZED);
+
+        user.setContrasenya(BCrypt.hashpw(newPasswd, BCrypt.gensalt()));
+        usuariAppManager.create(user);
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
 }
