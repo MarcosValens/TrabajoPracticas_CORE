@@ -1,6 +1,7 @@
 package com.esliceu.core.controller;
 
 import com.esliceu.core.manager.FileManager;
+import com.esliceu.core.utils.HashService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +33,10 @@ public class FotoController {
 
     @Autowired
     private FileManager fileManager;
+
+    @Autowired
+    private HashService hashService;
+
 
     @PostMapping("/private/uploadPhoto")
     public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @RequestParam("codiGrup") String codiGrup) {
@@ -96,27 +101,36 @@ public class FotoController {
         }
     }
 
-    @GetMapping(value = "/private/download-zip/{nombreZip}", produces = "application/zip")
-    public ResponseEntity zipDownload(@PathVariable String nombreZip) throws IOException {
+    @GetMapping(value="/private/download/code/{codiGrup}")
+    public ResponseEntity<String> getCode(@PathVariable String codiGrup) {
+        String hash = hashService.getHash(codiGrup);
+        return new ResponseEntity<>(hash, HttpStatus.OK);
+    }
 
-        // TODO este endpoint funcionaba sin los tokens hay que hacer
-        // ciertas modificaciones para que funcione con los tokens
-        // ya que el resource solo funcionaría con un href y no puede llevar tokens.
-        final String directorioZip = this.directorioZip + nombreZip;
+    @GetMapping(value = "/download-zip/{hash}", produces = "application/zip")
+    public ResponseEntity zipDownload(@PathVariable String hash) throws IOException {
+        String grup = hash.split("_")[1];
+        if(this.hashService.checkHash(hash)){
+            this.hashService.invalidateHash(hash);
+            final String directorioZip = this.directorioZip + "fotosGrup-" + grup + ".zip";
+            System.out.println(directorioZip);
+            Path path = Paths.get(directorioZip);
 
-        Path path = Paths.get(directorioZip);
+            if (!Files.exists(path)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
 
-        if (!Files.exists(path)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            Resource resource;
+            resource = new UrlResource(path.toUri());
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType("application/octet-stream"))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
         }
-
-        Resource resource;
-        resource = new UrlResource(path.toUri());
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
+        else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @GetMapping(value = "/private/list-zip")
