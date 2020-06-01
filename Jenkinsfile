@@ -1,4 +1,4 @@
-
+def dockerimage = null
 pipeline {
     environment {
         COMMITTER_EMAIL = sh (
@@ -53,10 +53,8 @@ pipeline {
                     sh  '''
                     echo "Contruimos la imagen docker"
                     '''
-                    docker.withRegistry('registry-back.esliceu.com', 'registry_jenkins') {
-                    def customImage = docker.build("image-core")
-                    customImage.push()
-                 }
+                    dockerimage = docker.build("imagen-core")
+                    
                 cleanWs()
                 }
                 
@@ -71,7 +69,13 @@ pipeline {
                 sh  '''
                 echo "Subimos la imagen docker creada"
                 '''
-                cleanWs()
+                script {
+                    docker.withRegistry('https://registry-back.esliceu.com', 'registry_jenkins') {
+                        dockerimage.push()
+                    }
+                    cleanWs()
+                }
+                
             }
         }
 
