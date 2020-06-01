@@ -53,7 +53,7 @@ pipeline {
                     sh  '''
                     echo "Contruimos la imagen docker"
                     '''
-                    dockerimage = docker.build("image-core")
+                    dockerimage = docker.build("imagen-core")
                     
                 cleanWs()
                 }
