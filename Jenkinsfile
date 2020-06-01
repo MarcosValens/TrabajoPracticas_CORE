@@ -48,11 +48,18 @@ pipeline {
                 branch 'produccion'
             }
             steps {
-                sh  '''
+                
+                script {
+                    sh  '''
                     echo "Contruimos la imagen docker"
-                    docker build -t imagen-core .
                     '''
+                    docker.withRegistry('registry-back.esliceu.com', 'registry_jenkins') {
+                    def customImage = docker.build("image-core")
+                    customImage.push()
+                 }
                 cleanWs()
+                }
+                
             }
         }
 
@@ -63,8 +70,6 @@ pipeline {
             steps  {
                 sh  '''
                 echo "Subimos la imagen docker creada"
-                docker tag  imagen-core  registry-back.esliceu.com/imagen-core
-                docker push registry-back.esliceu.com/imagen-core
                 '''
                 cleanWs()
             }
