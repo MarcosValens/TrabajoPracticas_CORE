@@ -52,6 +52,10 @@ pipeline {
                     echo "Contruimos la imagen docker"
                     docker build -t imagen-core .
                     '''
+                docker.withRegistry('registry-back.esliceu.com', 'registry_jenkins') {
+                    def customImage = docker.build("image-core")
+                    customImage.push()
+                }
                 cleanWs()
             }
         }
