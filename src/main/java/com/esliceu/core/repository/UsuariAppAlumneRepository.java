@@ -11,4 +11,6 @@ public interface UsuariAppAlumneRepository extends CrudRepository<UsuariAppAlumn
     List<UsuariAppAlumne> findByAlumne_Codi(String codiAlumne);
 
     List<UsuariAppAlumne> findByData(LocalDate dia);
+
+    List<UsuariAppAlumne> findByDataBetween(LocalDate dataInici, LocalDate dataFi);
 }

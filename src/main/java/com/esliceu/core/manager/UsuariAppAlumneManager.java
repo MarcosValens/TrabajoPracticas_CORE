@@ -29,4 +29,8 @@ public class UsuariAppAlumneManager {
     public List<UsuariAppAlumne> findByDia(LocalDate dia) {
         return usuariAppAlumneRepository.findByData(dia);
     }
+
+    public List<UsuariAppAlumne> findByDates(LocalDate dataInici, LocalDate dataFi){
+        return usuariAppAlumneRepository.findByDataBetween(dataInici, dataFi);
+    }
 }

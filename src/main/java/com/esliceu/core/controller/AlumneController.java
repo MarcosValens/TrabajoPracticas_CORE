@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,6 @@ public class AlumneController {
 
     @Autowired
     EntityManager em;
-
 
     @GetMapping("/private/alumnos")
     public List<Alumne> getAllAlumnos() {
@@ -93,5 +93,13 @@ public class AlumneController {
             alumne.setExpedient(null);
         }
         return alumnes;
+    }
+
+    //La fecha de finalización no está incluída. Si se busca entre las fechas 2020-06-02 y 2020-06-03 los del día 03 no van a salir
+    @GetMapping("/private/getAlumnesFrom/{dataInici}/from/{dataFi}")
+    public ResponseEntity<List<UsuariAppAlumne>> getAlumnesByData(@PathVariable("dataInici")String dataInici, @PathVariable("dataFi") String dataFi){
+        LocalDate inici = LocalDate.parse(dataInici);
+        LocalDate fi = LocalDate.parse(dataFi);
+        return new ResponseEntity<>(usuariAppAlumneManager.findByDates(inici, fi), HttpStatus.OK);
     }
 }
