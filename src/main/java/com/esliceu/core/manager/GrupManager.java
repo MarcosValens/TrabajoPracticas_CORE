@@ -24,4 +24,8 @@ public class GrupManager {
     public List<Grup> findAll() {
         return (List<Grup>) grupRepository.findAll();
     }
+
+    public void deleteAll() {
+        grupRepository.deleteAll();
+    }
 }

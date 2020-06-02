@@ -24,4 +24,8 @@ public class CursManager {
     public List<Curs> findAll() {
         return (List<Curs>) cursRepository.findAll();
     }
+
+    public void deleteAll() {
+        cursRepository.deleteAll();
+    }
 }

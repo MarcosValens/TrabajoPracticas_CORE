@@ -14,4 +14,8 @@ public class NotaManager {
     public void createOrUpdate(Nota nota) {
         notaRepository.save(nota);
     }
+
+    public void deleteAll() {
+        notaRepository.deleteAll();
+    }
 }

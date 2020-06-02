@@ -597,9 +597,16 @@ public class XmlParser {
         }
     }
 
+    private void purgeTaules() {
+        System.out.println("Purgant taules:");
+        activitatManager.deleteAll();
+        System.out.println("activitats eliminades");
+    }
+
     public void insertData(File file) {
         System.out.println("Eliminat true a todos los alumnos y profesores");
         setEliminitatAll();
+        purgeTaules();
         System.out.println("Insert Data");
         this.prepare(file);
         long startTime = System.currentTimeMillis();

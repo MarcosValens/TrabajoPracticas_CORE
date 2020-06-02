@@ -14,4 +14,8 @@ public class AvaluacioManager {
     public void createOrUpdate(Avaluacio avaluacio) {
         avaluacioRepository.save(avaluacio);
     }
+
+    public void deleteAll() {
+        avaluacioRepository.deleteAll();
+    }
 }
