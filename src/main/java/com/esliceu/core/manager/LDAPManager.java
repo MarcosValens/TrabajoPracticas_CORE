@@ -19,6 +19,7 @@ import javax.naming.directory.InitialDirContext;
 public class LDAPManager {
 
     public void addUser() {
+
         String url = "ldap://localhost:389";
         Hashtable env = new Hashtable();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
@@ -38,10 +39,6 @@ public class LDAPManager {
             // Create the objectclass to add
             final Attribute objClasses = new BasicAttribute("objectClass");
             objClasses.add("inetOrgPerson");
-            objClasses.add("person");
-            objClasses.add("posixAccount");
-            objClasses.add("top");
-            objClasses.add("organizationalPerson");
 
             // Assign the username, first name, and last name
             final Attribute commonName = new BasicAttribute("cn", "TestUser");
