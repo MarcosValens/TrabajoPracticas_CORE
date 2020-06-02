@@ -70,7 +70,9 @@ pipeline {
                 echo "Subimos la imagen docker creada"
                 '''
                 script {
-                    dockerimage.push()
+                    docker.withRegistry('registry-back.esliceu.com'){
+                        dockerimage.push()
+                    }
                     cleanWs()
                 }
                 
