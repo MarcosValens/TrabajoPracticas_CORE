@@ -31,6 +31,9 @@ public class Professor implements Serializable {
     @Column(name = "username", length = 100)
     private String username;
 
+    @Column(name = "eliminat")
+    private boolean eliminat;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "email", referencedColumnName = "email")
     private UsuariApp usuariApp;
@@ -123,5 +126,13 @@ public class Professor implements Serializable {
     public void addGrup(Grup grup) {
         grups.add(grup);
         grup.getProfessors().add(this);
+    }
+
+    public boolean isEliminat() {
+        return eliminat;
+    }
+
+    public void setEliminat(boolean eliminat) {
+        this.eliminat = eliminat;
     }
 }
