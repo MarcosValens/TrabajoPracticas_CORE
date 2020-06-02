@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 
 @Service
@@ -160,17 +161,22 @@ public class XmlParser {
                 final String ap2 = elementProfessor.getAttribute("ap2");
                 final String username = elementProfessor.getAttribute("username");
                 final String departament = elementProfessor.getAttribute("departament");
-
-                Professor professor = new Professor();
-                professor.setCodi(codi);
-                professor.setNom(nom);
-                professor.setAp1(ap1);
-                professor.setAp2(ap2);
-                professor.setUsername(username);
-                //Aqui se asigna el departamento del profesor
-                if (departament != null && !departament.equals("")) {
-                    Departament departamentProfessor = departamentManager.findById(Long.parseLong(departament));
-                    professor.setDepartament(departamentProfessor);
+                Professor professor = professorManager.findById(codi);
+                if (professor == null) {
+                    professor = new Professor();
+                    professor.setCodi(codi);
+                    professor.setNom(nom);
+                    professor.setAp1(ap1);
+                    professor.setAp2(ap2);
+                    professor.setUsername(username);
+                    professor.setEliminat(false);
+                    //Aqui se asigna el departamento del profesor
+                    if (departament != null && !departament.equals("")) {
+                        Departament departamentProfessor = departamentManager.findById(Long.parseLong(departament));
+                        professor.setDepartament(departamentProfessor);
+                    }
+                } else {
+                    professor.setEliminat(true);
                 }
                 professorManager.createOrUpdate(professor);
             }
@@ -313,16 +319,22 @@ public class XmlParser {
                 final String ap2 = elementAlumne.getAttribute("ap2");
                 final Long expedient = Long.parseLong(elementAlumne.getAttribute("expedient"));
                 final Long grup = Long.parseLong(elementAlumne.getAttribute("grup"));
-                Grup grupAlumne = grupManager.findById(grup);
+                Alumne alumne = alumneManager.findById(codi);
+                if (alumne == null) {
+                    Grup grupAlumne = grupManager.findById(grup);
 
-                Alumne alumne = new Alumne();
-                alumne.setCodi(codi);
-                alumne.setNom(nom);
-                alumne.setAp1(ap1);
-                alumne.setAp2(ap2);
-                alumne.setExpedient(expedient);
-                alumne.setGrup(grupAlumne);
+                    alumne = new Alumne();
+                    alumne.setCodi(codi);
+                    alumne.setNom(nom);
+                    alumne.setAp1(ap1);
+                    alumne.setAp2(ap2);
+                    alumne.setExpedient(expedient);
+                    alumne.setGrup(grupAlumne);
+                    alumne.setEliminat(false);
 
+                } else {
+                    alumne.setEliminat(true);
+                }
                 alumneManager.createOrUpdate(alumne);
             }
             long endTime = System.currentTimeMillis() - startTime;
@@ -572,7 +584,22 @@ public class XmlParser {
         }
     }
 
+    private void setEliminitatAll() {
+        List<Professor> professors = professorManager.findAll();
+        List<Alumne> alumnes = alumneManager.findAll();
+        for (Professor professor : professors) {
+            professor.setEliminat(true);
+            professorManager.createOrUpdate(professor);
+        }
+        for (Alumne alumne : alumnes) {
+            alumne.setEliminat(true);
+            alumneManager.createOrUpdate(alumne);
+        }
+    }
+
     public void insertData(File file) {
+        System.out.println("Eliminat true a todos los alumnos y profesores");
+        setEliminitatAll();
         System.out.println("Insert Data");
         this.prepare(file);
         long startTime = System.currentTimeMillis();
