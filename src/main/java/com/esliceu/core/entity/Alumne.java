@@ -32,6 +32,9 @@ public class Alumne implements Serializable {
     @Column(name = "expedient")
     private Long expedient;
 
+    @Column(name = "eliminat")
+    private boolean eliminat;
+
     @JoinColumn(name = "grup_codi")
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Grup grup;
@@ -98,5 +101,13 @@ public class Alumne implements Serializable {
 
     public void setTutorsAlumnes(List<TutorAlumne> tutorsAlumnes) {
         this.tutorsAlumnes = tutorsAlumnes;
+    }
+
+    public boolean isEliminat() {
+        return eliminat;
+    }
+
+    public void setEliminat(boolean eliminat) {
+        this.eliminat = eliminat;
     }
 }

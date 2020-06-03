@@ -18,7 +18,6 @@ public class LDAPController {
     public ResponseEntity<String> ldapuser() {
 
         ldapManager.addUser();
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
