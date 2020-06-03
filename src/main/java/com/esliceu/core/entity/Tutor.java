@@ -28,7 +28,7 @@ public class Tutor implements Serializable {
     @Column(name = "llinatge2", length = 100)
     private String llinatge2;
 
-    @OneToMany(mappedBy = "tutor")
+    @OneToMany(mappedBy = "tutor", orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonManagedReference
     private List<TutorAlumne> tutorsAlumnes;

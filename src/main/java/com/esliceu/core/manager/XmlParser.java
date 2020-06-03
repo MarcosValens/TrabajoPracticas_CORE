@@ -4,6 +4,7 @@ import com.esliceu.core.entity.*;
 import com.esliceu.core.utils.DateParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -176,7 +177,7 @@ public class XmlParser {
                         professor.setDepartament(departamentProfessor);
                     }
                 } else {
-                    professor.setEliminat(true);
+                    professor.setEliminat(false);
                 }
                 professorManager.createOrUpdate(professor);
             }
@@ -589,6 +590,7 @@ public class XmlParser {
         List<Alumne> alumnes = alumneManager.findAll();
         for (Professor professor : professors) {
             professor.setEliminat(true);
+            professor.setDepartament(null);
             professorManager.createOrUpdate(professor);
         }
         for (Alumne alumne : alumnes) {
@@ -597,10 +599,18 @@ public class XmlParser {
         }
     }
 
-    private void purgeTaules() {
+    public void purgeTaules() {
         System.out.println("Purgant taules:");
-        activitatManager.deleteAll();
-        System.out.println("activitats eliminades");
+        //departamentManager.deleteAll();
+        //aulaManager.deleteAll();
+        //activitatManager.deleteAll();
+        avaluacioManager.deleteAll();
+        grupManager.deleteAll();
+        cursManager.deleteAll();
+        submateriaManager.deleteAll();
+        tutorAlumneManager.deleteAll();
+        tutorManager.deleteAll();
+        sessioManager.deleteAll();
     }
 
     public void insertData(File file) {

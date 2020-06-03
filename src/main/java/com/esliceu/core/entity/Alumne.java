@@ -39,7 +39,7 @@ public class Alumne implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Grup grup;
 
-    @OneToMany(mappedBy = "alumne")
+    @OneToMany(mappedBy = "alumne", orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonManagedReference
     private List<TutorAlumne> tutorsAlumnes;
