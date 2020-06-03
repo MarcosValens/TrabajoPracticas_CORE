@@ -11,11 +11,15 @@ public class TutorAlumneManager {
     @Autowired
     private TutorAlumneRepository tutorAlumneRepository;
 
-    public void createOrUpdate(TutorAlumne tutorAlumne){
+    public void createOrUpdate(TutorAlumne tutorAlumne) {
         tutorAlumneRepository.save(tutorAlumne);
     }
 
-    public TutorAlumne findById(TutorAlumneID tutorAlumneID){
+    public TutorAlumne findById(TutorAlumneID tutorAlumneID) {
         return tutorAlumneRepository.findById(tutorAlumneID).orElse(null);
+    }
+
+    public void deleteAll() {
+        tutorAlumneRepository.deleteAll();
     }
 }

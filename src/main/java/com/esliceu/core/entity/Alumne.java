@@ -36,10 +36,10 @@ public class Alumne implements Serializable {
     private boolean eliminat;
 
     @JoinColumn(name = "grup_codi")
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Grup grup;
 
-    @OneToMany(mappedBy = "alumne")
+    @OneToMany(mappedBy = "alumne", orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonManagedReference
     private List<TutorAlumne> tutorsAlumnes;

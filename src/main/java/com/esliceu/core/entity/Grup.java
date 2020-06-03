@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "grup")
@@ -30,6 +31,9 @@ public class Grup implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonIgnore
     private List<Professor> professors = new ArrayList<>();
+
+    @OneToMany(mappedBy = "grup")
+    private List<Avaluacio> avaluacions;
 
     public Grup() {
     }
@@ -66,8 +70,30 @@ public class Grup implements Serializable {
         this.professors = professors;
     }
 
-    public void addProfessor(Professor professor){
+    public void addProfessor(Professor professor) {
         professors.add(professor);
         professor.getGrups().add(this);
     }
+
+    public List<Avaluacio> getAvaluacions() {
+        return avaluacions;
+    }
+
+    public void setAvaluacions(List<Avaluacio> avaluacions) {
+        this.avaluacions = avaluacions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Grup grup = (Grup) o;
+        return Objects.equals(codi, grup.codi);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(codi);
+    }
 }
+
