@@ -4,6 +4,7 @@ import com.esliceu.core.entity.*;
 import com.esliceu.core.utils.DateParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 
 @Service
@@ -83,10 +85,14 @@ public class XmlParser {
             for (int i = 0; i < nodeListDepartaments.getLength(); i++) {
                 //Departament
                 Element elementDepartament = (Element) nodeListDepartaments.item(i);
-                Departament departament = new Departament();
+                Departament departament;
                 final long codi = Long.parseLong(elementDepartament.getAttribute("codi"));
+                departament = departamentManager.findById(codi);
+                if (departament == null) {
+                    departament = new Departament();
+                    departament.setCodi(codi);
+                }
                 final String descripcio = elementDepartament.getAttribute("descripcio");
-                departament.setCodi(codi);
                 departament.setDescripcio(descripcio);
                 departamentManager.createOrUpdate(departament);
             }
@@ -107,8 +113,11 @@ public class XmlParser {
                 Element elementAula = (Element) nodeListAules.item(i);
                 final long codi = Integer.parseInt(elementAula.getAttribute("codi"));
                 final String descripcio = elementAula.getAttribute("descripcio");
-                Aula aula = new Aula();
-                aula.setCodi(codi);
+                Aula aula = aulaManager.findById(codi);
+                if (aula == null) {
+                    aula = new Aula();
+                    aula.setCodi(codi);
+                }
                 aula.setDescripcio(descripcio);
                 aulaManager.createOrUpdate(aula);
             }
@@ -132,8 +141,11 @@ public class XmlParser {
                 final String descripcio = elementActivitat.getAttribute("descripcio");
                 final String curta = elementActivitat.getAttribute("curta");
 
-                Activitat activitat = new Activitat();
-                activitat.setCodi(codi);
+                Activitat activitat = activitatManager.findById(codi);
+                if (activitat == null) {
+                    activitat = new Activitat();
+                    activitat.setCodi(codi);
+                }
                 activitat.setDescripcio(descripcio);
                 activitat.setCurta(curta);
                 activitatManager.createOrUpdate(activitat);
@@ -160,17 +172,34 @@ public class XmlParser {
                 final String ap2 = elementProfessor.getAttribute("ap2");
                 final String username = elementProfessor.getAttribute("username");
                 final String departament = elementProfessor.getAttribute("departament");
+                Professor professor = professorManager.findById(codi);
+                if (professor == null) {
+                    professor = new Professor();
+                    professor.setCodi(codi);
+                    professor.setNom(nom);
+                    professor.setAp1(ap1);
+                    professor.setAp2(ap2);
+                    professor.setUsername(username);
+                    professor.setEliminat(false);
+                    //Aqui se asigna el departamento del profesor
+                    if (departament != null && !departament.equals("")) {
+                        Departament departamentProfessor = departamentManager.findById(Long.parseLong(departament));
+                        professor.setDepartament(departamentProfessor);
+                    }
+                } else {
+                    if (departament != null && !departament.equals("")) {
+                        Departament newDepartamentoProfessor = departamentManager.findById(Long.parseLong(departament));
+                        if (professor.getDepartament() == null) {
+                            professor.setDepartament(newDepartamentoProfessor);
 
-                Professor professor = new Professor();
-                professor.setCodi(codi);
-                professor.setNom(nom);
-                professor.setAp1(ap1);
-                professor.setAp2(ap2);
-                professor.setUsername(username);
-                //Aqui se asigna el departamento del profesor
-                if (departament != null && !departament.equals("")) {
-                    Departament departamentProfessor = departamentManager.findById(Long.parseLong(departament));
-                    professor.setDepartament(departamentProfessor);
+                        } else {
+                            Departament departamentProfessor = departamentManager.findById(professor.getDepartament().getCodi());
+                            if (!departamentProfessor.equals(newDepartamentoProfessor)) {
+                                professor.setDepartament(newDepartamentoProfessor);
+                            }
+                        }
+                    }
+                    professor.setEliminat(false);
                 }
                 professorManager.createOrUpdate(professor);
             }
@@ -191,8 +220,11 @@ public class XmlParser {
                 Element elementCurs = (Element) nodeListCursos.item(i);
                 final Long codi = Long.parseLong(elementCurs.getAttribute("codi"));
                 final String descripcio = elementCurs.getAttribute("descripcio");
-                Curs curs = new Curs();
-                curs.setCodi(codi);
+                Curs curs = cursManager.findById(codi);
+                if (curs == null) {
+                    curs = new Curs();
+                    curs.setCodi(codi);
+                }
                 curs.setDescripcio(descripcio);
                 cursManager.createOrUpdate(curs);
                 //Por cada curso sacamos sus grupos
@@ -200,11 +232,14 @@ public class XmlParser {
                 for (int j = 0; j < nodeListGrups.getLength(); j++) {
                     Element elementGrup = (Element) nodeListGrups.item(j);
 
-                    Grup grup = new Grup();
+
                     final long codiGrup = Long.parseLong(elementGrup.getAttribute("codi"));
                     final String nom = elementGrup.getAttribute("nom");
-
-                    grup.setCodi(codiGrup);
+                    Grup grup = grupManager.findById(codiGrup);
+                    if (grup == null) {
+                        grup = new Grup();
+                        grup.setCodi(codiGrup);
+                    }
                     grup.setNom(nom);
 
                     //Sacamos todos los atributos de ese grupo para poder buscar todos sus tutores
@@ -234,8 +269,11 @@ public class XmlParser {
                         final LocalDate dataIniciAvaluacio = LocalDate.parse(elementAvaluacio.getAttribute("data_inici"));
                         final LocalDate dataFiAvaluacio = LocalDate.parse(elementAvaluacio.getAttribute("data_fi"));
 
-                        Avaluacio avaluacio = new Avaluacio();
-                        avaluacio.setCodi(codiAvaluacio);
+                        Avaluacio avaluacio = avaluacioManager.findById(codiAvaluacio);
+                        if (avaluacio == null) {
+                            avaluacio = new Avaluacio();
+                            avaluacio.setCodi(codi);
+                        }
                         avaluacio.setDescripcio(descripcioAvaluacio);
                         avaluacio.setDataInici(dataIniciAvaluacio);
                         avaluacio.setDataFi(dataFiAvaluacio);
@@ -252,9 +290,11 @@ public class XmlParser {
                     Element notaElement = (Element) nodeListNotes.item(j);
                     final long qualificacioNota = Long.parseLong(notaElement.getAttribute("qualificacio"));
                     final String descNota = notaElement.getAttribute("desc");
-
-                    Nota nota = new Nota();
-                    nota.setQualificacio(qualificacioNota);
+                    Nota nota = notaManager.findById(qualificacioNota);
+                    if (nota == null) {
+                        nota = new Nota();
+                        nota.setQualificacio(qualificacioNota);
+                    }
                     nota.setDescripcio(descNota);
                     nota.addCurs(cursAvaluacio);
                     notaManager.createOrUpdate(nota);
@@ -283,8 +323,11 @@ public class XmlParser {
                 final Long curs = Long.parseLong(elementSubmateria.getAttribute("curs"));
                 Curs cursSubmateria = cursManager.findById(curs);
 
-                Submateria submateria = new Submateria();
-                submateria.setCodi(codi);
+                Submateria submateria = submateriaManager.findById(codi);
+                if (submateria == null) {
+                    submateria = new Submateria();
+                    submateria.setCodi(codi);
+                }
                 submateria.setDescripcio(descripcio);
                 submateria.setCurta(curta);
                 submateria.setCurs(cursSubmateria);
@@ -313,16 +356,29 @@ public class XmlParser {
                 final String ap2 = elementAlumne.getAttribute("ap2");
                 final Long expedient = Long.parseLong(elementAlumne.getAttribute("expedient"));
                 final Long grup = Long.parseLong(elementAlumne.getAttribute("grup"));
+                Alumne alumne = alumneManager.findById(codi);
                 Grup grupAlumne = grupManager.findById(grup);
+                if (alumne == null) {
 
-                Alumne alumne = new Alumne();
-                alumne.setCodi(codi);
-                alumne.setNom(nom);
-                alumne.setAp1(ap1);
-                alumne.setAp2(ap2);
-                alumne.setExpedient(expedient);
-                alumne.setGrup(grupAlumne);
+                    alumne = new Alumne();
+                    alumne.setCodi(codi);
+                    alumne.setNom(nom);
+                    alumne.setAp1(ap1);
+                    alumne.setAp2(ap2);
+                    alumne.setExpedient(expedient);
+                    alumne.setGrup(grupAlumne);
+                    alumne.setEliminat(false);
 
+                } else {
+                    if (alumne.getGrup() == null) {
+                        alumne.setGrup(grupAlumne);
+                    } else {
+                        if (!grupAlumne.equals(alumne.getGrup())) {
+                            alumne.setGrup(grupAlumne);
+                        }
+                    }
+                    alumne.setEliminat(false);
+                }
                 alumneManager.createOrUpdate(alumne);
             }
             long endTime = System.currentTimeMillis() - startTime;
@@ -349,20 +405,24 @@ public class XmlParser {
                 final String nomTutor = elementTutor.getAttribute("nom");
                 final String relacio = elementTutor.getAttribute("relacio");
 
-                Tutor tutor = new Tutor();
-                tutor.setCodi(codiTutor);
+                Tutor tutor = tutorManager.findById(codiTutor);
+                if (tutor == null) {
+                    tutor = new Tutor();
+                    tutor.setCodi(codiTutor);
+                }
                 tutor.setLlinatge1(llinatge1);
                 tutor.setLlinatge2(llinatge2);
                 tutor.setNom(nomTutor);
                 tutorManager.createOrUpdate(tutor);
 
-
-                TutorAlumne tutorAlumne = new TutorAlumne();
-                tutorAlumne.setTutor(tutor);
-                tutorAlumne.setAlumne(alumneTutor);
+                TutorAlumne tutorAlumne = tutorAlumneManager.findById(new TutorAlumneID(alumneTutor.getCodi(), tutor.getCodi()));
+                if (tutorAlumne == null) {
+                    tutorAlumne = new TutorAlumne();
+                    tutorAlumne.setTutor(tutor);
+                    tutorAlumne.setAlumne(alumneTutor);
+                }
                 tutorAlumne.setRelacio(relacio);
                 tutorAlumneManager.createOrUpdate(tutorAlumne);
-
             }
             long endTime = System.currentTimeMillis() - startTime;
             System.out.println(endTime);
@@ -380,6 +440,9 @@ public class XmlParser {
             for (int i = 0; i < nodeListHorariP.getLength(); i++) {
                 Element elementHorariP = (Element) nodeListHorariP.item(i);
 
+                final String codiProfessor = elementHorariP.getAttribute("professor");
+                Professor professorSessioP = professorManager.findById(codiProfessor);
+                if (professorSessioP.isEliminat()) continue;
                 final String curs = elementHorariP.getAttribute("curs");
                 Curs cursSessioP = null;
                 if (curs != null && !curs.equals("")) {
@@ -427,8 +490,7 @@ public class XmlParser {
                     placaSessioP = Long.parseLong(placa);
                 }
 
-                final String codiProfessor = elementHorariP.getAttribute("professor");
-                Professor professorSessioP = professorManager.findById(codiProfessor);
+
 
                 Sessio sessio = new Sessio();
                 sessio.setCurs(cursSessioP);
@@ -460,6 +522,9 @@ public class XmlParser {
             for (int i = 0; i < nodeListHorariA.getLength(); i++) {
                 Element elementHorariA = (Element) nodeListHorariA.item(i);
 
+                final String codiAlumne = elementHorariA.getAttribute("alumne");
+                Alumne alumneSessioA = alumneManager.findById(codiAlumne);
+                if (alumneSessioA.isEliminat()) continue;
                 final String dia = elementHorariA.getAttribute("dia");
                 Short diaSessioA = null;
                 if (dia != null && !dia.equals("")) {
@@ -485,8 +550,7 @@ public class XmlParser {
                 if (submateria != null && !submateria.equals("")) {
                     submateriaSessioA = submateriaManager.findById(Long.parseLong(submateria));
                 }
-                final String codiAlumne = elementHorariA.getAttribute("alumne");
-                Alumne alumneSessioA = alumneManager.findById(codiAlumne);
+
 
                 Sessio sessio = new Sessio();
                 sessio.setHora(horaSessioA);
@@ -572,7 +636,41 @@ public class XmlParser {
         }
     }
 
+    private void setEliminitatAll() {
+        List<Professor> professors = professorManager.findAll();
+        List<Alumne> alumnes = alumneManager.findAll();
+        for (Professor professor : professors) {
+            professor.setEliminat(true);
+            professorManager.createOrUpdate(professor);
+        }
+        for (Alumne alumne : alumnes) {
+            alumne.setEliminat(true);
+            alumneManager.createOrUpdate(alumne);
+        }
+    }
+
+    public void purgeProfessor() {
+        List<Professor> professors = professorManager.findEliminat();
+        for (Professor professor : professors) {
+            professor.setDepartament(null);
+            professor.setUsuariApp(null);
+            professorManager.createOrUpdate(professor);
+        }
+    }
+
+    public void purgeAlumne() {
+        List<Alumne> alumnes = alumneManager.findEliminat();
+        for (Alumne alumne : alumnes) {
+            alumne.setGrup(null);
+            alumneManager.createOrUpdate(alumne);
+        }
+    }
+
+
     public void insertData(File file) {
+        sessioManager.deleteAll();
+        System.out.println("Eliminat true a todos los alumnos y profesores");
+        setEliminitatAll();
         System.out.println("Insert Data");
         this.prepare(file);
         long startTime = System.currentTimeMillis();
@@ -598,6 +696,10 @@ public class XmlParser {
         crearSesionesAlumnos();
         System.out.println("SESSIONES GRUPOS");
         crearSesionesGrupos();
+        System.out.println("Purgant professors");
+        this.purgeProfessor();
+        System.out.println("Purgant alumnes");
+        this.purgeAlumne();
         long endTime = System.currentTimeMillis() - startTime;
         System.out.println(endTime);
         System.out.println("Ha acabado");

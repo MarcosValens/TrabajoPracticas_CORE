@@ -20,19 +20,19 @@ public class Sessio implements Serializable {
     private Long id;
 
     @JoinColumn(name = "professor_codi")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Professor professor;
 
     @JoinColumn(name = "alumno_codi")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Alumne alumne;
 
     @JoinColumn(name = "curs_codi")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Curs curs;
 
     @JoinColumn(name = "grup_codi")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Grup grup;
 
     @Column(name = "dia")
@@ -45,15 +45,15 @@ public class Sessio implements Serializable {
     private Integer durada;
 
     @JoinColumn(name = "aula_codi")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Aula aula;
 
     @JoinColumn(name = "submateria_codi")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Submateria submateria;
 
     @JoinColumn(name = "activitat_codi")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Activitat activitat;
 
     @Column(name = "placa")

@@ -15,7 +15,11 @@ public class ActivitatManager {
         activitatRepository.save(activitat);
     }
 
-    public Activitat findById(Long id){
+    public Activitat findById(Long id) {
         return activitatRepository.findById(id).orElse(null);
+    }
+
+    public void deleteAll() {
+        activitatRepository.deleteAll();
     }
 }
