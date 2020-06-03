@@ -415,7 +415,6 @@ public class XmlParser {
                 tutor.setNom(nomTutor);
                 tutorManager.createOrUpdate(tutor);
 
-
                 TutorAlumne tutorAlumne = tutorAlumneManager.findById(new TutorAlumneID(alumneTutor.getCodi(), tutor.getCodi()));
                 if (tutorAlumne == null) {
                     tutorAlumne = new TutorAlumne();
@@ -441,6 +440,9 @@ public class XmlParser {
             for (int i = 0; i < nodeListHorariP.getLength(); i++) {
                 Element elementHorariP = (Element) nodeListHorariP.item(i);
 
+                final String codiProfessor = elementHorariP.getAttribute("professor");
+                Professor professorSessioP = professorManager.findById(codiProfessor);
+                if (professorSessioP.isEliminat()) continue;
                 final String curs = elementHorariP.getAttribute("curs");
                 Curs cursSessioP = null;
                 if (curs != null && !curs.equals("")) {
@@ -488,8 +490,7 @@ public class XmlParser {
                     placaSessioP = Long.parseLong(placa);
                 }
 
-                final String codiProfessor = elementHorariP.getAttribute("professor");
-                Professor professorSessioP = professorManager.findById(codiProfessor);
+
 
                 Sessio sessio = new Sessio();
                 sessio.setCurs(cursSessioP);
@@ -521,6 +522,9 @@ public class XmlParser {
             for (int i = 0; i < nodeListHorariA.getLength(); i++) {
                 Element elementHorariA = (Element) nodeListHorariA.item(i);
 
+                final String codiAlumne = elementHorariA.getAttribute("alumne");
+                Alumne alumneSessioA = alumneManager.findById(codiAlumne);
+                if (alumneSessioA.isEliminat()) continue;
                 final String dia = elementHorariA.getAttribute("dia");
                 Short diaSessioA = null;
                 if (dia != null && !dia.equals("")) {
@@ -546,8 +550,7 @@ public class XmlParser {
                 if (submateria != null && !submateria.equals("")) {
                     submateriaSessioA = submateriaManager.findById(Long.parseLong(submateria));
                 }
-                final String codiAlumne = elementHorariA.getAttribute("alumne");
-                Alumne alumneSessioA = alumneManager.findById(codiAlumne);
+
 
                 Sessio sessio = new Sessio();
                 sessio.setHora(horaSessioA);
@@ -646,26 +649,28 @@ public class XmlParser {
         }
     }
 
-    public void purgeTaules() {
-        System.out.println("Purgant taules:");
-        //departamentManager.deleteAll();
-        //aulaManager.deleteAll();
-        //activitatManager.deleteAll();
-
-        grupManager.deleteAll();
-        avaluacioManager.deleteAll();
-        cursManager.deleteAll();
-        submateriaManager.deleteAll();
-        tutorAlumneManager.deleteAll();
-        tutorManager.deleteAll();
-
+    public void purgeProfessor() {
+        List<Professor> professors = professorManager.findEliminat();
+        for (Professor professor : professors) {
+            professor.setDepartament(null);
+            professor.setUsuariApp(null);
+            professorManager.createOrUpdate(professor);
+        }
     }
+
+    public void purgeAlumne() {
+        List<Alumne> alumnes = alumneManager.findEliminat();
+        for (Alumne alumne : alumnes) {
+            alumne.setGrup(null);
+            alumneManager.createOrUpdate(alumne);
+        }
+    }
+
 
     public void insertData(File file) {
         sessioManager.deleteAll();
         System.out.println("Eliminat true a todos los alumnos y profesores");
         setEliminitatAll();
-
         System.out.println("Insert Data");
         this.prepare(file);
         long startTime = System.currentTimeMillis();
@@ -691,6 +696,10 @@ public class XmlParser {
         crearSesionesAlumnos();
         System.out.println("SESSIONES GRUPOS");
         crearSesionesGrupos();
+        System.out.println("Purgant professors");
+        this.purgeProfessor();
+        System.out.println("Purgant alumnes");
+        this.purgeAlumne();
         long endTime = System.currentTimeMillis() - startTime;
         System.out.println(endTime);
         System.out.println("Ha acabado");

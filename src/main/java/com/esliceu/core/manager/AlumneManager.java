@@ -42,4 +42,8 @@ public class AlumneManager {
         return alumneRepository.findByGrup(grup);
     }
 
+    public List<Alumne> findEliminat() {
+        return alumneRepository.findAllByEliminatIsTrue();
+    }
+
 }

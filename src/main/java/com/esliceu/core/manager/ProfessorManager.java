@@ -1,5 +1,6 @@
 package com.esliceu.core.manager;
 
+import com.esliceu.core.entity.Alumne;
 import com.esliceu.core.entity.Professor;
 import com.esliceu.core.repository.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +46,9 @@ public class ProfessorManager {
         cq.select(cb.construct(Professor.class, professor.get("codi"), professor.get("nom"), professor.get("ap1"), professor.get("ap2")));
         TypedQuery<Professor> query = em.createQuery(cq);
         return query.getResultList();
+    }
+
+    public List<Professor> findEliminat() {
+        return professorRepository.findAllByEliminatIsTrue();
     }
 }
