@@ -1,81 +1,62 @@
 package com.esliceu.core.manager;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Hashtable;
 
-import javax.naming.AuthenticationException;
-import javax.naming.AuthenticationNotSupportedException;
-import javax.naming.Context;
-import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.BasicAttribute;
-import javax.naming.directory.BasicAttributes;
-import javax.naming.directory.DirContext;
-import javax.naming.directory.InitialDirContext;
+import javax.naming.*;
+import javax.naming.directory.*;
 
 @Service
 public class LDAPManager {
+    private DirContext context;
+    private String url;
+
+    public LDAPManager() throws NamingException {
+        this.url = "ldap://localhost:389";
+        Hashtable<String, String> environment = new Hashtable<>();
+
+        environment.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+        environment.put(Context.PROVIDER_URL, this.url);
+        environment.put(Context.SECURITY_AUTHENTICATION, "simple");
+        environment.put(Context.SECURITY_PRINCIPAL, "cn=admin,dc=esliceu,dc=com");
+        environment.put(Context.SECURITY_CREDENTIALS, "test");
+        this.context = new InitialDirContext(environment);
+        System.out.println("Connected..");
+        System.out.println(this.context.getEnvironment());
+    }
 
     public void addUser() {
-
-        String url = "ldap://localhost:389";
-        Hashtable env = new Hashtable();
-        env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        env.put(Context.PROVIDER_URL, url);
-        env.put(Context.SECURITY_AUTHENTICATION, "simple");
-        env.put(Context.SECURITY_PRINCIPAL, "cn=admin,dc=esliceu,dc=com");
-        env.put(Context.SECURITY_CREDENTIALS, "test");
-
         try {
+            BasicAttributes attrs = new BasicAttributes();
 
-            DirContext ctx = new InitialDirContext(env);
-            System.out.println("connected");
-            System.out.println(ctx.getEnvironment());
+            Attribute classes = new BasicAttribute("objectclass");
+            classes.add("person");
+            classes.add("posixAccount");
+            classes.add("inetOrgPerson");
+            classes.add("organizationalPerson");
+            classes.add("top");
+            attrs.put(classes);
 
-            final Attributes container = new BasicAttributes();
+            attrs.put("displayname", "ALUMNE JAVA");
+            attrs.put("gidnumber", "10000");
+            attrs.put("homedirectory", "/home/userjava");
+            attrs.put("l", "Localitat");
+            attrs.put("loginshell", "/bin/bash");
+            attrs.put("mail", "alumnejava@esliceu.net");
+            attrs.put("sn", "COGNOMSJAVA");
+            attrs.put("uid", "alumnejava");
+            attrs.put("uidnumber", "11772");
+            attrs.put("userpassword", "patata");
 
-            // Create the objectclass to add
-            final Attribute objClasses = new BasicAttribute("objectClass");
-            objClasses.add("inetOrgPerson");
+            this.context.createSubcontext(this.url+"/cn=userjava,ou=users,ou=accounts,dc=esliceu,dc=com", attrs);
 
-            // Assign the username, first name, and last name
-            final Attribute commonName = new BasicAttribute("cn", "TestUser");
-            final Attribute email = new BasicAttribute("mail", "TestUser");
-            final Attribute givenName = new BasicAttribute("givenName", "test1");
-            final Attribute uid = new BasicAttribute("uid", "estudiantes");
-            final Attribute surName = new BasicAttribute("sn", "test2");
+            this.context.close();
 
-            // Add password
-            final Attribute userPassword = new BasicAttribute("userpassword", "test1");
-
-            // Add these to the container
-            container.put(objClasses);
-            container.put(commonName);
-            container.put(email);
-            container.put(userPassword);
-
-            ctx.createSubcontext(getUserDN("TestUser"), container);
-
-            // do something useful with the context...
-
-            ctx.close();
-
-        } catch (AuthenticationNotSupportedException ex) {
-            System.out.println("The authentication is not supported by the server");
-        } catch (AuthenticationException ex) {
-            System.out.println("incorrect password or username");
-        } catch (NamingException ex) {
-            System.out.println("error when trying to create the context");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-
-    private static String getUserDN(final String userName) {
-        String userDN = new StringBuffer().append("cn=").append(userName).append(",OU=users,OU=accounts,dc=esliceu,dc=com").toString();
-        System.out.println(userDN);
-        return userDN;
-    }
-
 
 }
