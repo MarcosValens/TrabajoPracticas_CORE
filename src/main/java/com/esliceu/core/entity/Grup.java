@@ -31,8 +31,24 @@ public class Grup implements Serializable {
     @JsonIgnore
     private List<Professor> professors = new ArrayList<>();
 
+    @OneToMany(mappedBy = "grup")
+    private List<Avaluacio> avaluacions;
+
     public Grup() {
     }
+
+    /*@PreRemove
+    public void preremove() {
+        this.curs = null;
+        this.avaluacions = null;
+        if (this.professors == null) {
+            return;
+        }
+        for (Professor professor : professors) {
+            professor.getGrups().remove(this);
+        }
+        this.professors = null;
+    }*/
 
     public Long getCodi() {
         return codi;
@@ -66,8 +82,16 @@ public class Grup implements Serializable {
         this.professors = professors;
     }
 
-    public void addProfessor(Professor professor){
+    public void addProfessor(Professor professor) {
         professors.add(professor);
         professor.getGrups().add(this);
+    }
+
+    public List<Avaluacio> getAvaluacions() {
+        return avaluacions;
+    }
+
+    public void setAvaluacions(List<Avaluacio> avaluacions) {
+        this.avaluacions = avaluacions;
     }
 }

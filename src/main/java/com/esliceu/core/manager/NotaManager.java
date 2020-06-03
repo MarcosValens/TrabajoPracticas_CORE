@@ -11,6 +11,10 @@ public class NotaManager {
     @Autowired
     private NotaRepository notaRepository;
 
+    public Nota findById(long codi) {
+        return notaRepository.findById(codi);
+    }
+
     public void createOrUpdate(Nota nota) {
         notaRepository.save(nota);
     }

@@ -1,5 +1,6 @@
 package com.esliceu.core.manager;
 
+import com.esliceu.core.entity.Avaluacio;
 import com.esliceu.core.entity.Grup;
 import com.esliceu.core.repository.GrupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ public class GrupManager {
 
     @Autowired
     private GrupRepository grupRepository;
+
+    @Autowired
+    private AvaluacioManager avaluacioManager;
 
     public void createOrUpdate(Grup grup) {
         grupRepository.save(grup);
@@ -27,5 +31,9 @@ public class GrupManager {
 
     public void deleteAll() {
         grupRepository.deleteAll();
+    }
+
+    public void deleteGrup(Grup grup) {
+        grupRepository.delete(grup);
     }
 }

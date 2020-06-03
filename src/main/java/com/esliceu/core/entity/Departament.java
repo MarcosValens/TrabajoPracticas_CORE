@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "departament")
@@ -37,4 +38,16 @@ public class Departament implements Serializable {
         this.descripcio = descripcio;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Departament that = (Departament) o;
+        return Objects.equals(codi, that.codi);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(codi);
+    }
 }

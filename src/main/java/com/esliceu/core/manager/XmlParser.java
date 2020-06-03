@@ -85,10 +85,14 @@ public class XmlParser {
             for (int i = 0; i < nodeListDepartaments.getLength(); i++) {
                 //Departament
                 Element elementDepartament = (Element) nodeListDepartaments.item(i);
-                Departament departament = new Departament();
+                Departament departament;
                 final long codi = Long.parseLong(elementDepartament.getAttribute("codi"));
+                departament = departamentManager.findById(codi);
+                if (departament == null) {
+                    departament = new Departament();
+                    departament.setCodi(codi);
+                }
                 final String descripcio = elementDepartament.getAttribute("descripcio");
-                departament.setCodi(codi);
                 departament.setDescripcio(descripcio);
                 departamentManager.createOrUpdate(departament);
             }
@@ -109,8 +113,11 @@ public class XmlParser {
                 Element elementAula = (Element) nodeListAules.item(i);
                 final long codi = Integer.parseInt(elementAula.getAttribute("codi"));
                 final String descripcio = elementAula.getAttribute("descripcio");
-                Aula aula = new Aula();
-                aula.setCodi(codi);
+                Aula aula = aulaManager.findById(codi);
+                if (aula == null) {
+                    aula = new Aula();
+                    aula.setCodi(codi);
+                }
                 aula.setDescripcio(descripcio);
                 aulaManager.createOrUpdate(aula);
             }
@@ -134,8 +141,11 @@ public class XmlParser {
                 final String descripcio = elementActivitat.getAttribute("descripcio");
                 final String curta = elementActivitat.getAttribute("curta");
 
-                Activitat activitat = new Activitat();
-                activitat.setCodi(codi);
+                Activitat activitat = activitatManager.findById(codi);
+                if (activitat == null) {
+                    activitat = new Activitat();
+                    activitat.setCodi(codi);
+                }
                 activitat.setDescripcio(descripcio);
                 activitat.setCurta(curta);
                 activitatManager.createOrUpdate(activitat);
@@ -177,6 +187,18 @@ public class XmlParser {
                         professor.setDepartament(departamentProfessor);
                     }
                 } else {
+                    if (departament != null && !departament.equals("")) {
+                        Departament newDepartamentoProfessor = departamentManager.findById(Long.parseLong(departament));
+                        if (professor.getDepartament() == null) {
+                            professor.setDepartament(newDepartamentoProfessor);
+
+                        } else {
+                            Departament departamentProfessor = departamentManager.findById(professor.getDepartament().getCodi());
+                            if (!departamentProfessor.equals(newDepartamentoProfessor)) {
+                                professor.setDepartament(newDepartamentoProfessor);
+                            }
+                        }
+                    }
                     professor.setEliminat(false);
                 }
                 professorManager.createOrUpdate(professor);
@@ -198,8 +220,11 @@ public class XmlParser {
                 Element elementCurs = (Element) nodeListCursos.item(i);
                 final Long codi = Long.parseLong(elementCurs.getAttribute("codi"));
                 final String descripcio = elementCurs.getAttribute("descripcio");
-                Curs curs = new Curs();
-                curs.setCodi(codi);
+                Curs curs = cursManager.findById(codi);
+                if (curs == null) {
+                    curs = new Curs();
+                    curs.setCodi(codi);
+                }
                 curs.setDescripcio(descripcio);
                 cursManager.createOrUpdate(curs);
                 //Por cada curso sacamos sus grupos
@@ -207,11 +232,14 @@ public class XmlParser {
                 for (int j = 0; j < nodeListGrups.getLength(); j++) {
                     Element elementGrup = (Element) nodeListGrups.item(j);
 
-                    Grup grup = new Grup();
+
                     final long codiGrup = Long.parseLong(elementGrup.getAttribute("codi"));
                     final String nom = elementGrup.getAttribute("nom");
-
-                    grup.setCodi(codiGrup);
+                    Grup grup = grupManager.findById(codi);
+                    if (grup == null) {
+                        grup = new Grup();
+                        grup.setCodi(codi);
+                    }
                     grup.setNom(nom);
 
                     //Sacamos todos los atributos de ese grupo para poder buscar todos sus tutores
@@ -241,8 +269,11 @@ public class XmlParser {
                         final LocalDate dataIniciAvaluacio = LocalDate.parse(elementAvaluacio.getAttribute("data_inici"));
                         final LocalDate dataFiAvaluacio = LocalDate.parse(elementAvaluacio.getAttribute("data_fi"));
 
-                        Avaluacio avaluacio = new Avaluacio();
-                        avaluacio.setCodi(codiAvaluacio);
+                        Avaluacio avaluacio = avaluacioManager.findById(codi);
+                        if (avaluacio == null) {
+                            avaluacio = new Avaluacio();
+                            avaluacio.setCodi(codi);
+                        }
                         avaluacio.setDescripcio(descripcioAvaluacio);
                         avaluacio.setDataInici(dataIniciAvaluacio);
                         avaluacio.setDataFi(dataFiAvaluacio);
@@ -259,9 +290,11 @@ public class XmlParser {
                     Element notaElement = (Element) nodeListNotes.item(j);
                     final long qualificacioNota = Long.parseLong(notaElement.getAttribute("qualificacio"));
                     final String descNota = notaElement.getAttribute("desc");
-
-                    Nota nota = new Nota();
-                    nota.setQualificacio(qualificacioNota);
+                    Nota nota = notaManager.findById(codi);
+                    if (nota == null) {
+                        nota = new Nota();
+                        nota.setQualificacio(qualificacioNota);
+                    }
                     nota.setDescripcio(descNota);
                     nota.addCurs(cursAvaluacio);
                     notaManager.createOrUpdate(nota);
@@ -590,7 +623,6 @@ public class XmlParser {
         List<Alumne> alumnes = alumneManager.findAll();
         for (Professor professor : professors) {
             professor.setEliminat(true);
-            professor.setDepartament(null);
             professorManager.createOrUpdate(professor);
         }
         for (Alumne alumne : alumnes) {
@@ -604,8 +636,9 @@ public class XmlParser {
         //departamentManager.deleteAll();
         //aulaManager.deleteAll();
         //activitatManager.deleteAll();
-        avaluacioManager.deleteAll();
+
         grupManager.deleteAll();
+        avaluacioManager.deleteAll();
         cursManager.deleteAll();
         submateriaManager.deleteAll();
         tutorAlumneManager.deleteAll();
@@ -616,7 +649,7 @@ public class XmlParser {
     public void insertData(File file) {
         System.out.println("Eliminat true a todos los alumnos y profesores");
         setEliminitatAll();
-        purgeTaules();
+
         System.out.println("Insert Data");
         this.prepare(file);
         long startTime = System.currentTimeMillis();
