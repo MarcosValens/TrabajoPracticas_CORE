@@ -323,8 +323,11 @@ public class XmlParser {
                 final Long curs = Long.parseLong(elementSubmateria.getAttribute("curs"));
                 Curs cursSubmateria = cursManager.findById(curs);
 
-                Submateria submateria = new Submateria();
-                submateria.setCodi(codi);
+                Submateria submateria = submateriaManager.findById(codi);
+                if (submateria == null) {
+                    submateria = new Submateria();
+                    submateria.setCodi(codi);
+                }
                 submateria.setDescripcio(descripcio);
                 submateria.setCurta(curta);
                 submateria.setCurs(cursSubmateria);
@@ -354,8 +357,8 @@ public class XmlParser {
                 final Long expedient = Long.parseLong(elementAlumne.getAttribute("expedient"));
                 final Long grup = Long.parseLong(elementAlumne.getAttribute("grup"));
                 Alumne alumne = alumneManager.findById(codi);
+                Grup grupAlumne = grupManager.findById(grup);
                 if (alumne == null) {
-                    Grup grupAlumne = grupManager.findById(grup);
 
                     alumne = new Alumne();
                     alumne.setCodi(codi);
@@ -367,7 +370,14 @@ public class XmlParser {
                     alumne.setEliminat(false);
 
                 } else {
-                    alumne.setEliminat(true);
+                    if (alumne.getGrup() == null) {
+                        alumne.setGrup(grupAlumne);
+                    } else {
+                        if (!grupAlumne.equals(alumne.getGrup())) {
+                            alumne.setGrup(grupAlumne);
+                        }
+                    }
+                    alumne.setEliminat(false);
                 }
                 alumneManager.createOrUpdate(alumne);
             }

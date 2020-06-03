@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "grup")
@@ -36,19 +37,6 @@ public class Grup implements Serializable {
 
     public Grup() {
     }
-
-    /*@PreRemove
-    public void preremove() {
-        this.curs = null;
-        this.avaluacions = null;
-        if (this.professors == null) {
-            return;
-        }
-        for (Professor professor : professors) {
-            professor.getGrups().remove(this);
-        }
-        this.professors = null;
-    }*/
 
     public Long getCodi() {
         return codi;
@@ -94,4 +82,18 @@ public class Grup implements Serializable {
     public void setAvaluacions(List<Avaluacio> avaluacions) {
         this.avaluacions = avaluacions;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Grup grup = (Grup) o;
+        return Objects.equals(codi, grup.codi);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(codi);
+    }
 }
+
