@@ -16,8 +16,13 @@ public class LDAPController {
 
     @GetMapping("/ldap/user")
     public ResponseEntity<String> ldapuser() {
-
         ldapManager.addUser();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/ldap/group")
+    public ResponseEntity<String> ldapgroup(){
+        ldapManager.addGroup();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

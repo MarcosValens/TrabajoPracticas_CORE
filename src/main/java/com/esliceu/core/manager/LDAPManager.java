@@ -40,7 +40,7 @@ public class LDAPManager {
             attrs.put(classes);
 
             attrs.put("displayname", "ALUMNE JAVA");
-            attrs.put("gidnumber", "10000");
+            attrs.put("gidnumber", "10001");
             attrs.put("homedirectory", "/home/userjava");
             attrs.put("l", "Localitat");
             attrs.put("loginshell", "/bin/bash");
@@ -50,7 +50,7 @@ public class LDAPManager {
             attrs.put("uidnumber", "11772");
             attrs.put("userpassword", "patata");
 
-            this.context.createSubcontext(this.url+"/cn=userjava,ou=users,ou=accounts,dc=esliceu,dc=com", attrs);
+            this.context.createSubcontext(this.url + "/cn=userjava,ou=users,ou=accounts,dc=esliceu,dc=com", attrs);
 
             this.context.close();
 
@@ -59,4 +59,19 @@ public class LDAPManager {
         }
     }
 
+    public void addGroup(){
+        try {
+            BasicAttributes attrs = new BasicAttributes();
+
+            Attribute classes = new BasicAttribute("objectclass");
+            classes.add("posixGroup");
+            classes.add("top");
+            attrs.put(classes);
+            attrs.put("gidnumber", "10001");
+
+            this.context.createSubcontext(this.url+"/cn=1rESO_A,ou=posixgroups,ou=accounts,dc=esliceu,dc=com", attrs);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }
