@@ -19,6 +19,9 @@ public class FilterOauth extends GenericFilterBean {
         String referer = ((HttpServletRequest) req).getHeader("referer");
         HttpServletResponse response = (HttpServletResponse) res;
 
+        System.out.println("Este deberia ser el referer");
+        System.out.println(referer);
+
         if (referer != null) {
             Cookie cookie = new Cookie("Referer", referer);
             response.addCookie(cookie);
