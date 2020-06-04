@@ -16,11 +16,13 @@ public class FilterOauth extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 
-        String referer = ((HttpServletRequest) req).getHeader("referer");
         HttpServletResponse response = (HttpServletResponse) res;
 
-        if (referer != null) {
-            Cookie cookie = new Cookie("Referer", referer);
+        HttpServletRequest request = (HttpServletRequest) req;
+        String origin = request.getParameter("Origin");
+
+        if (origin != null) {
+            Cookie cookie = new Cookie("Origin", origin);
             response.addCookie(cookie);
         }
 
