@@ -15,7 +15,11 @@ public class TutorManager {
         tutorRepository.save(tutor);
     }
 
-    public Tutor findById(String codi){
+    public Tutor findById(String codi) {
         return tutorRepository.findById(codi).orElse(null);
+    }
+
+    public void deleteAll() {
+        tutorRepository.deleteAll();
     }
 }

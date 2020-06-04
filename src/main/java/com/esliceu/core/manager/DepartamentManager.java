@@ -15,7 +15,11 @@ public class DepartamentManager {
         departamentRepository.save(departament);
     }
 
-    public Departament findById(long codi){
+    public Departament findById(long codi) {
         return departamentRepository.findById(codi).orElse(null);
+    }
+
+    public void deleteAll() {
+        departamentRepository.deleteAll();
     }
 }

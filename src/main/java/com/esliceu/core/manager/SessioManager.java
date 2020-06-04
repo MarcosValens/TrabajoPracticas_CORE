@@ -10,7 +10,11 @@ public class SessioManager {
     @Autowired
     SessioRepository sessioRepository;
 
-    public void createOrUpdate(Sessio sessio){
+    public void createOrUpdate(Sessio sessio) {
         sessioRepository.save(sessio);
+    }
+
+    public void deleteAll() {
+        sessioRepository.deleteAll();
     }
 }

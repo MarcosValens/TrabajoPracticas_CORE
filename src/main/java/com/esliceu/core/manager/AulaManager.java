@@ -15,7 +15,11 @@ public class AulaManager {
         aulaRepository.save(aula);
     }
 
-    public Aula findById(Long id){
+    public Aula findById(Long id) {
         return aulaRepository.findById(id).orElse(null);
+    }
+
+    public void deleteAll() {
+        aulaRepository.deleteAll();
     }
 }

@@ -15,7 +15,11 @@ public class SubmateriaManager {
         submateriaRepository.save(submateria);
     }
 
-    public Submateria findById(Long id){
+    public Submateria findById(Long id) {
         return submateriaRepository.findById(id).orElse(null);
+    }
+
+    public void deleteAll() {
+        submateriaRepository.deleteAll();
     }
 }
