@@ -1,9 +1,11 @@
 package com.esliceu.core.manager;
 
+import com.esliceu.core.entity.Grup;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.naming.*;
 import javax.naming.directory.*;
@@ -12,7 +14,6 @@ import javax.naming.directory.*;
 public class LDAPManager {
     private DirContext context;
     private String url;
-/*
     public LDAPManager() throws NamingException {
         this.url = "ldap://localhost:389";
         Hashtable<String, String> environment = new Hashtable<>();
@@ -25,7 +26,7 @@ public class LDAPManager {
         this.context = new InitialDirContext(environment);
         System.out.println("Connected..");
         System.out.println(this.context.getEnvironment());
-    }*/
+    }
 
     public void addUser() {
         try {
@@ -40,7 +41,7 @@ public class LDAPManager {
             attrs.put(classes);
 
             attrs.put("displayname", "ALUMNE JAVA");
-            attrs.put("gidnumber", "10000");
+            attrs.put("gidnumber", "10001");
             attrs.put("homedirectory", "/home/userjava");
             attrs.put("l", "Localitat");
             attrs.put("loginshell", "/bin/bash");
@@ -50,7 +51,7 @@ public class LDAPManager {
             attrs.put("uidnumber", "11772");
             attrs.put("userpassword", "patata");
 
-            this.context.createSubcontext(this.url+"/cn=userjava,ou=users,ou=accounts,dc=esliceu,dc=com", attrs);
+            this.context.createSubcontext(this.url + "/cn=userjava,ou=users,ou=accounts,dc=esliceu,dc=com", attrs);
 
             this.context.close();
 
@@ -59,4 +60,21 @@ public class LDAPManager {
         }
     }
 
+    public void addGroup(List<Grup> grups){
+        try {
+            BasicAttributes attrs = new BasicAttributes();
+
+            Attribute classes = new BasicAttribute("objectclass");
+            classes.add("posixGroup");
+            classes.add("top");
+            attrs.put(classes);
+            for (Grup grup : grups) {
+                attrs.put("gidnumber", grup.getCodi().toString());
+
+                this.context.createSubcontext(this.url+"/cn="+grup.getCurs().getDescripcio()+" "+grup.getNom()+",ou=posixgroups,ou=accounts,dc=esliceu,dc=com", attrs);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }
