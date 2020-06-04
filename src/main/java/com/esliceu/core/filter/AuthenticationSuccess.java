@@ -39,14 +39,12 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
         }
 
         Cookie[] cookies = request.getCookies();
-
         Stream<Cookie> stream = Objects.nonNull(cookies) ? Arrays.stream(cookies) : Stream.empty();
 
         String cookieValue = stream.filter(cookie -> "Referer".equals(cookie.getName()))
                 .findFirst()
                 .orElse(new Cookie("Referer", null))
                 .getValue();
-
 
         DefaultOidcUser oidcUser = (DefaultOidcUser) authentication.getPrincipal();
         Map attributes = oidcUser.getAttributes();
@@ -63,30 +61,21 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
         boolean cuiner = usuariApp.isCuiner();
         boolean monitor = usuariApp.isMonitor();
 
-        // ESTA LINEA DE AQUI, FUNCIONARÁ BIEN SI TENEMOS EL QUASAR CON EL ROUTER EN MODO HISTORY.
-//        String redirectionURL = environment.getProperty("FRONTEND_URL")
-//                 + "#/login/oauth/callback" + "?access_token=" + acces_token + "&refresh_token=" + refresh_token
-//                 + "&isAdmin="+admin+"&isCuiner="+cuiner+"&isMonitor="+monitor;
-
-        // EN NUESTRO CASO, YA SEA PROD O DEV TENEMOS EL MODO HASH (ABAJO)
-
         String redirectionURL;
 
         if (cookieValue != null) {
-            // ESTA LINEA DE AQUI FUNCIONA SI ESTA EL ROUTER EN MODO HASH DE QUASAR
+            // Funciona Modo Hash
             redirectionURL = cookieValue + "?access_token=" + acces_token
                     + "&refresh_token=" + refresh_token
                     + "&isAdmin=" + admin + "&isCuiner=" + cuiner + "&isMonitor=" + monitor +
                     "#/login/oauth/callback";
 
         } else {
-
-            // ESTA LINEA DE AQUI FUNCIONA SI ESTA EL ROUTER EN MODO HASH DE QUASAR
+            // Funciona Modo Hash
             redirectionURL = environment.getProperty("FRONTEND_URL") + "?access_token=" + acces_token
                     + "&refresh_token=" + refresh_token
                     + "&isAdmin=" + admin + "&isCuiner=" + cuiner + "&isMonitor=" + monitor +
                     "#/login/oauth/callback";
-
         }
 
         getRedirectStrategy().sendRedirect(request, response, redirectionURL);

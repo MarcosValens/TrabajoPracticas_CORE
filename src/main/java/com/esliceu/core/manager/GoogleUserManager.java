@@ -19,10 +19,6 @@ public class GoogleUserManager extends OidcUserService {
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
 
-        System.out.println(userRequest.getClientRegistration());
-        System.out.println(userRequest.getIdToken());
-        System.out.println(userRequest.getAdditionalParameters());
-
         // Cogemos el mail de los valores que nos devuelve google
         // TODO comprobar que sea un correo de @esliceu.com
         // No está hecho para que todos podamos realizar pruebas por si no tenemos cuenta de @esliceu.com
