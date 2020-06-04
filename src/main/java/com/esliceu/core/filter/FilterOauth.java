@@ -19,7 +19,7 @@ public class FilterOauth extends GenericFilterBean {
         HttpServletResponse response = (HttpServletResponse) res;
 
         HttpServletRequest request = (HttpServletRequest) req;
-        String origin = request.getParameter("origin");
+        String origin = request.getParameter("Origin");
 
         if (origin != null) {
             Cookie cookie = new Cookie("Origin", origin);
