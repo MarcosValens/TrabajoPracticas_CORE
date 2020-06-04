@@ -10,10 +10,14 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Component
 public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler {
@@ -33,6 +37,16 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
         if (response.isCommitted()) {
             return;
         }
+
+        Cookie[] cookies = request.getCookies();
+        Stream<Cookie> stream = Objects.nonNull(cookies) ? Arrays.stream(cookies) : Stream.empty();
+
+        String cookieValue = stream.filter(cookie -> "Referer".equals(cookie.getName()))
+                .findFirst()
+                .orElse(new Cookie("Referer", "Error al leer Origen"))
+                .getValue();
+
+        System.out.println("Referer->" + cookieValue);
 
         DefaultOidcUser oidcUser = (DefaultOidcUser) authentication.getPrincipal();
         Map attributes = oidcUser.getAttributes();

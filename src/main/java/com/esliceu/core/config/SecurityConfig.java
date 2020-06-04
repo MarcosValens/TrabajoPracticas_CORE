@@ -41,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .cors()
                 .and()
+                .antMatcher("/oauth2/authorize")
                 .addFilterBefore(new FilterOauth(), BasicAuthenticationFilter.class)
                 .antMatcher("/**").authorizeRequests()
                 .antMatchers(prefijoUri + "/auth/login/flutter", "/auth/recovery", prefijoUri + "/auth/login", prefijoUri + "/oauth2/callback/google", prefijoUri + "/private/**", prefijoUri + "/admin/**", prefijoUri + "/download-zip/**", prefijoUri + "/ldap/*").permitAll()
