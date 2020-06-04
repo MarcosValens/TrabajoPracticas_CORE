@@ -39,14 +39,14 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
         }
 
         Cookie[] cookies = request.getCookies();
+
         Stream<Cookie> stream = Objects.nonNull(cookies) ? Arrays.stream(cookies) : Stream.empty();
 
         String cookieValue = stream.filter(cookie -> "Referer".equals(cookie.getName()))
                 .findFirst()
-                .orElse(new Cookie("Referer", "Error al leer Origen"))
+                .orElse(new Cookie("Referer", null))
                 .getValue();
 
-        System.out.println("Referer->" + cookieValue);
 
         DefaultOidcUser oidcUser = (DefaultOidcUser) authentication.getPrincipal();
         Map attributes = oidcUser.getAttributes();
@@ -55,21 +55,9 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
         String acces_token = tokenManager.generateAcessToken(usuariApp);
         String refresh_token = tokenManager.generateRefreshToken(usuariApp);
 
-        // Una manera mejor de hacerlo pero da problemas con el #
-
-        /*
-        String redirectionUrl = UriComponentsBuilder.fromUriString(environment.getProperty("FRONTEND_URL"))
-                .queryParam("acces_token", acces_token)
-                .queryParam("refresh_token", refresh_token)
-                .build().toUriString();
-
-         */
-
-
         /*
          * Sacamos los roles
          * */
-
 
         boolean admin = usuariApp.isAdmin();
         boolean cuiner = usuariApp.isCuiner();
@@ -82,11 +70,24 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
 
         // EN NUESTRO CASO, YA SEA PROD O DEV TENEMOS EL MODO HASH (ABAJO)
 
-        // ESTA LINEA DE AQUI FUNCIONA SI ESTA EL ROUTER EN MODO HASH DE QUASAR
-        String redirectionURL = environment.getProperty("FRONTEND_URL") + "?access_token=" + acces_token
-                + "&refresh_token=" + refresh_token
-                + "&isAdmin=" + admin + "&isCuiner=" + cuiner + "&isMonitor=" + monitor +
-                "#/login/oauth/callback";
+        String redirectionURL;
+
+        if (cookieValue != null) {
+            // ESTA LINEA DE AQUI FUNCIONA SI ESTA EL ROUTER EN MODO HASH DE QUASAR
+            redirectionURL = cookieValue + "?access_token=" + acces_token
+                    + "&refresh_token=" + refresh_token
+                    + "&isAdmin=" + admin + "&isCuiner=" + cuiner + "&isMonitor=" + monitor +
+                    "#/login/oauth/callback";
+
+        } else {
+
+            // ESTA LINEA DE AQUI FUNCIONA SI ESTA EL ROUTER EN MODO HASH DE QUASAR
+            redirectionURL = environment.getProperty("FRONTEND_URL") + "?access_token=" + acces_token
+                    + "&refresh_token=" + refresh_token
+                    + "&isAdmin=" + admin + "&isCuiner=" + cuiner + "&isMonitor=" + monitor +
+                    "#/login/oauth/callback";
+
+        }
 
         getRedirectStrategy().sendRedirect(request, response, redirectionURL);
     }
