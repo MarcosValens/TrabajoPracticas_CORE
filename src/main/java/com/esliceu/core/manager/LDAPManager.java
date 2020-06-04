@@ -17,15 +17,15 @@ public class LDAPManager {
     private DirContext context;
     private String url;
 
-    public LDAPManager(@Value("${URL_LDAP}") String urlLdap) throws NamingException {
+    public LDAPManager(@Value("${LDAP_URL}") String urlLdap, @Value("${LDAP_ADMIN}") String admin, @Value("${LDAP_PASSWORD}") String password) throws NamingException {
         Hashtable<String, String> environment = new Hashtable<>();
         this.url = urlLdap;
 
         environment.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         environment.put(Context.PROVIDER_URL, this.url);
         environment.put(Context.SECURITY_AUTHENTICATION, "simple");
-        environment.put(Context.SECURITY_PRINCIPAL, "cn=admin,dc=esliceu,dc=com");
-        environment.put(Context.SECURITY_CREDENTIALS, "test");
+        environment.put(Context.SECURITY_PRINCIPAL, admin);
+        environment.put(Context.SECURITY_CREDENTIALS, password);
         this.context = new InitialDirContext(environment);
         System.out.println("Connected..");
         System.out.println(this.context.getEnvironment());
