@@ -46,8 +46,6 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
                 .orElse(new Cookie("Referer", null))
                 .getValue();
 
-        System.out.println("El valor de la coockie Referer es:");
-        System.out.println(cookieValue);
 
         DefaultOidcUser oidcUser = (DefaultOidcUser) authentication.getPrincipal();
         Map attributes = oidcUser.getAttributes();
