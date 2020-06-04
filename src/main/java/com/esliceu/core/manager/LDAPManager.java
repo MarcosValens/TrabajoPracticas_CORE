@@ -12,7 +12,7 @@ import javax.naming.directory.*;
 public class LDAPManager {
     private DirContext context;
     private String url;
-
+/*
     public LDAPManager() throws NamingException {
         this.url = "ldap://localhost:389";
         Hashtable<String, String> environment = new Hashtable<>();
@@ -25,7 +25,7 @@ public class LDAPManager {
         this.context = new InitialDirContext(environment);
         System.out.println("Connected..");
         System.out.println(this.context.getEnvironment());
-    }
+    }*/
 
     public void addUser() {
         try {

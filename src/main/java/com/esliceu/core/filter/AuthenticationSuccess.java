@@ -10,10 +10,14 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Component
 public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler {
@@ -34,6 +38,14 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
             return;
         }
 
+        Cookie[] cookies = request.getCookies();
+        Stream<Cookie> stream = Objects.nonNull(cookies) ? Arrays.stream(cookies) : Stream.empty();
+
+        String cookieValue = stream.filter(cookie -> "Referer".equals(cookie.getName()))
+                .findFirst()
+                .orElse(new Cookie("Referer", null))
+                .getValue();
+
         DefaultOidcUser oidcUser = (DefaultOidcUser) authentication.getPrincipal();
         Map attributes = oidcUser.getAttributes();
         String email = (String) attributes.get("email");
@@ -41,38 +53,30 @@ public class AuthenticationSuccess extends SimpleUrlAuthenticationSuccessHandler
         String acces_token = tokenManager.generateAcessToken(usuariApp);
         String refresh_token = tokenManager.generateRefreshToken(usuariApp);
 
-        // Una manera mejor de hacerlo pero da problemas con el #
-
-        /*
-        String redirectionUrl = UriComponentsBuilder.fromUriString(environment.getProperty("FRONTEND_URL"))
-                .queryParam("acces_token", acces_token)
-                .queryParam("refresh_token", refresh_token)
-                .build().toUriString();
-
-         */
-
-
         /*
          * Sacamos los roles
          * */
-
 
         boolean admin = usuariApp.isAdmin();
         boolean cuiner = usuariApp.isCuiner();
         boolean monitor = usuariApp.isMonitor();
 
-        // ESTA LINEA DE AQUI, FUNCIONARÁ BIEN SI TENEMOS EL QUASAR CON EL ROUTER EN MODO HISTORY.
-//        String redirectionURL = environment.getProperty("FRONTEND_URL")
-//                 + "#/login/oauth/callback" + "?access_token=" + acces_token + "&refresh_token=" + refresh_token
-//                 + "&isAdmin="+admin+"&isCuiner="+cuiner+"&isMonitor="+monitor;
+        String redirectionURL;
 
-        // EN NUESTRO CASO, YA SEA PROD O DEV TENEMOS EL MODO HASH (ABAJO)
+        if (cookieValue != null) {
+            // Funciona Modo Hash
+            redirectionURL = cookieValue + "?access_token=" + acces_token
+                    + "&refresh_token=" + refresh_token
+                    + "&isAdmin=" + admin + "&isCuiner=" + cuiner + "&isMonitor=" + monitor +
+                    "#/login/oauth/callback";
 
-        // ESTA LINEA DE AQUI FUNCIONA SI ESTA EL ROUTER EN MODO HASH DE QUASAR
-        String redirectionURL = environment.getProperty("FRONTEND_URL") + "?access_token=" + acces_token
-                + "&refresh_token=" + refresh_token
-                + "&isAdmin=" + admin + "&isCuiner=" + cuiner + "&isMonitor=" + monitor +
-                "#/login/oauth/callback";
+        } else {
+            // Funciona Modo Hash
+            redirectionURL = environment.getProperty("FRONTEND_URL") + "?access_token=" + acces_token
+                    + "&refresh_token=" + refresh_token
+                    + "&isAdmin=" + admin + "&isCuiner=" + cuiner + "&isMonitor=" + monitor +
+                    "#/login/oauth/callback";
+        }
 
         getRedirectStrategy().sendRedirect(request, response, redirectionURL);
     }
