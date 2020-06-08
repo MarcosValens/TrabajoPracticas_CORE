@@ -2,18 +2,18 @@ package com.esliceu.core.manager;
 
 import com.esliceu.core.entity.Alumne;
 import com.esliceu.core.entity.Grup;
-import com.sun.mail.util.BASE64EncoderStream;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.esliceu.core.entity.Professor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import java.security.MessageDigest;
-import java.util.*;
-
-import javax.naming.*;
+import javax.naming.Context;
+import javax.naming.NamingException;
 import javax.naming.directory.*;
-import javax.xml.bind.DatatypeConverter;
+import java.security.MessageDigest;
+import java.text.Normalizer;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class LDAPManager {
@@ -46,29 +46,26 @@ public class LDAPManager {
             classes.add("top");
             attrs.put(classes);
 
-            Set<String> alumnesSet = new HashSet<>();
+            List<String> alumnesSet = new LinkedList<>();
             for (Alumne alumne : alumnes) {
 
-                String displayName = alumne.getNom() + " " + alumne.getAp1() + " " + alumne.getAp2();
-                String gidNumber = alumne.getGrup().getCodi().toString();
-                String username = createUserName(alumne.getNom(), alumne.getAp1(), alumne.getAp2()).toLowerCase();
-                String mailLiceu = createEmailLiceu(alumne, alumnesSet).toLowerCase();
-                String cognoms = alumne.getAp1() + " " + alumne.getAp2();
-                Long uidNumberMod = alumne.getExpedient() + 10000;
-                String uidNumber = uidNumberMod.toString();
+                String username = createUserName(alumnesSet, alumne);
+                Long uidNumber = alumne.getExpedient() + 10000;
 
-                attrs.put("displayname", displayName);
-                attrs.put("gidnumber", gidNumber);
-                attrs.put("homedirectory", "/home/" + username);
-                attrs.put("l", "Localitat");
-                attrs.put("loginshell", "/bin/bash");
-                attrs.put("mail", mailLiceu);
-                attrs.put("sn", cognoms);
+                attrs.put("employeenumber", alumne.getExpedient().toString());
+                attrs.put("uidnumber", uidNumber.toString());
                 attrs.put("uid", username);
-                attrs.put("uidnumber", uidNumber);
+                attrs.put("sn", alumne.getAp1() + " " + alumne.getAp2());
+                attrs.put("gidnumber", "10000");
+                attrs.put("displayname", alumne.getNom());
+                attrs.put("loginshell", "/bin/bash");
+                attrs.put("mail", username + "@esliceu.net");
+                attrs.put("homedirectory", "/home/" + username);
                 attrs.put("userpassword", cryptToMd5("esliceu2019"));
+                attrs.put("description", " ");
 
-                this.context.createSubcontext(this.url + "/cn=" + username + ",ou=users,ou=accounts,dc=esliceu,dc=com", attrs);
+
+                this.context.createSubcontext(this.url + "/cn=" + username + ",ou=alumnes,ou=people,dc=esliceu,dc=com", attrs);
             }
 
         } catch (Exception e) {
@@ -76,27 +73,36 @@ public class LDAPManager {
         }
     }
 
-    private String createUserName(String nom, String cognom1, String cognom2) {
-        char primeraLletraNom = nom.charAt(0);
-        char primeraLletraCognom2 = cognom2.charAt(0);
-        return primeraLletraNom + cognom1 + primeraLletraCognom2;
+    //Professors començen per 10k i els alumnes per 12k i s'els hi suma incremental
+    //TODO Eliminar espacios del nombre y apellidos
+    private String createUserName(List<String> alumnes, Alumne alumne) {
+        char primeraLletraNom = alumne.getNom().charAt(0);
+        String username = primeraLletraNom + alumne.getAp1();
+        username = Normalizer.normalize(username, Normalizer.Form.NFD);
+        username = username.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        username = checkIfUserAlumneExistst(username.toLowerCase(), true, alumnes, alumne);
+        alumnes.add(username);
+        return username;
     }
 
-    private String createEmailLiceu(Alumne alumne, Set<String> alumnesSet) {
-        String nom = alumne.getNom();
-        String cognom1 = alumne.getAp1();
-        String cognom2 = alumne.getAp2();
-
-        String mailBase = nom + "." + cognom1 + "." + cognom2;
-        if (alumnesSet.contains(mailBase)) {
-            mailBase += alumne.getExpedient();
-        } else {
-            alumnesSet.add(mailBase);
+    private String checkIfUserAlumneExistst(String username, boolean firstTime, List<String> alumnes, Alumne alumne) {
+        if (alumnes.contains(username) && firstTime) {
+            username = checkIfUserAlumneExistst(username + alumne.getAp2().toLowerCase().charAt(0), false, alumnes, alumne);
+        } else if (alumnes.contains(username) && !firstTime) {
+            Pattern pattern = Pattern.compile("\\d+");
+            Matcher matcher = pattern.matcher(username);
+            if (!matcher.find(0)) {
+                username = checkIfUserAlumneExistst(username + "1", false, alumnes, alumne);
+            } else {
+                Integer index = Integer.parseInt(matcher.group(0));
+                username = checkIfUserAlumneExistst(username + (index + 1), false, alumnes, alumne);
+            }
         }
-        return mailBase + "@esliceu.net";
+        System.out.println(username);
+        return username;
     }
 
-    public String cryptToMd5(String plainPassword) {
+    private String cryptToMd5(String plainPassword) {
         try {
             MessageDigest digest = MessageDigest.getInstance("MD5");
             digest.update(plainPassword.getBytes());
@@ -107,6 +113,58 @@ public class LDAPManager {
         }
         return null;
     }
+
+    /*public void addProfessors(List<Professor> professors){
+        try {
+            BasicAttributes attrs = new BasicAttributes();
+
+            Attribute classes = new BasicAttribute("objectclass");
+            classes.add("person");
+            classes.add("posixAccount");
+            classes.add("inetOrgPerson");
+            classes.add("organizationalPerson");
+            classes.add("top");
+            attrs.put(classes);
+
+
+            Set<String> professorSet = new HashSet<>();
+            int contador = 1;
+            for (Professor professor : professors) {
+                String displayName = professor.getNom() + " " + professor.getAp1() + " " + professor.getAp2();
+                String username = createUserName(professor.getNom(), professor.getAp1(), professor.getAp2()).toLowerCase();
+                String mailLiceu = createEmailProfessors(professor, professorSet).toLowerCase();
+                String cognoms = professor.getAp1() + " " + professor.getAp2();
+
+                attrs.put("displayname", displayName);
+                attrs.put("gidnumber", 10000);
+                attrs.put("homedirectory", "/home/" + username);
+                attrs.put("l", "Localitat");
+                attrs.put("loginshell", "/bin/bash");
+                attrs.put("mail", mailLiceu);
+                attrs.put("sn", cognoms);
+                attrs.put("uid", 10000+contador);
+                contador++;
+                attrs.put("uidnumber", 10000);
+                attrs.put("userpassword", cryptToMd5("esliceu2019"));
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private String createEmailProfessors(Professor professor, Set<String> alumnesSet) {
+        String nom = professor.getNom();
+        String cognom1 = professor.getAp1();
+        String cognom2 = professor.getAp2();
+
+        String mailBase = nom + "." + cognom1;
+        if (cognom2 != null){
+            mailBase += '.'+cognom2;
+        }
+
+        return mailBase + "@esliceu.com";
+    }*/
 
     public void addGroup(List<Grup> grups) {
         try {
