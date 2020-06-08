@@ -47,10 +47,11 @@ public class LDAPManager {
             attrs.put(classes);
 
             List<String> alumnesSet = new LinkedList<>();
+            long contador = 1;
             for (Alumne alumne : alumnes) {
 
                 String username = createUserName(alumnesSet, alumne);
-                Long uidNumber = alumne.getExpedient() + 10000;
+                Long uidNumber = 12000 + contador;
 
                 attrs.put("employeenumber", alumne.getExpedient().toString());
                 attrs.put("uidnumber", uidNumber.toString());
@@ -66,6 +67,7 @@ public class LDAPManager {
 
 
                 this.context.createSubcontext(this.url + "/cn=" + username + ",ou=alumnes,ou=people,dc=esliceu,dc=com", attrs);
+                contador++;
             }
 
         } catch (Exception e) {
@@ -74,12 +76,12 @@ public class LDAPManager {
     }
 
     //Professors començen per 10k i els alumnes per 12k i s'els hi suma incremental
-    //TODO Eliminar espacios del nombre y apellidos
     private String createUserName(List<String> alumnes, Alumne alumne) {
         char primeraLletraNom = alumne.getNom().charAt(0);
         String username = primeraLletraNom + alumne.getAp1();
         username = Normalizer.normalize(username, Normalizer.Form.NFD);
         username = username.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        username = username.replaceAll("\\s+","");
         username = checkIfUserAlumneExistst(username.toLowerCase(), true, alumnes, alumne);
         alumnes.add(username);
         return username;
