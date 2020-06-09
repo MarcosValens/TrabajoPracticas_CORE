@@ -96,6 +96,10 @@ public class AuthController {
 
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
         String emailJson = jsonObject.get("email").getAsString();
+
+        /*
+         * POR AHORA COMO NO FUNCIONA EL OAUTH-FLUTTER BIEN EN ANDROID ESTO SE QUEDA COMENTADO
+         * */
 //        String idToken = jsonObject.get("idToken").getAsString();
 //
 //        if (!oauthManager.validateGoogleIdToken(idToken)){
