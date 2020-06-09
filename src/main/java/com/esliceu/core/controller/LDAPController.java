@@ -45,4 +45,14 @@ public class LDAPController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/ldap/update")
+    public ResponseEntity<String> ldapupdate(){
+        try {
+            ldapManager.edit("aaguila", "MODIFICACION DE PRUEBA");
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

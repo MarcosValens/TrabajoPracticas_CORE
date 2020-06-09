@@ -90,6 +90,16 @@ public class LDAPManager {
         }
     }
 
+    public void edit(String username, String newUsername) throws NamingException {
+        String base = "ou=alumnes,ou=people,dc=esliceu,dc=com";
+        ModificationItem[] mod = new ModificationItem[1];
+        Attribute modUsername = new BasicAttribute("uid", newUsername);
+        mod[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, modUsername);
+
+        context.modifyAttributes("cn="+username+","+base, mod);
+
+    }
+
     //Professors començen per 10k i els alumnes per 12k i s'els hi suma incremental
     private String createUserName(List<String> alumnes, Alumne alumne) {
         char primeraLletraNom = alumne.getNom().charAt(0);
