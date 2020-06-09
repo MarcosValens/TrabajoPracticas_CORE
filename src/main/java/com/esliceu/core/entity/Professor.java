@@ -148,35 +148,19 @@ public class Professor implements Serializable {
         this.eliminat = eliminat;
     }
 
-    public String getLoginLDAP() {
-        return LoginLDAP;
-    }
+    public String getLoginLDAP() { return LoginLDAP; }
 
-    public void setLoginLDAP(String loginLDAP) {
-        LoginLDAP = loginLDAP;
-    }
+    public void setLoginLDAP(String loginLDAP) { LoginLDAP = loginLDAP; }
 
-    public boolean isNew() {
-        return isNew;
-    }
+    public boolean isNew() { return isNew; }
 
-    public void setNew(boolean aNew) {
-        isNew = aNew;
-    }
+    public void setNew(boolean aNew) { isNew = aNew; }
 
-    public String getPasswordLDAP() {
-        return passwordLDAP;
-    }
+    public String getPasswordLDAP() { return passwordLDAP; }
 
-    public void setPasswordLDAP(String passwordLDAP) {
-        this.passwordLDAP = passwordLDAP;
-    }
+    public void setPasswordLDAP(String passwordLDAP) { this.passwordLDAP = passwordLDAP; }
 
-    public Long getUidNumberLDAP() {
-        return uidNumberLDAP;
-    }
+    public Long getUidNumberLDAP() { return uidNumberLDAP; }
 
-    public void setUidNumberLDAP(Long uidNumberLDAP) {
-        this.uidNumberLDAP = uidNumberLDAP;
-    }
+    public void setUidNumberLDAP(Long uidNumberLDAP) { this.uidNumberLDAP = uidNumberLDAP; }
 }
