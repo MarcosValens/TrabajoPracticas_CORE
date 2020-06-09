@@ -24,7 +24,7 @@ public class LDAPController {
 
     @GetMapping("/ldap/user")
     public ResponseEntity<String> ldapuser() {
-        ldapManager.addUser();
+        ldapManager.addUser(alumneManager.findAll());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
