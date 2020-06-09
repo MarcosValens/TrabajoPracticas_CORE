@@ -76,7 +76,7 @@ public class LDAPManager {
         SearchControls sc = new SearchControls();
         sc.setSearchScope(SearchControls.SUBTREE_SCOPE);
 
-        String filter = "(uid="+username+")";
+        String filter = "(cn="+username+")";
 
         NamingEnumeration results = this.context.search(base, filter, sc);
 
@@ -98,6 +98,11 @@ public class LDAPManager {
 
         context.modifyAttributes("cn="+username+","+base, mod);
 
+    }
+
+    public void delete(String username) throws NamingException {
+        String base = "ou=alumnes,ou=people,dc=esliceu,dc=com";
+        this.context.destroySubcontext("cn="+username+","+base);
     }
 
     //Professors començen per 10k i els alumnes per 12k i s'els hi suma incremental
