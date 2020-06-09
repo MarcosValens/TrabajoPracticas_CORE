@@ -93,7 +93,7 @@ public class AuthController {
 
     @PostMapping("/auth/login/flutter")
     public Map<String, String> loginFlutter(@RequestBody String json, HttpServletResponse response) {
-
+        System.out.println(json);
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
         String emailJson = jsonObject.get("email").getAsString();
 
