@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.naming.NamingException;
+
 @RestController
 public class LDAPController {
 
@@ -31,6 +33,36 @@ public class LDAPController {
     @GetMapping("/ldap/group")
     public ResponseEntity<String> ldapgroup(){
         ldapManager.addGroup(grupManager.findAll());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/ldap/search")
+    public ResponseEntity<String> ldapsearch(){
+        try {
+            ldapManager.search("aaguila");
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/ldap/update")
+    public ResponseEntity<String> ldapupdate(){
+        try {
+            ldapManager.edit("aaguila", "pepe");
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/ldap/delete")
+    public ResponseEntity<String> ldapdelete(){
+        try {
+            ldapManager.delete("aaguila");
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
