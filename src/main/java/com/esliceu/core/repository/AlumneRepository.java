@@ -14,4 +14,5 @@ public interface AlumneRepository extends CrudRepository<Alumne, String> {
 
     List<Alumne> findAllByEliminatIsTrue();
 
+    List<Alumne> findAllByEliminatIsTrueOrIsNewIsTrue();
 }

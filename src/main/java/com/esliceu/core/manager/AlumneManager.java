@@ -46,4 +46,7 @@ public class AlumneManager {
         return alumneRepository.findAllByEliminatIsTrue();
     }
 
+    public List<Alumne> findNousIEliminats(){
+        return alumneRepository.findAllByEliminatIsTrueOrIsNewIsTrue();
+    }
 }
