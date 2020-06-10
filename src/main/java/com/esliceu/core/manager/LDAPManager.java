@@ -1,4 +1,4 @@
-/*
+
 package com.esliceu.core.manager;
 
 import com.esliceu.core.entity.Grup;
@@ -81,4 +81,4 @@ public class LDAPManager {
             e.printStackTrace();
         }
     }
-}*/
+}
