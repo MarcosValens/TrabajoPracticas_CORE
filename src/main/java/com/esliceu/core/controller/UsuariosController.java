@@ -59,6 +59,9 @@ public class UsuariosController {
         String fecha = data.get("fecha").getAsString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate parsedDate = LocalDate.parse(fecha, formatter);
+        /*
+        * Por cada peticion que se haga se eliminara la lista de esa fecha
+        * */
         usuariAppAlumneManager.deleteAllByData(parsedDate);
         usuariAppProfessorManager.deleteAllByData(parsedDate);
 
@@ -68,6 +71,9 @@ public class UsuariosController {
             Alumne alumne = alumneManager.findById(codi);
             Professor professor = professorManager.findById(codi);
 
+            /*
+            * En caso de que haya un profesor y ademas sea cocinero
+            * */
             if (professor != null && personaMarcadora.isCuiner()) {
 
                 UsuariAppProfessor usuariAppProfessor = new UsuariAppProfessor();
@@ -78,6 +84,9 @@ public class UsuariosController {
                 System.out.println("No estaba marcado");
                 continue;
             }
+             /*
+             * En caso de que sea profesor y el que este marcando no sea un cocinero
+             * */
             if (alumne == null){
                 continue;
             }
