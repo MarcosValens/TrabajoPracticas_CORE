@@ -2,6 +2,7 @@ package com.esliceu.core.controller;
 
 import com.esliceu.core.entity.*;
 import com.esliceu.core.manager.*;
+import com.google.api.client.json.Json;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class ProfessorController {
 
     @Autowired
     UsuariAppProfessorManager usuariAppProfessorManager;
+
+    @Autowired
+    Gson gson;
 
     @GetMapping("/private/cursos")
     public ResponseEntity<List<Curs>> getCursos() {
@@ -133,5 +137,26 @@ public class ProfessorController {
     @GetMapping("/private/professor/comedor/listado")
     public List<Professor> getAllProfesorsListadoComedor() {
         return professorManager.findAllLowCharge();
+    }
+
+    @GetMapping("/admin/getAllProfessorsEliminatsONous")
+    public ResponseEntity<List<Professor>> getAllProfessorsNousOEliminats(){
+        return new ResponseEntity<>(professorManager.findEliminarONou(), HttpStatus.OK);
+    }
+
+    @PostMapping("/admin/updateProfessorLdapCredentials")
+    public ResponseEntity<String> updateProfessorLdap(@RequestBody String jsonString){
+        JsonObject jsonObject = gson.fromJson(jsonString, JsonObject.class);
+        String codi = jsonObject.get("codi").getAsString();
+        Professor professor = professorManager.findById(codi);
+        String loginLdap =  jsonObject.get("loginLdap").getAsString();
+        String passwordLdap = jsonObject.get("passwordLdap").getAsString();
+        Long uidNumberLdap = jsonObject.get("uidNumber").getAsLong();
+        professor.setLoginLDAP(loginLdap);
+        professor.setPasswordLDAP(passwordLdap);
+        professor.setUidNumberLDAP(uidNumberLdap);
+        professorManager.createOrUpdate(professor);
+
+        return new ResponseEntity<>("Ha anat bé", HttpStatus.OK);
     }
 }

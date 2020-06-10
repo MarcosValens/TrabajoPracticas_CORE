@@ -113,7 +113,7 @@ public class AlumneController {
         return new ResponseEntity<>(alumneManager.findNousIEliminats(), HttpStatus.OK);
     }
 
-    @PostMapping("/admin/updateAlumne")
+    @PostMapping("/admin/updateAlumneLdapCredentials")
     public ResponseEntity<String> updateAlumne(@RequestBody String jsonString){
         JsonObject jsonObject = gson.fromJson(jsonString, JsonObject.class);
         String codi = jsonObject.get("codi").getAsString();
