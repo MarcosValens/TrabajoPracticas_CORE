@@ -78,7 +78,9 @@ public class UsuariosController {
                 System.out.println("No estaba marcado");
                 continue;
             }
-
+            if (alumne == null){
+                continue;
+            }
             UsuariAppAlumne usuariAppAlumne = new UsuariAppAlumne();
             usuariAppAlumne.setData(parsedDate);
             usuariAppAlumne.setAlumne(alumne);
