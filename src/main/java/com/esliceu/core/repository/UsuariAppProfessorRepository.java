@@ -13,4 +13,6 @@ public interface UsuariAppProfessorRepository extends CrudRepository<UsuariAppPr
     List<UsuariAppProfessor> findAllByProfessor(Professor professor);
 
     List<UsuariAppProfessor> findByData(LocalDate dia);
+
+    void deleteUsuariAppProfessorByData(LocalDate date);
 }

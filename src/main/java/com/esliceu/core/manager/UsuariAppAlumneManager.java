@@ -33,4 +33,8 @@ public class UsuariAppAlumneManager {
     public List<UsuariAppAlumne> findByDates(LocalDate dataInici, LocalDate dataFi){
         return usuariAppAlumneRepository.findByDataBetween(dataInici, dataFi);
     }
+
+    public void deleteAllByData(LocalDate date){
+        usuariAppAlumneRepository.deleteUsuariAppAlumnesByData(date);
+    }
 }
