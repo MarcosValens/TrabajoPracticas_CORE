@@ -50,7 +50,9 @@ public class UsuariosController {
         String token = request.getHeader("Authorization");
         token = token.replace("Bearer ", "");
         UsuariApp personaMarcadora = usuariAppManager.findByEmail(tokenManager.getBody(token).get("sub").toString());
-        boolean isCuinerOrMonitor = personaMarcadora.isCuiner() || personaMarcadora.isMonitor();
+        boolean isCuiner = personaMarcadora.isCuiner();
+        boolean isMonitor = personaMarcadora.isMonitor();
+        boolean isCuinerOrMonitor = isCuiner || isMonitor;
         if (!isCuinerOrMonitor) {
             return new ResponseEntity<>("Error marcant els alumnes i professors.", HttpStatus.BAD_REQUEST);
         }
@@ -60,11 +62,12 @@ public class UsuariosController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate parsedDate = LocalDate.parse(fecha, formatter);
         /*
-        * Por cada peticion que se haga se eliminara la lista de esa fecha
-        * */
+         * Por cada peticion que se haga se eliminara la lista de esa fecha
+         * */
         usuariAppAlumneManager.deleteAllByData(parsedDate);
-        usuariAppProfessorManager.deleteAllByData(parsedDate);
-
+        if (isCuiner) {
+            usuariAppProfessorManager.deleteAllByData(parsedDate);
+        }
         for (JsonElement comensal : users) {
             JsonObject object = comensal.getAsJsonObject();
             String codi = object.get("codi").toString().replace("\"", "");
@@ -72,10 +75,9 @@ public class UsuariosController {
             Professor professor = professorManager.findById(codi);
 
             /*
-            * En caso de que haya un profesor y ademas sea cocinero
-            * */
-            if (professor != null && personaMarcadora.isCuiner()) {
-
+             * En caso de que haya un profesor y ademas sea cocinero
+             * */
+            if (professor != null && isCuiner) {
                 UsuariAppProfessor usuariAppProfessor = new UsuariAppProfessor();
                 usuariAppProfessor.setData(parsedDate);
                 usuariAppProfessor.setProfessor(professor);
@@ -84,10 +86,10 @@ public class UsuariosController {
                 System.out.println("No estaba marcado");
                 continue;
             }
-             /*
+            /*
              * En caso de que sea profesor y el que este marcando no sea un cocinero
              * */
-            if (alumne == null){
+            if (alumne == null) {
                 continue;
             }
             UsuariAppAlumne usuariAppAlumne = new UsuariAppAlumne();
