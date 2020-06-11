@@ -148,4 +148,9 @@ public class FotoController {
         return new ResponseEntity<>(zipFiles, HttpStatus.OK);
 
     }
+    @DeleteMapping("/secret/delete")
+    public ResponseEntity<String> deleteDeleted() {
+
+        return new ResponseEntity<>(alumneManager.deleteEliminatFotos(), HttpStatus.OK);
+    }
 }
