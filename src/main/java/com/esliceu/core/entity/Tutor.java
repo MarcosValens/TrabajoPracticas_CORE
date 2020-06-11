@@ -1,6 +1,7 @@
 package com.esliceu.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.LazyCollection;
@@ -29,7 +30,7 @@ public class Tutor implements Serializable {
     private String llinatge2;
 
     @OneToMany(mappedBy = "tutor")
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonIgnore
     @JsonManagedReference
     private List<TutorAlumne> tutorsAlumnes;
 

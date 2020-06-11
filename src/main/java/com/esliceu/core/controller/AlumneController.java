@@ -97,7 +97,6 @@ public class AlumneController {
             alumne.setTutorsAlumnes(null);
             alumne.setExpedient(null);
         }
-        System.out.println(alumnes);
         return alumnes;
     }
 

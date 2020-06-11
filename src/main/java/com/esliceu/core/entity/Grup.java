@@ -28,11 +28,11 @@ public class Grup implements Serializable {
     private Curs curs;
 
     @ManyToMany(mappedBy = "grups")
-    @LazyCollection(LazyCollectionOption.FALSE)
     @JsonIgnore
     private List<Professor> professors = new ArrayList<>();
 
     @OneToMany(mappedBy = "grup")
+    @JsonIgnore
     private List<Avaluacio> avaluacions;
 
     @JoinColumn(name = "tutor1")
