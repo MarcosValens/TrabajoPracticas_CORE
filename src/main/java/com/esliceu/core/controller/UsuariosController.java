@@ -10,16 +10,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
+@EnableTransactionManagement
 public class UsuariosController {
     @Autowired
     Gson gson;
@@ -47,9 +50,56 @@ public class UsuariosController {
         String token = request.getHeader("Authorization");
         token = token.replace("Bearer ", "");
         UsuariApp personaMarcadora = usuariAppManager.findByEmail(tokenManager.getBody(token).get("sub").toString());
-        //JsonArray comensales = new JsonParser().parse(json).getAsJsonArray();
-        JsonArray comensales = gson.fromJson(json, JsonArray.class);
-        for (JsonElement comensal:comensales) {
+        boolean isCuiner = personaMarcadora.isCuiner();
+        boolean isMonitor = personaMarcadora.isMonitor();
+        boolean isCuinerOrMonitor = isCuiner || isMonitor;
+        if (!isCuinerOrMonitor) {
+            return new ResponseEntity<>("Error marcant els alumnes i professors.", HttpStatus.BAD_REQUEST);
+        }
+        JsonObject data = gson.fromJson(json, JsonObject.class);
+        JsonArray users = data.get("users").getAsJsonArray();
+        String fecha = data.get("fecha").getAsString();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate parsedDate = LocalDate.parse(fecha, formatter);
+        /*
+         * Por cada peticion que se haga se eliminara la lista de esa fecha
+         * */
+        usuariAppAlumneManager.deleteAllByData(parsedDate);
+        if (isCuiner) {
+            usuariAppProfessorManager.deleteAllByData(parsedDate);
+        }
+        for (JsonElement comensal : users) {
+            JsonObject object = comensal.getAsJsonObject();
+            String codi = object.get("codi").toString().replace("\"", "");
+            Alumne alumne = alumneManager.findById(codi);
+            Professor professor = professorManager.findById(codi);
+
+            /*
+             * En caso de que haya un profesor y ademas sea cocinero
+             * */
+            if (professor != null && isCuiner) {
+                UsuariAppProfessor usuariAppProfessor = new UsuariAppProfessor();
+                usuariAppProfessor.setData(parsedDate);
+                usuariAppProfessor.setProfessor(professor);
+                usuariAppProfessor.setUsuariApp(personaMarcadora);
+                usuariAppProfessorManager.createOrUpdate(usuariAppProfessor);
+                System.out.println("No estaba marcado");
+                continue;
+            }
+            /*
+             * En caso de que sea profesor y el que este marcando no sea un cocinero
+             * */
+            if (alumne == null) {
+                continue;
+            }
+            UsuariAppAlumne usuariAppAlumne = new UsuariAppAlumne();
+            usuariAppAlumne.setData(parsedDate);
+            usuariAppAlumne.setAlumne(alumne);
+            usuariAppAlumne.setUsuariApp(personaMarcadora);
+            usuariAppAlumneManager.createOrUpdate(usuariAppAlumne);
+            System.out.println("No estaba marcado");
+        }
+        /*for (JsonElement comensal:users) {
             JsonObject object = comensal.getAsJsonObject();
             String codi = object.get("codi").toString().replace("\"", "");
             Professor professor = professorManager.findById(codi);
@@ -81,7 +131,7 @@ public class UsuariosController {
             else {
                 return new ResponseEntity<>("Error marcant els alumnes i professors.", HttpStatus.BAD_REQUEST);
             }
-        }
+        }*/
         return new ResponseEntity<>("Usuarios marcados", HttpStatus.OK); // ESTO ES UN PLACEHOLDER
     }
 
@@ -134,7 +184,7 @@ public class UsuariosController {
     }
 
     @GetMapping("/private/usuario/me")
-    public ResponseEntity<UsuariApp> getInfo(HttpServletRequest request){
+    public ResponseEntity<UsuariApp> getInfo(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         token = token.replace("Bearer ", "");
         UsuariApp usuariApp = tokenManager.getUsuariFromToken(token);

@@ -8,14 +8,14 @@ import com.esliceu.core.entity.UsuariAppProfessor;
 import com.esliceu.core.manager.UsuariAppAlumneManager;
 import com.esliceu.core.manager.UsuariAppProfessorManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class MenjadorController {
@@ -83,5 +83,28 @@ public class MenjadorController {
 
         return map;
     }
+    @GetMapping("/private/comedor/comun/{date}")
+    public Map<String, Object> getCommonSelectionDay(@PathVariable("date")String dia) {
+        LocalDate diaSeleccionat = LocalDate.parse(dia);
+        List<Alumne> alumnes = new LinkedList<>();
+        List<Professor> professors = new LinkedList<>();
 
+        List<UsuariAppAlumne> alumnosComedor = this.usuariAppAlumneManager.findByDia(diaSeleccionat);
+
+        for (UsuariAppAlumne usuari : alumnosComedor) {
+            alumnes.add(usuari.getAlumne());
+        }
+
+        List<UsuariAppProfessor> professorsComedor = this.usuariAppProfessorManager.findByDia(diaSeleccionat);
+
+        for (UsuariAppProfessor usuari : professorsComedor) {
+            professors.add(usuari.getProfessor());
+        }
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("alumnes", alumnes);
+        map.put("professors", professors);
+
+        return map;
+    }
 }
