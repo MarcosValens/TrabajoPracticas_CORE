@@ -368,6 +368,7 @@ public class XmlParser {
                     alumne.setExpedient(expedient);
                     alumne.setGrup(grupAlumne);
                     alumne.setEliminat(false);
+                    alumne.setNew(true);
 
                 } else {
                     if (alumne.getGrup() == null) {

@@ -69,4 +69,8 @@ public class AlumneManager {
     public List<Alumne> findNousIEliminats(){
         return alumneRepository.findAllByEliminatIsTrueOrIsNewIsTrue();
     }
+
+    public Long getLastUidNumber(){
+        return alumneRepository.findByOrderByUidNumberLDAPDesc().get(0).getUidNumberLDAP();
+    }
 }
