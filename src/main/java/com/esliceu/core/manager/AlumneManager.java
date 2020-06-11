@@ -51,20 +51,20 @@ public class AlumneManager {
         return alumneRepository.findAllByEliminatIsTrue();
     }
 
-    public String deleteEliminatFotos(){
+    public String deleteEliminatFotos() {
         List<Alumne> elimimnats = alumneRepository.findAllByEliminatIsTrue();
         int i = 0;
-        for (Alumne alumne: elimimnats) {
+        for (Alumne alumne : elimimnats) {
             try {
-                File f= new File(directorioFotos+alumne.getGrup().getCodi()+"/"+alumne.getExpedient()+".png");
+                File f = new File(directorioFotos + alumne.getGrup().getCodi() + "/" + alumne.getExpedient() + ".png");
                 boolean deleted = f.delete();
-                if(deleted) i++;
-            }
-            catch (Exception exception) {
+                if (deleted) i++;
+            } catch (Exception exception) {
                 continue;
             }
-        };
-        return "Deleted "+i+" fotos";
+        }
+        return "Deleted " + i + " fotos";
+    }
 
     public List<Alumne> findNousIEliminats(){
         return alumneRepository.findAllByEliminatIsTrueOrIsNewIsTrue();

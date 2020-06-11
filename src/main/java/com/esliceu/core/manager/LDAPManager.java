@@ -37,34 +37,43 @@ public class LDAPManager {
         System.out.println(this.context.getEnvironment());
     }
 
-    public void addAlumne(List<Alumne> alumnes) {
-        try {
+    public void actualitzarAlumnesLdap(List<Alumne> alumnes) {
+        for (Alumne alumne : alumnes) {
+            boolean eliminat = alumne.isEliminat();
+            boolean nou = alumne.isNew();
+
             BasicAttributes attrs = createBasics();
-
-            //Afegir a la base de dades el uidNumber, username, password
-            List<String> alumnesSet = new LinkedList<>();
-            long contador = 1;
-            for (Alumne alumne : alumnes) {
-
-                String username = createUserName(alumnesSet, alumne);
-                Long uidNumber = 12000 + contador;
-
-                attrs.put("employeenumber", alumne.getExpedient().toString());
-                attrs.put("uidnumber", uidNumber.toString());
-                attrs.put("uid", username);
-                attrs.put("sn", alumne.getAp1() + " " + alumne.getAp2());
-                attrs.put("gidnumber", "10000");
-                attrs.put("displayname", alumne.getNom());
-                attrs.put("loginshell", "/bin/bash");
-                attrs.put("mail", username + "@esliceu.net");
-                attrs.put("homedirectory", "/home/" + username);
-                attrs.put("userpassword", cryptToMd5("esliceu2019"));
-                attrs.put("description", " ");
-
-
-                this.context.createSubcontext(this.url + "/cn=" + username + ",ou=alumnes,ou=people,dc=esliceu,dc=com", attrs);
-                contador++;
+            if (eliminat) {
+                //Eliminar
+            } else if (nou) {
+                addAlumne(alumne, attrs);
+            } else {
+                //Editar
             }
+        }
+    }
+
+    public void addAlumne(Alumne alumne, BasicAttributes attrs) {
+        try {
+            List<String> alumnesSet = new LinkedList<>();
+
+            String username = createUserName(alumnesSet, alumne);
+            Long uidNumber = 12000L;
+
+            attrs.put("employeenumber", alumne.getExpedient().toString());
+            attrs.put("uidnumber", uidNumber.toString());
+            attrs.put("uid", username);
+            attrs.put("sn", alumne.getAp1() + " " + alumne.getAp2());
+            attrs.put("gidnumber", "10000");
+            attrs.put("displayname", alumne.getNom());
+            attrs.put("loginshell", "/bin/bash");
+            attrs.put("mail", username + "@esliceu.net");
+            attrs.put("homedirectory", "/home/" + username);
+            attrs.put("userpassword", cryptToMd5("esliceu2019"));
+            attrs.put("description", " ");
+
+
+            this.context.createSubcontext(this.url + "/cn=" + username + ",ou=alumnes,ou=people,dc=esliceu,dc=com", attrs);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,16 +86,16 @@ public class LDAPManager {
         SearchControls sc = new SearchControls();
         sc.setSearchScope(SearchControls.SUBTREE_SCOPE);
 
-        String filter = "(cn="+username+")";
+        String filter = "(cn=" + username + ")";
 
         NamingEnumeration results = this.context.search(base, filter, sc);
 
-        while (results.hasMore()){
+        while (results.hasMore()) {
             SearchResult sr = (SearchResult) results.next();
             Attributes attributes = sr.getAttributes();
             Attribute attribute = attributes.get("mail");
-            if (attribute != null){
-                System.out.println("ALUMNE: "+attribute.get());
+            if (attribute != null) {
+                System.out.println("ALUMNE: " + attribute.get());
             }
         }
     }
@@ -97,13 +106,13 @@ public class LDAPManager {
         Attribute modUsername = new BasicAttribute("uid", newUsername);
         mod[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, modUsername);
 
-        context.modifyAttributes("cn="+username+","+base, mod);
+        context.modifyAttributes("cn=" + username + "," + base, mod);
 
     }
 
     public void deleteAlumne(String username) throws NamingException {
         String base = "ou=alumnes,ou=people,dc=esliceu,dc=com";
-        this.context.destroySubcontext("cn="+username+","+base);
+        this.context.destroySubcontext("cn=" + username + "," + base);
     }
 
     //Professors començen per 10k i els alumnes per 12k i s'els hi suma incremental
@@ -112,7 +121,7 @@ public class LDAPManager {
         String username = primeraLletraNom + alumne.getAp1();
         username = Normalizer.normalize(username, Normalizer.Form.NFD);
         username = username.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
-        username = username.replaceAll("\\s+","");
+        username = username.replaceAll("\\s+", "");
         username = checkIfUserAlumneExistst(username.toLowerCase(), true, alumnes, alumne);
         alumnes.add(username);
         return username;
@@ -147,7 +156,7 @@ public class LDAPManager {
         return null;
     }
 
-    private BasicAttributes createBasics(){
+    private BasicAttributes createBasics() {
         BasicAttributes attrs = new BasicAttributes();
         Attribute classes = new BasicAttribute("objectclass");
         classes.add("person");
