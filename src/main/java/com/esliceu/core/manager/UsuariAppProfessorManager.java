@@ -6,11 +6,13 @@ import com.esliceu.core.entity.UsuariAppProfessorID;
 import com.esliceu.core.repository.UsuariAppProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@Transactional
 public class UsuariAppProfessorManager {
     @Autowired
     private UsuariAppProfessorRepository usuariAppProfessorRepository;
@@ -28,5 +30,9 @@ public class UsuariAppProfessorManager {
 
     public List<UsuariAppProfessor> findByDia(LocalDate dia) {
         return usuariAppProfessorRepository.findByData(dia);
+    }
+
+    public void deleteAllByData(LocalDate date){
+        usuariAppProfessorRepository.deleteUsuariAppProfessorByData(date);
     }
 }

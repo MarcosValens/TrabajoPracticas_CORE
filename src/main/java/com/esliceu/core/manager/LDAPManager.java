@@ -1,3 +1,4 @@
+
 package com.esliceu.core.manager;
 
 import com.esliceu.core.entity.Alumne;
@@ -36,7 +37,7 @@ public class LDAPManager {
         System.out.println(this.context.getEnvironment());
     }
 
-    public void addUser(List<Alumne> alumnes) {
+    public void addAlumne(List<Alumne> alumnes) {
         try {
             BasicAttributes attrs = createBasics();
 
@@ -70,7 +71,7 @@ public class LDAPManager {
         }
     }
 
-    public void search(String username) throws NamingException {
+    public void searchAlumne(String username) throws NamingException {
         String base = "ou=alumnes,ou=people,dc=esliceu,dc=com";
 
         SearchControls sc = new SearchControls();
@@ -90,7 +91,7 @@ public class LDAPManager {
         }
     }
 
-    public void edit(String username, String newUsername) throws NamingException {
+    public void editAlumne(String username, String newUsername) throws NamingException {
         String base = "ou=alumnes,ou=people,dc=esliceu,dc=com";
         ModificationItem[] mod = new ModificationItem[1];
         Attribute modUsername = new BasicAttribute("uid", newUsername);
@@ -100,7 +101,7 @@ public class LDAPManager {
 
     }
 
-    public void delete(String username) throws NamingException {
+    public void deleteAlumne(String username) throws NamingException {
         String base = "ou=alumnes,ou=people,dc=esliceu,dc=com";
         this.context.destroySubcontext("cn="+username+","+base);
     }

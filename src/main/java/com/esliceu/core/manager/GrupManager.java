@@ -14,9 +14,6 @@ public class GrupManager {
     @Autowired
     private GrupRepository grupRepository;
 
-    @Autowired
-    private AvaluacioManager avaluacioManager;
-
     public void createOrUpdate(Grup grup) {
         grupRepository.save(grup);
     }
@@ -36,4 +33,5 @@ public class GrupManager {
     public void deleteGrup(Grup grup) {
         grupRepository.delete(grup);
     }
+
 }

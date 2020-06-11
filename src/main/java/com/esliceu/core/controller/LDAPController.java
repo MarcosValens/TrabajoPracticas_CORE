@@ -1,3 +1,4 @@
+
 package com.esliceu.core.controller;
 
 
@@ -26,7 +27,7 @@ public class LDAPController {
 
     @GetMapping("/ldap/user")
     public ResponseEntity<String> ldapuser() {
-        ldapManager.addUser(alumneManager.findAll());
+        ldapManager.addAlumne(alumneManager.findAll());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -39,7 +40,7 @@ public class LDAPController {
     @GetMapping("/ldap/search")
     public ResponseEntity<String> ldapsearch(){
         try {
-            ldapManager.search("aaguila");
+            ldapManager.searchAlumne("aaguila");
         } catch (NamingException e) {
             e.printStackTrace();
         }
@@ -49,7 +50,7 @@ public class LDAPController {
     @GetMapping("/ldap/update")
     public ResponseEntity<String> ldapupdate(){
         try {
-            ldapManager.edit("aaguila", "pepe");
+            ldapManager.editAlumne("aaguila", "pepe");
         } catch (NamingException e) {
             e.printStackTrace();
         }
@@ -59,10 +60,11 @@ public class LDAPController {
     @GetMapping("/ldap/delete")
     public ResponseEntity<String> ldapdelete(){
         try {
-            ldapManager.delete("aaguila");
+            ldapManager.deleteAlumne("aaguila");
         } catch (NamingException e) {
             e.printStackTrace();
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
+

@@ -65,5 +65,8 @@ public class AlumneManager {
             }
         };
         return "Deleted "+i+" fotos";
+
+    public List<Alumne> findNousIEliminats(){
+        return alumneRepository.findAllByEliminatIsTrueOrIsNewIsTrue();
     }
 }
