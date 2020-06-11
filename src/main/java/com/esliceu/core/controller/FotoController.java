@@ -1,5 +1,6 @@
 package com.esliceu.core.controller;
 
+import com.esliceu.core.manager.AlumneManager;
 import com.esliceu.core.manager.FileManager;
 import com.esliceu.core.utils.HashService;
 import org.apache.commons.io.IOUtils;
@@ -33,6 +34,9 @@ public class FotoController {
 
     @Autowired
     private FileManager fileManager;
+
+    @Autowired
+    private AlumneManager alumneManager;
 
     @Autowired
     private HashService hashService;
