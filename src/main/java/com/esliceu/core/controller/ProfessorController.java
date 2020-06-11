@@ -85,6 +85,9 @@ public class ProfessorController {
         }
         UsuariApp usuariApp = new UsuariApp();
         usuariApp.setEmail(email);
+        usuariApp.setNombre(professor.getNom());
+        usuariApp.setApellido1(professor.getAp1());
+        usuariApp.setApellido2(professor.getAp2());
         usuariApp.setProfessor(professor);
         usuariApp.setIsProfessor(true);
         professor.setUsuariApp(usuariApp);
