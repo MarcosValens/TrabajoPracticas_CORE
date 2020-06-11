@@ -1,3 +1,4 @@
+
 package com.esliceu.core.controller;
 
 
@@ -66,3 +67,4 @@ public class LDAPController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
+
