@@ -5,11 +5,13 @@ import com.esliceu.core.repository.TutorAlumneRepository;
 import com.esliceu.core.repository.UsuariAppAlumneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@Transactional
 public class UsuariAppAlumneManager {
     @Autowired
     private UsuariAppAlumneRepository usuariAppAlumneRepository;
