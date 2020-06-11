@@ -59,4 +59,8 @@ public class ProfessorManager {
     public List<Professor> findEliminarONou(){
         return professorRepository.findAllByEliminatIsTrueOrIsNewIsTrue();
     }
+
+    public Long getLastUidNumber(){
+        return professorRepository.findByOrderByUidNumberLDAPDesc().get(0).getUidNumberLDAP();
+    }
 }
