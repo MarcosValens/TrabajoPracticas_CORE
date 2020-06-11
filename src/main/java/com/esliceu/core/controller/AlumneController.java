@@ -102,4 +102,5 @@ public class AlumneController {
         LocalDate fi = LocalDate.parse(dataFi);
         return new ResponseEntity<>(usuariAppAlumneManager.findByDates(inici, fi), HttpStatus.OK);
     }
+
 }
