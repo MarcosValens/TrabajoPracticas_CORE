@@ -37,14 +37,17 @@ public class Grup implements Serializable {
 
     @JoinColumn(name = "tutor1")
     @ManyToOne()
+    @JsonIgnore
     private Professor tutor1;
 
     @JoinColumn(name = "tutor2")
     @ManyToOne()
+    @JsonIgnore
     private Professor tutor2;
 
     @JoinColumn(name = "tutor3")
     @ManyToOne()
+    @JsonIgnore
     private Professor tutor3;
 
 
