@@ -6,6 +6,8 @@ import com.esliceu.core.manager.AlumneManager;
 import com.esliceu.core.manager.GrupManager;
 import com.esliceu.core.manager.UsuariAppAlumneManager;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,9 @@ public class AlumneController {
 
     @Autowired
     EntityManager em;
+
+    @Autowired
+    Gson gson;
 
     @GetMapping("/private/alumnos")
     public List<Alumne> getAllAlumnos() {
@@ -102,4 +107,25 @@ public class AlumneController {
         LocalDate fi = LocalDate.parse(dataFi);
         return new ResponseEntity<>(usuariAppAlumneManager.findByDates(inici, fi), HttpStatus.OK);
     }
+
+    @GetMapping("/admin/getAllAlumnesEliminatsONous")
+    public ResponseEntity<List<Alumne>> getAlumnesByNouOEliminat(){
+        return new ResponseEntity<>(alumneManager.findNousIEliminats(), HttpStatus.OK);
+    }
+
+    @PostMapping("/admin/updateAlumneLdapCredentials")
+    public ResponseEntity<String> updateAlumne(@RequestBody String jsonString){
+        JsonObject jsonObject = gson.fromJson(jsonString, JsonObject.class);
+        String codi = jsonObject.get("codi").getAsString();
+        Alumne alumne = alumneManager.findById(codi);
+        String loginLdap =  jsonObject.get("loginLdap").getAsString();
+        String passwordLdap = jsonObject.get("passwordLdap").getAsString();
+        Long uidNumberLdap = jsonObject.get("uidNumber").getAsLong();
+        alumne.setLoginLDAP(loginLdap);
+        alumne.setPasswordLDAP(passwordLdap);
+        alumne.setUidNumberLDAP(uidNumberLdap);
+        alumneManager.createOrUpdate(alumne);
+        return new ResponseEntity<>("Ha anat bé", HttpStatus.OK);
+    }
+
 }

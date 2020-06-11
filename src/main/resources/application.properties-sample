@@ -49,7 +49,7 @@ spring.security.oauth2.client.registration.google.redirect-uri=http://localhost:
 # FOTOS ##
 UPLOAD.DIRECTORY.FOTOS=./src/main/resources/photos/
 UPLOAD.DIRECTORY.ZIP=./src/main/resources/zip/
-
+DELETE.FOTOS.SECRET=secret
 
 ## Token JwT ##
 ACCES_TOKEN_EXPIRE=1800000

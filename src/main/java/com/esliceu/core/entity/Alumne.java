@@ -10,7 +10,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "alumno")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "codi")
 public class Alumne implements Serializable {
 
     @Id
@@ -31,6 +30,18 @@ public class Alumne implements Serializable {
 
     @Column(name = "eliminat")
     private boolean eliminat;
+
+    @Column(name = "loginldap")
+    private String LoginLDAP;
+
+    @Column(name = "isnew", columnDefinition = "bit default 1")
+    private boolean isNew;
+
+    @Column(name = "passwordldap")
+    private String passwordLDAP;
+
+    @Column(name = "uidnumberldap")
+    private Long uidNumberLDAP;
 
     @JoinColumn(name = "grup_codi")
     @ManyToOne(cascade = CascadeType.ALL)
@@ -106,4 +117,20 @@ public class Alumne implements Serializable {
     public void setEliminat(boolean eliminat) {
         this.eliminat = eliminat;
     }
+
+    public String getLoginLDAP() { return LoginLDAP; }
+
+    public void setLoginLDAP(String loginLDAP) { LoginLDAP = loginLDAP; }
+
+    public boolean isNew() { return isNew; }
+
+    public void setNew(boolean aNew) { isNew = aNew; }
+
+    public String getPasswordLDAP() { return passwordLDAP; }
+
+    public void setPasswordLDAP(String passwordLDAP) { this.passwordLDAP = passwordLDAP; }
+
+    public Long getUidNumberLDAP() { return uidNumberLDAP; }
+
+    public void setUidNumberLDAP(Long uidNumberLDAP) { this.uidNumberLDAP = uidNumberLDAP; }
 }

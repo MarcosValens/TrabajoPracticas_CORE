@@ -51,4 +51,16 @@ public class ProfessorManager {
     public List<Professor> findEliminat() {
         return professorRepository.findAllByEliminatIsTrue();
     }
+
+    public void deleteById(String id){
+        professorRepository.deleteById(id);
+    }
+
+    public List<Professor> findEliminarONou(){
+        return professorRepository.findAllByEliminatIsTrueOrIsNewIsTrue();
+    }
+
+    public Long getLastUidNumber(){
+        return professorRepository.findByOrderByUidNumberLDAPDesc().get(0).getUidNumberLDAP();
+    }
 }

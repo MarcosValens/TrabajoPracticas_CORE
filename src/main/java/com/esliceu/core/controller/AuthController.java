@@ -2,6 +2,7 @@ package com.esliceu.core.controller;
 
 import com.esliceu.core.entity.UsuariApp;
 import com.esliceu.core.manager.MailingManager;
+import com.esliceu.core.manager.OauthManager;
 import com.esliceu.core.manager.TokenManager;
 import com.esliceu.core.manager.UsuariAppManager;
 import com.google.gson.Gson;
@@ -34,6 +35,9 @@ public class AuthController {
 
     @Autowired
     private MailingManager mailingManager;
+
+    @Autowired
+    private OauthManager oauthManager;
 
     @PostMapping("/auth/login")
     public Map<String, String> login(@RequestBody String json, HttpServletResponse response) {
@@ -89,13 +93,22 @@ public class AuthController {
 
     @PostMapping("/auth/login/flutter")
     public Map<String, String> loginFlutter(@RequestBody String json, HttpServletResponse response) {
-
+        System.out.println(json);
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
         String emailJson = jsonObject.get("email").getAsString();
 
+        /*
+         * POR AHORA COMO NO FUNCIONA EL OAUTH-FLUTTER BIEN EN ANDROID ESTO SE QUEDA COMENTADO
+         * */
+//        String idToken = jsonObject.get("idToken").getAsString();
+//
+//        if (!oauthManager.validateGoogleIdToken(idToken)){
+//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            return null;
+//        }
+
         UsuariApp usuariApp = usuariAppManager.findByEmail(emailJson);
 
-        System.out.println(usuariApp);
 
         if (usuariApp == null) {
             UsuariApp usuariBD = new UsuariApp();

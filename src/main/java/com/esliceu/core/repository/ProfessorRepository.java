@@ -9,4 +9,8 @@ public interface ProfessorRepository extends CrudRepository<Professor, String> {
 
     List<Professor> findAllByEliminatIsTrue();
 
+    List<Professor> findAllByEliminatIsTrueOrIsNewIsTrue();
+
+    List<Professor> findByOrderByUidNumberLDAPDesc();
+
 }
