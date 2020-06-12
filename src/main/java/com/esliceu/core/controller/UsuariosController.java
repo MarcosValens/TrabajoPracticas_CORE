@@ -59,9 +59,8 @@ public class UsuariosController {
         JsonObject data = gson.fromJson(json, JsonObject.class);
         JsonArray users = data.get("users").getAsJsonArray();
         String fecha = data.get("fecha").getAsString();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-dd-MM");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate parsedDate = LocalDate.parse(fecha, formatter);
-        System.out.println("MARCOS "+ parsedDate);
         /*
          * Por cada peticion que se haga se eliminara la lista de esa fecha
          * */

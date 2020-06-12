@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
@@ -85,7 +86,8 @@ public class MenjadorController {
     }
     @GetMapping("/private/comedor/comun/{date}")
     public Map<String, Object> getCommonSelectionDay(@PathVariable("date")String dia) {
-        LocalDate diaSeleccionat = LocalDate.parse(dia);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate diaSeleccionat = LocalDate.parse(dia,formatter);
         List<Alumne> alumnes = new LinkedList<>();
         List<Professor> professors = new LinkedList<>();
 
