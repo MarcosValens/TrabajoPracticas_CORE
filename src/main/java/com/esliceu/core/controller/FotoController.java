@@ -1,6 +1,10 @@
 package com.esliceu.core.controller;
 
+import com.esliceu.core.entity.Alumne;
+import com.esliceu.core.entity.Grup;
+import com.esliceu.core.manager.AlumneManager;
 import com.esliceu.core.manager.FileManager;
+import com.esliceu.core.manager.GrupManager;
 import com.esliceu.core.utils.HashService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +19,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class FotoController {
@@ -35,7 +43,13 @@ public class FotoController {
     private FileManager fileManager;
 
     @Autowired
+    private AlumneManager alumneManager;
+
+    @Autowired
     private HashService hashService;
+
+    @Autowired
+    GrupManager grupManager;
 
 
     @PostMapping("/private/uploadPhoto")
@@ -81,6 +95,34 @@ public class FotoController {
         String base64 = Base64.getEncoder().encodeToString(imageBytes);
 
         return ResponseEntity.ok().body(base64);
+    }
+
+    @GetMapping(value = "/private/download/all")
+    public List<Alumne> downloadAllPhotos(HttpServletResponse response) throws IOException {
+
+        List<Grup> grups = grupManager.findAll();
+        List<Alumne> alumnes = alumneManager.findAll();
+
+        for (int i = 0; i < grups.size(); i++) {
+            String directoriFotosGrup = this.direcotrioFotos + grups.get(i).getCodi();
+            File tmpDir = new File(directoriFotosGrup);
+            if (tmpDir.exists()){
+                System.out.println("Grupo: " + directoriFotosGrup);
+                for (int j = 0; j < alumnes.size(); j++) {
+                    String directoriFotoAlumne = directoriFotosGrup + "/" + alumnes.get(j).getExpedient() + ".png";
+                    File tmpFile = new File(directoriFotoAlumne);
+                    if (tmpFile.exists()){
+                        InputStream iSteamReader = new FileInputStream(directoriFotoAlumne);
+                        byte[] imageBytes = IOUtils.toByteArray(iSteamReader);
+                        alumnes.get(j).setTutorsAlumnes(null);
+                        alumnes.get(j).setExpedient(null);
+                        alumnes.get(j).setImatge(Base64.getEncoder().encodeToString(imageBytes));
+                    }
+                }
+            }
+        }
+        response.setStatus(HttpServletResponse.SC_OK);
+        return alumnes;
     }
 
     @GetMapping(value = "/private/generate-zip/{codiGrup}", produces = "application/zip")
@@ -147,5 +189,10 @@ public class FotoController {
 
         return new ResponseEntity<>(zipFiles, HttpStatus.OK);
 
+    }
+    @DeleteMapping("/secret/delete")
+    public ResponseEntity<String> deleteDeleted() {
+
+        return new ResponseEntity<>(alumneManager.deleteEliminatFotos(), HttpStatus.OK);
     }
 }

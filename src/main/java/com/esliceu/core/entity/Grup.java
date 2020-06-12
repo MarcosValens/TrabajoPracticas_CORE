@@ -28,12 +28,28 @@ public class Grup implements Serializable {
     private Curs curs;
 
     @ManyToMany(mappedBy = "grups")
-    @LazyCollection(LazyCollectionOption.FALSE)
     @JsonIgnore
     private List<Professor> professors = new ArrayList<>();
 
     @OneToMany(mappedBy = "grup")
+    @JsonIgnore
     private List<Avaluacio> avaluacions;
+
+    @JoinColumn(name = "tutor1")
+    @ManyToOne()
+    @JsonIgnore
+    private Professor tutor1;
+
+    @JoinColumn(name = "tutor2")
+    @ManyToOne()
+    @JsonIgnore
+    private Professor tutor2;
+
+    @JoinColumn(name = "tutor3")
+    @ManyToOne()
+    @JsonIgnore
+    private Professor tutor3;
+
 
     public Grup() {
     }
@@ -81,6 +97,30 @@ public class Grup implements Serializable {
 
     public void setAvaluacions(List<Avaluacio> avaluacions) {
         this.avaluacions = avaluacions;
+    }
+
+    public Professor getTutor1() {
+        return tutor1;
+    }
+
+    public void setTutor1(Professor tutor1) {
+        this.tutor1 = tutor1;
+    }
+
+    public Professor getTutor2() {
+        return tutor2;
+    }
+
+    public void setTutor2(Professor tutor2) {
+        this.tutor2 = tutor2;
+    }
+
+    public Professor getTutor3() {
+        return tutor3;
+    }
+
+    public void setTutor3(Professor tutor3) {
+        this.tutor3 = tutor3;
     }
 
     @Override

@@ -85,6 +85,9 @@ public class ProfessorController {
         }
         UsuariApp usuariApp = new UsuariApp();
         usuariApp.setEmail(email);
+        usuariApp.setNombre(professor.getNom());
+        usuariApp.setApellido1(professor.getAp1());
+        usuariApp.setApellido2(professor.getAp2());
         usuariApp.setProfessor(professor);
         usuariApp.setIsProfessor(true);
         professor.setUsuariApp(usuariApp);
@@ -139,12 +142,12 @@ public class ProfessorController {
         return professorManager.findAllLowCharge();
     }
 
-    @GetMapping("/admin/getAllProfessorsEliminatsONous")
+    @GetMapping("/getAllProfessorsEliminatsONous")
     public ResponseEntity<List<Professor>> getAllProfessorsNousOEliminats(){
         return new ResponseEntity<>(professorManager.findEliminarONou(), HttpStatus.OK);
     }
 
-    @PostMapping("/admin/updateProfessorLdapCredentials")
+    @PostMapping("/updateProfessorLdapCredentials")
     public ResponseEntity<String> updateProfessorLdap(@RequestBody String jsonString){
         JsonObject jsonObject = gson.fromJson(jsonString, JsonObject.class);
         String codi = jsonObject.get("codi").getAsString();

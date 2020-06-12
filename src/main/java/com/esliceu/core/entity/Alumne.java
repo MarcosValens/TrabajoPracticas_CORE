@@ -1,6 +1,6 @@
 package com.esliceu.core.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -48,9 +48,11 @@ public class Alumne implements Serializable {
     private Grup grup;
 
     @OneToMany(mappedBy = "alumne", orphanRemoval = true)
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @JsonManagedReference
+    @JsonIgnore
     private List<TutorAlumne> tutorsAlumnes;
+
+    @Transient
+    private String imatge;
 
     public Alumne() {
     }
@@ -134,4 +136,12 @@ public class Alumne implements Serializable {
     public Long getUidNumberLDAP() { return uidNumberLDAP; }
 
     public void setUidNumberLDAP(Long uidNumberLDAP) { this.uidNumberLDAP = uidNumberLDAP; }
+
+    public void setImatge(String imatge) {
+        this.imatge = imatge;
+    }
+
+    public String getImatge() {
+        return imatge;
+    }
 }
