@@ -104,17 +104,19 @@ public class FotoController {
         List<Alumne> alumnes = alumneManager.findAll();
         Map<String, Alumne> map = new HashMap<>();
 
-        for (int i = 0; i < grups.size(); i++) {
-            String directoriFotosGrup = this.direcotrioFotos + grups.get(i).getCodi();
+        for (Grup grup : grups) {
+            String directoriFotosGrup = this.direcotrioFotos + grup.getCodi();
             File tmpDir = new File(directoriFotosGrup);
-            if (tmpDir.exists()){
-                for (int j = 0; j < alumnes.size(); j++) {
-                    String directoriFotoAlumne = directoriFotosGrup + "/" + alumnes.get(j).getExpedient() + ".png";
+            if (tmpDir.exists()) {
+                for (Alumne alumne : alumnes) {
+                    String directoriFotoAlumne = directoriFotosGrup + "/" + alumne.getExpedient() + ".png";
                     File tmpFile = new File(directoriFotoAlumne);
-                    if (tmpFile.exists()){
+                    if (tmpFile.exists()) {
                         InputStream iSteamReader = new FileInputStream(directoriFotoAlumne);
                         byte[] imageBytes = IOUtils.toByteArray(iSteamReader);
-                        map.put(Base64.getEncoder().encodeToString(imageBytes), alumnes.get(j));
+                        alumne.setTutorsAlumnes(null);
+                        alumne.setExpedient(null);
+                        map.put(Base64.getEncoder().encodeToString(imageBytes), alumne);
                     }
                 }
             }
