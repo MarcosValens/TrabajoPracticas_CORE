@@ -179,22 +179,4 @@ public class AlumneLDAPManager {
         attrs.put(classes);
         return attrs;
     }
-
-    public void addGroup(List<Grup> grups) {
-        try {
-            BasicAttributes attrs = new BasicAttributes();
-
-            Attribute classes = new BasicAttribute("objectclass");
-            classes.add("posixGroup");
-            classes.add("top");
-            attrs.put(classes);
-            for (Grup grup : grups) {
-                attrs.put("gidnumber", grup.getCodi().toString());
-
-                this.context.createSubcontext(this.url + "/cn=" + grup.getCurs().getDescripcio() + " " + grup.getNom() + ",ou=posixgroups,ou=accounts,dc=esliceu,dc=com", attrs);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

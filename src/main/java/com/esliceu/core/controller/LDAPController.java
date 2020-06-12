@@ -21,6 +21,9 @@ public class LDAPController {
     private GrupManager grupManager;
 
     @Autowired
+    private GrupLDAPManager grupLDAPManager;
+
+    @Autowired
     private AlumneManager alumneManager;
 
     @Autowired
@@ -39,6 +42,12 @@ public class LDAPController {
     public ResponseEntity<String> actualitzarLdapProfessors() throws NamingException {
         professorLDAPManager.actualitzarProfessorsLdap(professorManager.findAll());
         return new ResponseEntity<>("Canvis realitzats", HttpStatus.OK);
+    }
+
+    @PostMapping("/ldap/insertarGrups")
+    public ResponseEntity<String> insertarLdapGrups(){
+        grupLDAPManager.addGroup(grupManager.findAll());
+        return new ResponseEntity<>("Grups insertats", HttpStatus.OK);
     }
 }
 
