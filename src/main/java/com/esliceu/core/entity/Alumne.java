@@ -51,6 +51,9 @@ public class Alumne implements Serializable {
     @JsonIgnore
     private List<TutorAlumne> tutorsAlumnes;
 
+    @Transient
+    private String imatge;
+
     public Alumne() {
     }
 
@@ -133,4 +136,12 @@ public class Alumne implements Serializable {
     public Long getUidNumberLDAP() { return uidNumberLDAP; }
 
     public void setUidNumberLDAP(Long uidNumberLDAP) { this.uidNumberLDAP = uidNumberLDAP; }
+
+    public void setImatge(String imatge) {
+        this.imatge = imatge;
+    }
+
+    public String getImatge() {
+        return imatge;
+    }
 }
