@@ -97,32 +97,32 @@ public class FotoController {
         return ResponseEntity.ok().body(base64);
     }
 
-    @GetMapping(value = "/private/download/all/")
-    public Map<String, Alumne> downloadAllPhotos(HttpServletResponse response) throws IOException {
+    @GetMapping(value = "/private/download/all")
+    public List<Alumne> downloadAllPhotos(HttpServletResponse response) throws IOException {
 
         List<Grup> grups = grupManager.findAll();
         List<Alumne> alumnes = alumneManager.findAll();
-        Map<String, Alumne> map = new HashMap<>();
 
-        for (Grup grup : grups) {
-            String directoriFotosGrup = this.direcotrioFotos + grup.getCodi();
+        for (int i = 0; i < grups.size(); i++) {
+            String directoriFotosGrup = this.direcotrioFotos + grups.get(i).getCodi();
             File tmpDir = new File(directoriFotosGrup);
-            if (tmpDir.exists()) {
-                for (Alumne alumne : alumnes) {
-                    String directoriFotoAlumne = directoriFotosGrup + "/" + alumne.getExpedient() + ".png";
+            if (tmpDir.exists()){
+                System.out.println("Grupo: " + directoriFotosGrup);
+                for (int j = 0; j < alumnes.size(); j++) {
+                    String directoriFotoAlumne = directoriFotosGrup + "/" + alumnes.get(j).getExpedient() + ".png";
                     File tmpFile = new File(directoriFotoAlumne);
-                    if (tmpFile.exists()) {
+                    if (tmpFile.exists()){
                         InputStream iSteamReader = new FileInputStream(directoriFotoAlumne);
                         byte[] imageBytes = IOUtils.toByteArray(iSteamReader);
-                        alumne.setTutorsAlumnes(null);
-                        alumne.setExpedient(null);
-                        map.put(Base64.getEncoder().encodeToString(imageBytes), alumne);
+                        alumnes.get(j).setTutorsAlumnes(null);
+                        alumnes.get(j).setExpedient(null);
+                        alumnes.get(j).setImatge(Base64.getEncoder().encodeToString(imageBytes));
                     }
                 }
             }
         }
         response.setStatus(HttpServletResponse.SC_OK);
-        return map;
+        return alumnes;
     }
 
     @GetMapping(value = "/private/generate-zip/{codiGrup}", produces = "application/zip")
