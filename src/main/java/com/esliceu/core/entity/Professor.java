@@ -1,6 +1,7 @@
 package com.esliceu.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -55,7 +56,7 @@ public class Professor implements Serializable {
     private Departament departament;
 
     @ManyToMany()
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonIgnore
     @JoinTable(name = "grup_professor",
             joinColumns = @JoinColumn(name = "professor_codi"),
             inverseJoinColumns = @JoinColumn(name = "grup_codi"))

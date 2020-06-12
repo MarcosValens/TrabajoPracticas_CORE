@@ -1,6 +1,6 @@
 package com.esliceu.core.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -48,8 +48,7 @@ public class Alumne implements Serializable {
     private Grup grup;
 
     @OneToMany(mappedBy = "alumne", orphanRemoval = true)
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @JsonManagedReference
+    @JsonIgnore
     private List<TutorAlumne> tutorsAlumnes;
 
     public Alumne() {
