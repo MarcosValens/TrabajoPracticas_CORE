@@ -55,6 +55,20 @@ public class AlumneController {
         return new ResponseEntity<>(alumno, HttpStatus.OK);
     }
 
+    @PutMapping("/private/alumno")
+    public ResponseEntity<String> putAlumne(@RequestBody String jsonString){
+        JsonObject jsonObject = gson.fromJson(jsonString, JsonObject.class);
+        Alumne alumnebd = alumneManager.findById(jsonObject.get("codi").getAsString());
+        alumnebd.setNom(jsonObject.get("nom").getAsString());
+        alumnebd.setAp1(jsonObject.get("ap1").getAsString());
+        alumnebd.setAp2(jsonObject.get("ap2").getAsString());
+        alumnebd.setLoginLDAP(jsonObject.get("loginldap").getAsString());
+        alumnebd.setPasswordLDAP(jsonObject.get("passwordldap").getAsString());
+        alumnebd.setEliminat(jsonObject.get("eliminat").getAsBoolean());
+        alumneManager.createOrUpdate(alumnebd);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @DeleteMapping("/private/alumno/{codi}")
     public ResponseEntity<String> deleteAlumne(@PathVariable("codi") String codi) {
         alumneManager.delete(codi);
