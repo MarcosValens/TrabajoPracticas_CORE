@@ -49,5 +49,11 @@ public class LDAPController {
         grupLDAPManager.addGroup(grupManager.findAll());
         return new ResponseEntity<>("Grups insertats", HttpStatus.OK);
     }
+
+    @PostMapping("/ldap/insertarMembres")
+    public ResponseEntity<String> asignarGrups() throws NamingException {
+        grupLDAPManager.addMembers(alumneManager.findAll());
+        return new ResponseEntity<>("Membres assignats", HttpStatus.OK);
+    }
 }
 

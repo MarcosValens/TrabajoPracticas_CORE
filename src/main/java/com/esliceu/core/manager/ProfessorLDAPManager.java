@@ -71,7 +71,7 @@ public class ProfessorLDAPManager {
         attrs.put("uidnumber", uidNumber.toString());
         attrs.put("uid", username);
         attrs.put("sn", professor.getAp1() + " " + professor.getAp2());
-        attrs.put("gidnumber", uidNumber.toString());
+        attrs.put("gidnumber", "10000");
         attrs.put("displayname", professor.getNom());
         attrs.put("loginshell", "/bin/bash");
         attrs.put("mail", username + "@esliceu.net");

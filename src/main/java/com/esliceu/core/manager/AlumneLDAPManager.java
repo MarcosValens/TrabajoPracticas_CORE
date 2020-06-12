@@ -73,7 +73,7 @@ public class AlumneLDAPManager {
         attrs.put("uidnumber", uidNumber.toString());
         attrs.put("uid", username);
         attrs.put("sn", alumne.getAp1() + " " + alumne.getAp2());
-        attrs.put("gidnumber", uidNumber.toString());
+        attrs.put("gidnumber", "10000");
         attrs.put("displayname", alumne.getNom());
         attrs.put("loginshell", "/bin/bash");
         attrs.put("mail", username + "@esliceu.net");
@@ -119,7 +119,6 @@ public class AlumneLDAPManager {
         mod[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, modUsername);
         mod[1] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, modhome);
         context.modifyAttributes("cn=" + username + "," + base, mod);
-
     }
 
     private void deleteAlumne(Alumne alumne) throws NamingException {

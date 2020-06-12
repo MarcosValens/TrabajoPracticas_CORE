@@ -1,5 +1,6 @@
 package com.esliceu.core.manager;
 
+import com.esliceu.core.entity.Alumne;
 import com.esliceu.core.entity.Grup;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,16 @@ public class GrupLDAPManager {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void addMembers(List<Alumne> alumnes) throws NamingException {
+        String base = "ou=groups,dc=esliceu,dc=com";
+        for (Alumne alumne : alumnes) {
+            ModificationItem[] mod = new ModificationItem[1];
+            Attribute memberUidAttr = new BasicAttribute("memberUid", alumne.getUidNumberLDAP().toString());
+            mod[0] = new ModificationItem(DirContext.ADD_ATTRIBUTE, memberUidAttr);
+            context.modifyAttributes("cn=" + alumne.getGrup().getCurs().getDescripcio() + " " + alumne.getGrup().getNom() + "," + base, mod);
         }
     }
 }
