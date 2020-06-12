@@ -32,25 +32,27 @@ public class LDAPController {
     @Autowired
     private ProfessorLDAPManager professorLDAPManager;
 
-    @PostMapping("/ldap/actualitzarAlumnes")
+    //TODO Controlar duplicats
+    @PostMapping("/admin/ldap/actualitzarAlumnes")
     public ResponseEntity<String> actualitzarLdapAlumnes() throws NamingException {
         alumneLdapManager.actualitzarAlumnesLdap(alumneManager.findAll());
         return new ResponseEntity<>("Canvis realitzats", HttpStatus.OK);
     }
 
-    @PostMapping("/ldap/actualitzarProfessors")
+    //TODO Controlar duplicats
+    @PostMapping("/admin/ldap/actualitzarProfessors")
     public ResponseEntity<String> actualitzarLdapProfessors() throws NamingException {
         professorLDAPManager.actualitzarProfessorsLdap(professorManager.findAll());
         return new ResponseEntity<>("Canvis realitzats", HttpStatus.OK);
     }
 
-    @PostMapping("/ldap/insertarGrups")
+    @PostMapping("/admin/ldap/insertarGrups")
     public ResponseEntity<String> insertarLdapGrups(){
         grupLDAPManager.addGroup(grupManager.findAll());
         return new ResponseEntity<>("Grups insertats", HttpStatus.OK);
     }
 
-    @PostMapping("/ldap/insertarMembres")
+    @PostMapping("/admin/ldap/insertarMembres")
     public ResponseEntity<String> asignarGrups() throws NamingException {
         grupLDAPManager.addMembers(alumneManager.findAll());
         return new ResponseEntity<>("Membres assignats", HttpStatus.OK);
