@@ -59,7 +59,7 @@ public class UsuariosController {
         JsonObject data = gson.fromJson(json, JsonObject.class);
         JsonArray users = data.get("users").getAsJsonArray();
         String fecha = data.get("fecha").getAsString();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-dd-MM");
         LocalDate parsedDate = LocalDate.parse(fecha, formatter);
         System.out.println("MARCOS "+ parsedDate);
         /*
