@@ -97,30 +97,32 @@ public class FotoController {
         return ResponseEntity.ok().body(base64);
     }
 
-    @GetMapping(value = "/private/download/all/")
-    public Map<String, Alumne> downloadAllPhotos(HttpServletResponse response) throws IOException {
+    @GetMapping(value = "/private/download/all")
+    public List<Alumne> downloadAllPhotos(HttpServletResponse response) throws IOException {
 
         List<Grup> grups = grupManager.findAll();
         List<Alumne> alumnes = alumneManager.findAll();
-        Map<String, Alumne> map = new HashMap<>();
 
         for (int i = 0; i < grups.size(); i++) {
             String directoriFotosGrup = this.direcotrioFotos + grups.get(i).getCodi();
             File tmpDir = new File(directoriFotosGrup);
             if (tmpDir.exists()){
+                System.out.println("Grupo: " + directoriFotosGrup);
                 for (int j = 0; j < alumnes.size(); j++) {
                     String directoriFotoAlumne = directoriFotosGrup + "/" + alumnes.get(j).getExpedient() + ".png";
                     File tmpFile = new File(directoriFotoAlumne);
                     if (tmpFile.exists()){
                         InputStream iSteamReader = new FileInputStream(directoriFotoAlumne);
                         byte[] imageBytes = IOUtils.toByteArray(iSteamReader);
-                        map.put(Base64.getEncoder().encodeToString(imageBytes), alumnes.get(j));
+                        alumnes.get(j).setTutorsAlumnes(null);
+                        alumnes.get(j).setExpedient(null);
+                        alumnes.get(j).setImatge(Base64.getEncoder().encodeToString(imageBytes));
                     }
                 }
             }
         }
         response.setStatus(HttpServletResponse.SC_OK);
-        return map;
+        return alumnes;
     }
 
     @GetMapping(value = "/private/generate-zip/{codiGrup}", produces = "application/zip")

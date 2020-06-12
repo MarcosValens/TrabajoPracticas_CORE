@@ -1,6 +1,7 @@
 package com.esliceu.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,6 +22,7 @@ public class UsuariAppProfessor implements Serializable {
 
     @Id
     @Column(name = "data")
+    @Type(type="LocalDate")
     LocalDate data;
 
     public UsuariAppProfessor() {

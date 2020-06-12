@@ -1,5 +1,7 @@
 package com.esliceu.core.entity;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -19,6 +21,7 @@ public class UsuariAppAlumne implements Serializable {
 
     @Id
     @Column(name = "data")
+    @Type(type="LocalDate")
     LocalDate data;
 
     public UsuariAppAlumne() {
