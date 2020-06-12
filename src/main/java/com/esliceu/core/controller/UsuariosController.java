@@ -61,6 +61,7 @@ public class UsuariosController {
         String fecha = data.get("fecha").getAsString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate parsedDate = LocalDate.parse(fecha, formatter);
+        System.out.println("MARCOS "+ parsedDate);
         /*
          * Por cada peticion que se haga se eliminara la lista de esa fecha
          * */
