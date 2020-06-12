@@ -142,12 +142,12 @@ public class ProfessorController {
         return professorManager.findAllLowCharge();
     }
 
-    @GetMapping("/admin/getAllProfessorsEliminatsONous")
+    @GetMapping("/getAllProfessorsEliminatsONous")
     public ResponseEntity<List<Professor>> getAllProfessorsNousOEliminats(){
         return new ResponseEntity<>(professorManager.findEliminarONou(), HttpStatus.OK);
     }
 
-    @PostMapping("/admin/updateProfessorLdapCredentials")
+    @PostMapping("/updateProfessorLdapCredentials")
     public ResponseEntity<String> updateProfessorLdap(@RequestBody String jsonString){
         JsonObject jsonObject = gson.fromJson(jsonString, JsonObject.class);
         String codi = jsonObject.get("codi").getAsString();
