@@ -22,7 +22,7 @@ public class UsuariAppProfessor implements Serializable {
 
     @Id
     @Column(name = "data")
-    @Type(type="date")
+    @Type(type="LocalDate")
     LocalDate data;
 
     public UsuariAppProfessor() {

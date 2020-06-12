@@ -21,7 +21,7 @@ public class UsuariAppAlumne implements Serializable {
 
     @Id
     @Column(name = "data")
-    @Type(type="date")
+    @Type(type="LocalDate")
     LocalDate data;
 
     public UsuariAppAlumne() {
