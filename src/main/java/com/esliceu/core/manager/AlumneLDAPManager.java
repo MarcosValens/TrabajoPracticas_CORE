@@ -19,7 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class LDAPManager {
+public class AlumneLDAPManager {
     private DirContext context;
     private String url;
     private Hashtable<String, String> environment;
@@ -27,7 +27,7 @@ public class LDAPManager {
     @Autowired
     AlumneManager alumneManager;
 
-    public LDAPManager(@Value("${LDAP_URL}") String urlLdap, @Value("${LDAP_ADMIN}") String admin, @Value("${LDAP_PASSWORD}") String password) throws NamingException {
+    public AlumneLDAPManager(@Value("${LDAP_URL}") String urlLdap, @Value("${LDAP_ADMIN}") String admin, @Value("${LDAP_PASSWORD}") String password) throws NamingException {
         this.environment = new Hashtable<>();
         this.url = urlLdap;
 

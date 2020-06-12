@@ -181,6 +181,7 @@ public class XmlParser {
                     professor.setAp2(ap2);
                     professor.setUsername(username);
                     professor.setEliminat(false);
+                    professor.setNew(true);
                     //Aqui se asigna el departamento del profesor
                     if (departament != null && !departament.equals("")) {
                         Departament departamentProfessor = departamentManager.findById(Long.parseLong(departament));
