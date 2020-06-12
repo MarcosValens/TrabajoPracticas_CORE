@@ -2,9 +2,7 @@
 package com.esliceu.core.controller;
 
 
-import com.esliceu.core.manager.AlumneManager;
-import com.esliceu.core.manager.GrupManager;
-import com.esliceu.core.manager.AlumneLDAPManager;
+import com.esliceu.core.manager.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +23,22 @@ public class LDAPController {
     @Autowired
     private AlumneManager alumneManager;
 
-   @PostMapping("/ldap/actualitzarAlumnes")
+    @Autowired
+    private ProfessorManager professorManager;
+
+    @Autowired
+    private ProfessorLDAPManager professorLDAPManager;
+
+    @PostMapping("/ldap/actualitzarAlumnes")
     public ResponseEntity<String> actualitzarLdapAlumnes() throws NamingException {
-       alumneLdapManager.actualitzarAlumnesLdap(alumneManager.findAll());
-       return new ResponseEntity<>("Canvis realitzats", HttpStatus.OK);
-   }
+        alumneLdapManager.actualitzarAlumnesLdap(alumneManager.findAll());
+        return new ResponseEntity<>("Canvis realitzats", HttpStatus.OK);
+    }
+
+    @PostMapping("/ldap/actualitzarProfessors")
+    public ResponseEntity<String> actualitzarLdapProfessors() throws NamingException {
+        professorLDAPManager.actualitzarProfessorsLdap(professorManager.findAll());
+        return new ResponseEntity<>("Canvis realitzats", HttpStatus.OK);
+    }
 }
 
