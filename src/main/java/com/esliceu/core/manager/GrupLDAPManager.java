@@ -36,6 +36,7 @@ public class GrupLDAPManager {
         System.out.println(this.context.getEnvironment());
     }
 
+
     public void addGroup(List<Grup> grups) {
         try {
             BasicAttributes attrs = new BasicAttributes();
