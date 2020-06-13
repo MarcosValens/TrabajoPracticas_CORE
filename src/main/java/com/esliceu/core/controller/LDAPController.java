@@ -32,6 +32,16 @@ public class LDAPController {
     @Autowired
     private ProfessorLDAPManager professorLDAPManager;
 
+    // Manu: actualitzam LDAP complet (tots els metodes)
+    @PostMapping("/admin/ldap/actualitzarTot")
+    public ResponseEntity<String> actualitzarLdap() throws NamingException {
+        alumneLdapManager.actualitzarAlumnesLdap(alumneManager.findAll());
+        professorLDAPManager.actualitzarProfessorsLdap(professorManager.findAll());
+        grupLDAPManager.addGroup(grupManager.findAll());
+        grupLDAPManager.addMembers(alumneManager.findAll());
+        return new ResponseEntity<>("Canvis realitzats", HttpStatus.OK);
+    }
+
     //TODO Controlar duplicats
     @PostMapping("/admin/ldap/actualitzarAlumnes")
     public ResponseEntity<String> actualitzarLdapAlumnes() throws NamingException {
