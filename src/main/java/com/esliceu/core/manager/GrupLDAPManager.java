@@ -59,7 +59,8 @@ public class GrupLDAPManager {
         cleanGroups();
         for (Alumne alumne : alumnes) {
             ModificationItem[] mod = new ModificationItem[1];
-            Attribute memberUidAttr = new BasicAttribute("memberUid", alumne.getUidNumberLDAP().toString());
+           // Attribute memberUidAttr = new BasicAttribute("memberUid", alumne.getUidNumberLDAP().toString());
+            Attribute memberUidAttr = new BasicAttribute("memberUid", alumne.getLoginLDAP().toString());
             mod[0] = new ModificationItem(DirContext.ADD_ATTRIBUTE, memberUidAttr);
             context.modifyAttributes("cn=" + alumne.getGrup().getCurs().getDescripcio() + " " + alumne.getGrup().getNom() + "," + base, mod);
         }
