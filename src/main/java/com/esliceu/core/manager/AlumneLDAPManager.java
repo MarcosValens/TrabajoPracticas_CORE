@@ -118,7 +118,10 @@ public class AlumneLDAPManager {
         Attribute modhome = new BasicAttribute("homedirectory", "/home/"+alumne.getLoginLDAP());
         mod[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, modUsername);
         mod[1] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, modhome);
-        context.modifyAttributes("cn=" + username + "," + base, mod);
+        System.out.println("Alumne=" + username);
+        if (username != null) {
+            context.modifyAttributes("cn=" + username + "," + base, mod);
+        }
     }
 
     private void deleteAlumne(Alumne alumne) throws NamingException {

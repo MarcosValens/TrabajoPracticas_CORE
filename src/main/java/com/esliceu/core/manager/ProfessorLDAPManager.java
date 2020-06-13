@@ -116,7 +116,9 @@ public class ProfessorLDAPManager {
         Attribute modhome = new BasicAttribute("homedirectory", "/home/" + professor.getLoginLDAP());
         mod[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, modUsername);
         mod[1] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, modhome);
-        context.modifyAttributes("cn=" + username + "," + base, mod);
+        if (username != null) {
+            context.modifyAttributes("cn=" + username + "," + base, mod);
+        }
 
     }
 
