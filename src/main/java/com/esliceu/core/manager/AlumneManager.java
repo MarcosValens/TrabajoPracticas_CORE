@@ -52,9 +52,9 @@ public class AlumneManager {
     }
 
     public String deleteEliminatFotos() {
-        List<Alumne> elimimnats = alumneRepository.findAllByEliminatIsTrue();
+        List<Alumne> eliminats = alumneRepository.findAllByEliminatIsTrue();
         int i = 0;
-        for (Alumne alumne : elimimnats) {
+        for (Alumne alumne : eliminats) {
             try {
                 File f = new File(directorioFotos + alumne.getGrup().getCodi() + "/" + alumne.getExpedient() + ".png");
                 boolean deleted = f.delete();

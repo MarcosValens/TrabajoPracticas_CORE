@@ -35,11 +35,18 @@ public class LDAPController {
     // Manu: actualitzam LDAP complet (tots els metodes)
     @PostMapping("/admin/ldap/actualitzarTot")
     public ResponseEntity<String> actualitzarLdap() throws NamingException {
+        // TODO: Lo seu seria treure un spin mentre ho fa, i si falla mostrar els errors
+        System.out.println("LDAPController-actualitzarTot: actualitzant alumnes...");
         alumneLdapManager.actualitzarAlumnesLdap(alumneManager.findAll());
+        System.out.println("LDAPController-actualitzarTot: actualitzant professors...");
         professorLDAPManager.actualitzarProfessorsLdap(professorManager.findAll());
+        System.out.println("LDAPController-actualitzarTot: afegint grups...");
         grupLDAPManager.addGroup(grupManager.findAll());
+        System.out.println("LDAPController-actualitzarTot: afegint membres...");
         grupLDAPManager.addMembers(alumneManager.findAll());
+        System.out.println("LDAPController-actualitzarTot: fi replicacio");
         return new ResponseEntity<>("Canvis realitzats", HttpStatus.OK);
+
     }
 
     //TODO Controlar duplicats
